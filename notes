@@ -1,0 +1,26 @@
+R = room number (map is 10 rooms across)
+r$=response message about last action / this location
+d = direction to go 1, 2, 3, 4 -> n/u, e, s/d, w
+f() = mostly flags array(bool 0 or 1), some > 1
+e$() = array of exits per room eg 'nsw'
+c() = array location(room number) for each 'carryable' object (0=in players bag) (81=dumping ground for used objects)
+
+routines:
+4260 - decrypt message(in r$)
+2730? - drop object?
+2830 - throw?
+
+
+values
+f(56) 1=dead
+f(34) carrying water?
+ob 16 bottle/container?
+ob 21 key ?
+f(70) 1=door is unlocked?
+f(42) ring counter
+ob 1 related to f(44) down counter
+
+
+Getting 'address is out of range' and seg faults from brandy 1.19
+see http://sourceforge.net/p/brandy/bugs/2/
+use brandy 1.20.1
