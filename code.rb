@@ -1142,12 +1142,12 @@ def m3360
 end
 
 def m3380
-  $C=[]
-  $Estr=[]
-  $F=[]
-  $Xstr=[]
-  $Ystr=[]
-  $Gstr=[]
+  $C=Array.new($G+1,0)
+  $Estr=Array.new(80+1,'')
+  $F=Array.new(70+1,0)
+  $Xstr=Array.new(6+1,'')
+  $Ystr=Array.new(6+1,'')
+  $Gstr=Array.new(2+1,'')
   m3330
 	for $I in 1..$NO
 		$Tstr=mREAD
