@@ -59,7 +59,7 @@ def m30
   puts
   puts
   puts "WHAT WILL YOU DO NOW "
-  INPUT $Istr
+  $Istr=mINPUT
   if $Istr=="SAVE GAME" then
     m4630
   end
@@ -1003,7 +1003,7 @@ def m3010
   end
   begin puts
 		puts "HOW MANY TIMES?"
-		INPUT $MR
+		$MR=mINPUT
 		if $MR==0 then
 			puts "A NUMBER"
 		end
@@ -1096,7 +1096,7 @@ def m3260
   $Rstr="XIBU JT UIF DPEF"
   m4260
   puts $Rstr
-  INPUT $CN
+  $CN=mINPUT
   $Rstr="WRONG!"
   if $CN==$F[41] then
     $Rstr="IT OPENS"
@@ -1137,7 +1137,7 @@ end
 
 def m3360
   puts "PRESS return TO CONTINUE"
-  INPUT $Zstr
+  $Zstr=mINPUT
   return
 end
 
@@ -1178,7 +1178,7 @@ def m3380
 		puts
 		puts
 		puts "TYPE IN EITHER 1 OR 2"
-		INPUT $C
+		$C=mINPUT.to_i
   end until !($C!=1 && $C!=2)
   if $C==1 then
     m4450
@@ -1372,7 +1372,7 @@ end
 def m4640
   puts
   puts "PLEASE ENTER A FILE NAME"
-  INPUT $FLstr
+  $FLstr=mINOUT
   return
 end
 
@@ -1437,6 +1437,9 @@ def mREAD
 	$DATA.shift
 end
 
+def mINPUT
+	gets.chomp
+end
 
 
 start
