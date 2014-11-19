@@ -1,7 +1,7 @@
 $EL=39;$NO=88;$NV=57;$G=28
 m3380
 m30
-die
+exit
 
 def m30
   m4400
@@ -510,7 +510,7 @@ def m4260
   $C=ASC[$Cstr]-1;if $C==64 then $C=90;end
   $Zstr=Zstr+CHRstr($C)
 end
-  NEXT $I;$Rstr=$Zstr;return
+	end;$Rstr=$Zstr;return
 end
 
 def m4310
