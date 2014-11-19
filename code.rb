@@ -1437,6 +1437,10 @@ def mREAD
 	$DATA.shift
 end
 
+def TAB(len)
+	' '*len
+end
+
 def mINPUT
 	gets.chomp
 end
