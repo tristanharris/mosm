@@ -569,26 +569,24 @@ def m4640
 end
 
 def m4670
-  REM READ DATA FILE
-  REM
-  puts "OK. SEARCHING FOR "+$FLstr
-  $X=OPENIN($FLstr);puts "OK. LOADING"
-	for $I in 1..80;INPUT#$X,$Estr[$I];end
-	for $I in 1..$G;INPUT#$X,$C[$I];end
-	for $I in 1..70;INPUT#$X,$F[$I];end
-  INPUT#$X,$Gstr[1];INPUT#$X,$Gstr[2]
-  CLOSE#$X;return
+  #READ DATA FILE
+  #puts "OK. SEARCHING FOR "+$FLstr
+  #$X=OPENIN($FLstr);puts "OK. LOADING"
+	#for $I in 1..80;INPUT#$X,$Estr[$I];end
+	#for $I in 1..$G;INPUT#$X,$C[$I];end
+	#for $I in 1..70;INPUT#$X,$F[$I];end
+  #INPUT#$X,$Gstr[1];INPUT#$X,$Gstr[2]
+  #CLOSE#$X;return
 end
 
 def m4760
-  REM SAVE DATA FILE
-  REM
-  $X=OPENOUT($FLstr);puts "OK. SAVING"
-	for $I in 1..80;puts#$X,$Estr[$I];end
-	for $I in 1..$G;puts#$X,$C[$I];end
-	for $I in 1..70;puts#$X,$F[$I];end
-  puts#$X,$Gstr[1];puts#$X,$Gstr[2]
-  CLOSE#$X;return
+  #SAVE DATA FILE
+  #$X=OPENOUT($FLstr);puts "OK. SAVING"
+	#for $I in 1..80;puts#$X,$Estr[$I];end
+	#for $I in 1..$G;puts#$X,$C[$I];end
+	#for $I in 1..70;puts#$X,$F[$I];end
+  #puts#$X,$Gstr[1];puts#$X,$Gstr[2]
+  #CLOSE#$X;return
 end
 
 def m4830
