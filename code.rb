@@ -11,7 +11,7 @@ def m30
   $Jstr=$Rstr+". "+"YOU ARE "+$Pstr+RIGHTstr($Dstr,LEN($Dstr)-2)+" ";m4830
   m3330;$Jstr=""
   for $I in 1..($G-1)
-  READ $Ostr
+  $Ostr=mREAD
   $Pstr=$Ystr[VAL(LEFTstr($Ostr,1))];m3350
   if $F[$I]==0 && $C[$I]==$R then $Jstr=$Jstr+" "+$Pstr+" "+$Ostr+",";end
 	end
@@ -42,7 +42,7 @@ def m30
 	end;$F[36]=0
 begin
   m3330
-  for $I in 1..$NO;READ $Ostr;if $I<=$G then m3350;end
+  for $I in 1..$NO;$Ostr=mREAD;if $I<=$G then m3350;end
   if $Tstr==$Ostr then $B=$I;$RI=$NO;end
   end
   if $B==0 && $F[36]==0 && $Tstr!="" then $Tstr=$RTstr+"S";$F[36]=1
@@ -130,7 +130,7 @@ end
   return
   m3330;$Rstr="OK";$F[49]=0
   print "YOU HAVE "
-  for $I in 1..$G;READ $Ostr;m3350;if $I==1 && $C[1]==0 && $F[44]==1 then $Ostr="COIN";end
+  for $I in 1..$G;$Ostr=mREAD;m3350;if $I==1 && $C[1]==0 && $F[44]==1 then $Ostr="COIN";end
   if !($I==$G && $C[5]==0) then
   if $C[$I]==0 then print $Ostr+",";$F[49]=1;end
 	end;if $F[49]==0 then puts "NOTHING";end
@@ -389,12 +389,12 @@ def m3290
 end
 
 def m3310
-	RESTORE;for $I in 1..$R;READ $Dstr;end
+	mRESTORE;for $I in 1..$R;$Dstr=mREAD;end
   return
 end
 
 def m3330
-	RESTORE;for $I in 1..80;READ $Dstr;end
+	mRESTORE;for $I in 1..80;$Dstr=mREAD;end
   return
 end
 
@@ -410,8 +410,8 @@ end
 def m3380
   $C=[];$Estr=[];$F=[];$Xstr=[];$Ystr=[];$Gstr=[]
   m3330
-	for $I in 1..$NO;READ $Tstr;end
-	for $I in 1..6;READ $Xstr[$I],$Ystr[$I];end
+	for $I in 1..$NO;$Tstr=mREAD;end
+	for $I in 1..6;$Xstr[$I]=mREAD;$Ystr[$I]=mREAD;end
   $Bstr="NOOEOOSOOWOOUOODOOINVGETTAKEXAREAGIVSAYPICWEATIECLIRIGUSEOPE"
   $Bstr=$Bstr+"LIGFILPLAWATSWIEMPENTCROREMFEETURDIVBAILEATHRINSBLODROEATMOV"
   $Bstr=$Bstr+"INTRINCUTHOLBURPOISHOUNLWITDRICOUPAYMAKBRESTEGATREF"
@@ -436,6 +436,8 @@ begin
   return
 end
 
+def mRESTORE
+	$DATA=%q{
   DATA 11HALF-DUG GRAVE,12GOBLIN GRAVEYARD
   DATA 11HOLLOW TOMB,23STALACTITES AND STALAGMITES
   DATA 11MAZE OF TUNNELS,11VAULTED CAVERN
@@ -499,6 +501,8 @@ end
   DATA 80,70,60,69,74,72,63,52,20,11,1,14,36,54,61,21,32,10,50
   DATA 29,59,34,13,80,30,81,47,74
   DATA 1,2,3,4,5,9,12,13,16,17,20,21,22
+	}.chomp.gsub(/\s*DATA\s*/,',')[2..-1].gsub('"','').split(',')
+end
 
 def m4260
   $Zstr="";for $I in 1..LEN($Rstr)
@@ -532,9 +536,9 @@ def m4400
 end
 
 def m4450
-	for $I in 1..80;READ $Estr[$I];end
-	for $I in 1..$G;READ $C[$I];end
-	for $I in 1..13;READ $A;$F[$A]=1;end
+	for $I in 1..80;$Estr[$I]=mREAD;end
+	for $I in 1..$G;$C[$I]=mREAD;end
+	for $I in 1..13;$A=mREAD;$F[$A]=1;end
   $F[41]=INT(RND(1)*900)+100;$F[42]=INT(RND(1)*3)+2
   $F[44]=4;$F[57]=68;$F[58]=54;$F[59]=15;$F[52]=INT(RND(1)*3)
   $R=77;$Rstr="GOOD LUCK ON YOUR QUEST!"
@@ -597,4 +601,6 @@ def m4830
   return
 end
 
-
+def mREAD
+	$DATA.shift
+end
