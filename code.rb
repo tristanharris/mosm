@@ -1,5 +1,9 @@
 10      EL=39:NO=88:NV=57:G=28
 20      m3380
+m30
+die
+
+def m30
 30      m4400
 40      LL=0
 50      m3310
@@ -25,46 +29,52 @@
 250     Rstr="PARDON?":PRINT "======================================"
 260     PRINT:PRINT:PRINT "WHAT WILL YOU DO NOW "
 270     INPUT Istr
-280     if Istr="SAVE GAME" then GOTO 4630;end
+280     if Istr="SAVE GAME" then m4630;end
 290     Vstr="":Tstr="":VB=0:B=0
 300     FOR I=1 TO LEN(Istr)
 310     if MIDstr(Istr,I,1)=" " AND Vstr="" then Vstr=LEFTstr(Istr,I-1);end
 320     if MIDstr(Istr,I+1,1)<>" " AND Vstr<>"" then Tstr=MIDstr(Istr,I+1,LEN(Istr)-1):I=LEN(Istr);end
 330     NEXT I:IF Tstr="" then Vstr=Istr;end
-340     if LEN(Vstr)<3 then Vstr=Vstr+"O":GOTO 340;end
+340     while LEN(Vstr)<3; Vstr=Vstr+"O";end
 350     if Vstr="PLAY" then Vstr="BLO";end
 360     Ustr=LEFTstr(Vstr,3)
 370     FOR I=1 TO NV:IF MIDstr(Bstr,I*3-2,3)=Ustr then VB=I:I=NV;end
 380     NEXT I:F[36]=0
+begin
 390     m3330
 400     FOR I=1 TO NO:READ Ostr:IF I<=G then m3350;end
 410     if Tstr=Ostr then B=I:I=NO;end
 420     NEXT I
-430     if B=0 AND F[36]=0 AND Tstr>"" then Tstr=Tstr+"S":F[36]=1:GOTO 390;end
+430     if B=0 AND F[36]=0 AND Tstr>"" then Tstr=Tstr+"S":F[36]=1
+end until !(B=0 AND F[36]=0 AND Tstr>"")
 440     if VB=0 then VB=NV+1;end
 450     if Tstr="" then Rstr="I NEED TWO WORDS";end
 460     if VB>NV then Rstr="TRY SOMETHING ELSE";end
 470     if VB>NV AND B=0 then Rstr="YOU CANNOT "+Istr;end
-480     if B>G OR B=0 then GOTO 510;end
-490     if VB=8 OR VB=9 OR VB=14 OR VB=17 OR VB=44 OR VB>54 then GOTO 510;end
-500     if VB<NV AND C[B]<>0 then Rstr="YOU DO NOT HAVE THE "+Tstr:GOTO 30;end
-510     if R=56 AND F[35]=0 AND VB<>37 AND VB<>53 then Rstr=X1str+" HAS GOT YOU!":GOTO 30;end
-520     if VB=44 OR VB=47 OR VB=19 OR VB=57 OR VB=49 then GOTO 540;end
-530     if R=48 AND F[63]=0 then Rstr=X9str:GOTO 30;end
+480     if !(B>G OR B=0) then
+490     if !(VB=8 OR VB=9 OR VB=14 OR VB=17 OR VB=44 OR VB>54) then
+500     if VB<NV AND C[B]<>0 then Rstr="YOU DO NOT HAVE THE "+Tstr:m30;end
+end
+end
+510     if R=56 AND F[35]=0 AND VB<>37 AND VB<>53 then Rstr=X1str+" HAS GOT YOU!":m30;end
+520     if !(VB=44 OR VB=47 OR VB=19 OR VB=57 OR VB=49) then
+530     if R=48 AND F[63]=0 then Rstr=X9str:m30;end
+end
 540     H=VAL(STRstr(R)+STRstr(B))
 560     send([:m800,:m800,:m800,:m800,:m800,:m800,:m1220,:m1290,:m1290,:m1470,:m1470,:m1750,:m1890,
 580     :m1960,:m1980,:m2010,:m2050,:m2870,:m2120,:m2220,:m2310,:m2380,:m2420,:m2450,:m2470,:m2520,
 600     :m2550,:m2580,:m2610,:m2650,:m2670,:m2700,:m2720,:m2730,:m2830,:m2800,:m2870,:m2730,:m2920,
 620     :m2950,:m2990,:m3010,:m3050,:m3070,:m2310,:m2990,:m3070,:m3010,:m2120,:m3190,:m1470,:m3100,
 640     :m2870,:m3150,:m1290,:m1290,:m3170,:m3200][VB])
-650     if F[62]=1 then GOTO 730;end
+650     if !F[62]=1 then
 660     if R=41 then F[67]=F[67]+1:if F[67]=10 then F[56]=1:Rstr="YOU SANK!";end;end
 670     if R=56 AND F[35]=0 AND C[10]<>0 then Rstr=X1str+" GETS YOU!":F[56]=1;end
-680     if F[56]=0 then GOTO 30;end
+680     if F[56]=0 then m30;end
 690     m4400:PRINT Rstr
 700     PRINT "YOU HAVE FAILED IN YOUR QUEST!"
 710     PRINT:PRINT "BUT YOU ARE GRANTED ANOTHER TRY"
 720     m3360:RUN
+end
 730     m4400
 740     PRINT "HOOOOOOORRRRRAAAAAYYYYYY!"
 750     PRINT
@@ -76,13 +86,15 @@ def m800
 800     D=VB
 810     if D=5 then D=1;end
 820     if D=6 then D=3;end
-830     if NOT ((R=75 AND D=2) OR (R=76 AND D=4)) OR F[64]=1 then GOTO 850;end
+830     if !(NOT ((R=75 AND D=2) OR (R=76 AND D=4)) OR F[64]=1) then
 840     Rstr="B USPMM TUPQT ZPV DSPTTJOH":m4260:RETURN
+end
 850     if F[64]=1 then F[64]=0;end
-860     if F[51]=1 OR F[29]=1 then GOTO 900;end
+860     if !(F[51]=1 OR F[29]=1) then
 870     if F[55]=1 then F[56]=1:Rstr="GRARGS HAVE GOT YOOU!":RETURN;end
 880     if R=29 AND F[48]=0 then Rstr="GRARGS WILL SEE YOU!":RETURN;end
 890     if R=73 OR R=42 OR R=9 OR R=10 then Rstr=X3str:F[55]=1:RETURN;end
+end
 900     if C[8]=0 AND ((R=52 AND D=2) OR (R=31 AND D<>3))THEN Rstr="THE BOAT IS TOO HEAVY":RETURN
 910     if C[8]<>0 AND ((R=52 AND D=4) OR (R=31 AND D=3)) then Rstr="YOU CANNOT SWIM":RETURN;end
 920     if R=52 AND C[8] AND D=4 AND F[30]=0 then Rstr="NO POWER!":RETURN;end
@@ -118,9 +130,10 @@ def m800
 1220    m3330:Rstr="OK":F[49]=0
 1230    PRINT "YOU HAVE ";
 1240    FOR I=1 TO G:READ Ostr:m3350:IF I=1 AND C[1]=0 AND F[44]=1 then Ostr="COIN";end
-1250    if I=G AND C[5]=0 then GOTO 1270;end
+1250    if !(I=G AND C[5]=0) then
 1260    if C[I]=0 then PRINT Ostr;",";:F[49]=1;end
 1270    NEXT I:IF F[49]=0 then PRINT "NOTHING";end
+end
 1280    PRINT:m3360:RETURN
 end
 
@@ -328,7 +341,7 @@ def m2950
 2990    if (B=67 OR B=68) AND C[9]=0 AND R=49 then Rstr="OK":F[47]=1;end
 3000    RETURN
 3010    if R<>27 OR B<>63 then RETURN;end
-3020    PRINT:PRINT "HOW MANY TIMES?":INPUT MR:IF MR=0 then PRINT "A NUMBER":GOTO 3020;end
+3020    begin PRINT:PRINT "HOW MANY TIMES?":INPUT MR:IF MR=0 then PRINT "A NUMBER":end:end until MR>0
 3030    if MR=F[42] then Rstr="A ROCK DOOR OPENS":Estr[27]="EW":RETURN;end
 3040    Rstr="ZPV IBWF NJTUSFBUFE UIF CFMM!":F[56]=1:m4260:RETURN
 3050    if H=5861 then H=5818:m2470;end
@@ -414,8 +427,9 @@ def m3380
 3550    m4400:PRINT "DO YOU WANT TO"
 3560    PRINT:PRINT "   1. START A NEW GAME"
 3570    PRINT "OR 2. CONTINUE A SAVED GAME"
+begin
 3580    PRINT:PRINT:PRINT "TYPE IN EITHER 1 OR 2"
-3590    INPUT C:IF C<>1 AND C<>2 then GOTO 3580;end
+3590    INPUT C:end until !(C<>1 AND C<>2)
 3600    if C=1 then m4450;end
 3610    if C=2 then m4600;end
 3620    RETURN
@@ -487,21 +501,24 @@ end
 
 def m4260
 4260    Zstr="":FOR I=1 TO LEN(Rstr)
-4270    Cstr=MIDstr(Rstr,I,1):IF Cstr<"A" then Zstr=Zstr+Cstr:GOTO 4300;end
+4270    Cstr=MIDstr(Rstr,I,1):IF Cstr<"A" then Zstr=Zstr+Cstr;else
 4280    C=ASC[Cstr]-1:IF C=64 then C=90;end
 4290    Zstr=Zstr+CHRstr(C)
+end
 4300    NEXT I:Rstr=Zstr:RETURN
 end
 
 def m4310
 4310    Jstr="SSSSSSSS":NG=0
+begin
 4320    MP=D/2:m4400
 4330    PRINT "YOU ARE LOST IN THE":PRINT "      TUNNELS"
 4340    PRINT WHICH WAY? (NS,W OR E)
 4350    if NG>15 then PRINT "(OR G TO GIVE UP!)";end
 4360    PRINT:PRINT Wstr:Jstr=RIGHTstr(Jstr+RIGHTstr(Wstr,1),8)
 4370    if Wstr="G" then F[56]=1:RETURN;end
-4380    if Jstr<>Gstr[MP] then NG=NG+1:GOTO 4320;end
+4380    if Jstr<>Gstr[MP] then NG=NG+1
+end until !(Jstr<>Gstr[MP])
 4390    RETURN
 end
 
