@@ -24,7 +24,7 @@ def m30
   if $Jstr!="" then $Jstr=", YOU CAN SEE"+$Jstr;end
   $Jstr=$Jstr+" AND YOU CAN GO "
   m4830;print " "
-  for $Iin 1..LEN($Estr[$R)];print MIDstr($Estr[$R),$I,1]+","
+  for $I in 1..LEN($Estr[$R]);print MIDstr($Estr[$R],$I,1)+","
 	end;puts;puts
   $Rstr="PARDON?";puts "======================================"
   puts;puts;puts "WHAT WILL YOU DO NOW "
@@ -38,7 +38,7 @@ def m30
   while LEN($Vstr)<3; $Vstr=$RVstr+"O";end
   if $Vstr=="PLAY" then $Vstr="BLO";end
   $RUstr=LEFTstr($Vstr,3)
-  for $I in 1..$NV;if MIDstr($Bstr,$I*3-2,3)==$RUstr then $VB=$I;I=$NV;end
+  for $I in 1..$NV;if MIDstr($Bstr,$I*3-2,3)==$RUstr then $VB=$I;$I=$NV;end
 	end;$F[36]=0
 begin
   m3330
@@ -117,7 +117,7 @@ end
   if $R==29 && $D==3 then $F[48]=1;$F[20]=0;end
   if $R==8 && $D==2 then $F[46]=0;end
   $OM=$R;for $I in 1..LEN($Estr[$R])
-  $Kstr=MIDstr($Estr[$OM),$I,1]
+  $Kstr=MIDstr($Estr[$OM],$I,1)
   if ($Kstr=="N" || $Kstr=="U") && $D==1 then $R=$R-10;end
   if $Kstr=="E" && $D==2 then $R=R+1;end
   if ($Kstr=="S" || $Kstr=="D") && $D==3 then $R=$R+10;end
@@ -167,7 +167,7 @@ def m1470
   if $H==8080 then $Rstr="AHA!";$F[1]=0;end
   if $H==7029 then $Rstr="OK";$F[2]=0;end
   if $B==20 then $Rstr="NBUDIFT JO QPDLFU";m4260;$C[26]=0;end
-  if $H==1648 then $Rstr="THEREARE SOME LETTERS '"+$Gstr[2]"'";end
+  if $H==1648 then $Rstr="THEREARE SOME LETTERS '"+$Gstr[2]+"'";end
   if $H==7432 then $Rstr="UIFZ BSF BQQMF USFFT";m4260;$F[5]=0;end
   if $H==2134 || $H==2187 then $Rstr="OK";$F[16]=0;end
   if $B==35 then $Rstr="IT IS FISHY!";$F[17]=0;end
