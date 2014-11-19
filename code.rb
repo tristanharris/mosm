@@ -1320,7 +1320,7 @@ def m4450
 		$C[$I]=mREAD
   end
 	for $I in 1..13
-		$A=mREAD
+		$A=mREAD.to_i
 		$F[$A]=1
   end
   $F[41]=INT(RND(1)*900)+100
@@ -1445,5 +1445,38 @@ def mINPUT
 	gets.chomp
 end
 
+def RND(v)
+	raise unless v==1
+	rand
+end
+
+def INT(v)
+	v.to_i
+end
+
+def MIDstr(str, start, len)
+	start -= 1
+	str[start...(start+len)]
+end
+
+def LEFTstr(str, len)
+	str[0..(len-1)]
+end
+
+def RIGHTstr(str, len)
+	str[-len..-1]
+end
+
+def VAL(str)
+	str.to_i
+end
+
+def STRstr(num)
+	num.to_s
+end
+
+def LEN(str)
+	str.length
+end
 
 start
