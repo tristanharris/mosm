@@ -528,7 +528,7 @@ end until !($Jstr!=$Gstr[$MP])
 end
 
 def m4400
-  CLS;puts
+  system('clear');puts
   puts TAB($EL/2-9)+"MYSTERY OF SILVER"
   puts TAB($EL/2-9)+"    MOUNTAIN"
   puts "======================================"
@@ -560,7 +560,7 @@ def m4600
 end
 
 def m4630
-  $F[69]=$R;m4640;m4760;puts "BYE...";STOP
+  $F[69]=$R;m4640;m4760;puts "BYE...";exit
 end
 
 def m4640
