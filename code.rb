@@ -7,12 +7,12 @@ def m30
   m4400
   $LL=0
   m3310
-  $Pstr=$Xstr(VAL(LEFTstr($Dstr,1)))+" "+$Ystr(VAL(MIDstr($Dstr,2,1)))+" "
+  $Pstr=$Xstr[VAL(LEFTstr($Dstr,1))]+" "+$Ystr[VAL(MIDstr($Dstr,2,1))]+" "
   $Jstr=$Rstr+". "+"YOU ARE "+$Pstr+RIGHTstr($Dstr,LEN($Dstr)-2)+" ";m4830
   m3330;$Jstr=""
   FOR $I=1 TO $G-1
   READ $Ostr
-  $Pstr=$Ystr(VAL(LEFTstr($Ostr,1)));m3350
+  $Pstr=$Ystr[VAL(LEFTstr($Ostr,1))];m3350
   if $F[$I]=0 AND $C[$I]=$R then $Jstr=$Jstr+" "+$Pstr+" "+$Ostr+",";end
   NEXT $I
   if $R=29 AND $F[48]=0 then $Jstr=$Jstr+" GRARGS FEASTING,";end
