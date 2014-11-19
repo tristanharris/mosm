@@ -81,7 +81,7 @@ end
   puts "YOU HAVE SUCCEEDED IN YOUR"
   puts "QUEST AND BROUGHT PEACE TO"
   puts "THE LAND"
-  die
+  exit
 
 def m800
   $D=$VB
@@ -107,7 +107,7 @@ end
   if $R==4 && $D==4 then $Rstr="PASSAGE IS TOO STEEP";return;end
   if $R==7 && $D==2 && $F[46]==0 then $Rstr="A HUGE HOUND BARS YOUR WAY";return;end
   if ($R==38 || $R==37) && $F[50]==0 then $Rstr="JU JT UPP EBSL";m4260;return;end
-  if $R==49 && $D==2 && $F[54]==0 then ET $Rstr="MYSTERIOUS FORCES HOLD YOU BACK";return;end
+  if $R==49 && $D==2 && $F[54]==0 then $Rstr="MYSTERIOUS FORCES HOLD YOU BACK";return;end
   if $R==49 && $D==3 && $F[68]==0 then $Rstr="YOU MEET OGBAN!!!";$F[56]=1;return;end
   if $R==38 && $F[65]==0 then $Rstr="RATS NIBBLE YOUR ANKLES";return;end
   if $R==58 && ($D==1 || $D==4) && $F[66]==0 then $Rstr="YOU GET CAUGHT IN THE WEBS!";return;end
