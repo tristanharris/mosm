@@ -518,7 +518,7 @@ def m4310
 begin
   $MP=$D/2;m4400
   puts "YOU ARE LOST IN THE";puts "      TUNNELS"
-  puts WHICH WAY? (NS,W OR E)
+  puts "WHICH WAY? (NS,W OR E)"
   if $NG>15 then puts "(OR $G TO GIVE UP!)";end
   puts;puts $Wstr;$Jstr=RIGHTstr($Jstr+RIGHTstr($Wstr,1),8)
   if $Wstr=="$G" then $F[56]=1;return;end
