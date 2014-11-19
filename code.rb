@@ -408,7 +408,7 @@ def m3360
 end
 
 def m3380
-  DIM $C[$G],$Estr[80],$F[70],$Xstr[6],$Ystr[6],$Gstr[2]
+  $C=[];$Estr=[];$F=[];$Xstr=[];$Ystr=[];$Gstr=[]
   m3330
 	for $I in 1..$NO;READ $Tstr;end
 	for $I in 1..6;READ $Xstr[$I],$Ystr[$I];end
