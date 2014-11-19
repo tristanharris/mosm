@@ -198,7 +198,7 @@ def m800
   if !($F[51]==1 || $F[29]==1) then
 		if $F[55]==1 then
 			$F[56]=1
-			$Rstr="GRARGS HAVE GOT YOOU!"
+			$Rstr="GRARGS HAVE GOT YOU!"
 			return
 		end
 		if $R==29 && $F[48]==0 then
