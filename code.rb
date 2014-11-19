@@ -23,11 +23,11 @@ def m30
   if R=59 AND F[68]=1 then Jstr=Jstr+" OGBAN (DEAD),";end
   if Jstr<>"" then Jstr=", YOU CAN SEE"+Jstr;end
   Jstr=Jstr+" AND YOU CAN GO "
-  m4830:PRINT " ";
-  FOR I=1 TO LEN(Estr[R)]:PRINT MIDstr(Estr[R),I,1];",";
-  NEXT I:PRINT:PRINT
-  Rstr="PARDON?":PRINT "======================================"
-  PRINT:PRINT:PRINT "WHAT WILL YOU DO NOW "
+  m4830:print " "
+  FOR I=1 TO LEN(Estr[R)]:print MIDstr(Estr[R),I,1]+","
+  NEXT I:puts:puts
+  Rstr="PARDON?":puts "======================================"
+  puts:puts:puts "WHAT WILL YOU DO NOW "
   INPUT Istr
   if Istr="SAVE GAME" then m4630;end
   Vstr="":Tstr="":VB=0:B=0
@@ -70,17 +70,17 @@ end
   if R=41 then F[67]=F[67]+1:if F[67]=10 then F[56]=1:Rstr="YOU SANK!";end;end
   if R=56 AND F[35]=0 AND C[10]<>0 then Rstr=X1str+" GETS YOU!":F[56]=1;end
   if F[56]=0 then m30;end
-  m4400:PRINT Rstr
-  PRINT "YOU HAVE FAILED IN YOUR QUEST!"
-  PRINT:PRINT "BUT YOU ARE GRANTED ANOTHER TRY"
+  m4400:puts Rstr
+  puts "YOU HAVE FAILED IN YOUR QUEST!"
+  puts:puts "BUT YOU ARE GRANTED ANOTHER TRY"
   m3360:RUN
 end
   m4400
-  PRINT "HOOOOOOORRRRRAAAAAYYYYYY!"
-  PRINT
-  PRINT "YOU HAVE SUCCEEDED IN YOUR"
-  PRINT "QUEST AND BROUGHT PEACE TO"
-  PRINT "THE LAND"
+  puts "HOOOOOOORRRRRAAAAAYYYYYY!"
+  puts
+  puts "YOU HAVE SUCCEEDED IN YOUR"
+  puts "QUEST AND BROUGHT PEACE TO"
+  puts "THE LAND"
   STOP
 def m800
   D=VB
@@ -128,13 +128,13 @@ end
   if F[39]>5 AND F[29]=1 then Rstr="CPPUT IBWF XPSO PVU":m4260: F[29]=0:C[3]=81;end
   RETURN
   m3330:Rstr="OK":F[49]=0
-  PRINT "YOU HAVE ";
+  print "YOU HAVE "
   FOR I=1 TO G:READ Ostr:m3350:IF I=1 AND C[1]=0 AND F[44]=1 then Ostr="COIN";end
   if !(I=G AND C[5]=0) then
-  if C[I]=0 then PRINT Ostr;",";:F[49]=1;end
-  NEXT I:IF F[49]=0 then PRINT "NOTHING";end
+  if C[I]=0 then print Ostr+",":F[49]=1;end
+  NEXT I:IF F[49]=0 then puts "NOTHING";end
 end
-  PRINT:m3360:RETURN
+  puts:m3360:RETURN
 end
 
 def m1290
@@ -341,7 +341,7 @@ def m2950
   if (B=67 OR B=68) AND C[9]=0 AND R=49 then Rstr="OK":F[47]=1;end
   RETURN
   if R<>27 OR B<>63 then RETURN;end
-  begin PRINT:PRINT "HOW MANY TIMES?":INPUT MR:IF MR=0 then PRINT "A NUMBER":end:end until MR>0
+  begin puts:puts "HOW MANY TIMES?":INPUT MR:IF MR=0 then puts "A NUMBER":end:end until MR>0
   if MR=F[42] then Rstr="A ROCK DOOR OPENS":Estr[27]="EW":RETURN;end
   Rstr="ZPV IBWF NJTUSFBUFE UIF CFMM!":F[56]=1:m4260:RETURN
   if H=5861 then H=5818:m2470;end
@@ -377,7 +377,7 @@ def m3230
 end
 
 def m3260
-  PRINT:Rstr="XIBU JT UIF DPEF":m4260:PRINT Rstr:INPUT CN
+  puts:Rstr="XIBU JT UIF DPEF":m4260:puts Rstr:INPUT CN
   Rstr="WRONG!":IF CN=F[41] then Rstr="IT OPENS":F[21]=0;end
   RETURN
 end
@@ -402,7 +402,7 @@ def m3350
 end
 
 def m3360
-  PRINT "PRESS RETURN TO CONTINUE"
+  puts "PRESS RETURN TO CONTINUE"
   INPUT Zstr:RETURN
 end
 
@@ -424,11 +424,11 @@ def m3380
   X8str="TOWERS FALL DOWN!"
   X9str="THE WIZARD HAS YOU IN HIS GLARE"
   XBstr="HE LEADS YOU "
-  m4400:PRINT "DO YOU WANT TO"
-  PRINT:PRINT "   1. START A NEW GAME"
-  PRINT "OR 2. CONTINUE A SAVED GAME"
+  m4400:puts "DO YOU WANT TO"
+  puts:puts "   1. START A NEW GAME"
+  puts "OR 2. CONTINUE A SAVED GAME"
 begin
-  PRINT:PRINT:PRINT "TYPE IN EITHER 1 OR 2"
+  puts:puts:puts "TYPE IN EITHER 1 OR 2"
   INPUT C:end until !(C<>1 AND C<>2)
   if C=1 then m4450;end
   if C=2 then m4600;end
@@ -512,10 +512,10 @@ def m4310
   Jstr="SSSSSSSS":NG=0
 begin
   MP=D/2:m4400
-  PRINT "YOU ARE LOST IN THE":PRINT "      TUNNELS"
-  PRINT WHICH WAY? (NS,W OR E)
-  if NG>15 then PRINT "(OR G TO GIVE UP!)";end
-  PRINT:PRINT Wstr:Jstr=RIGHTstr(Jstr+RIGHTstr(Wstr,1),8)
+  puts "YOU ARE LOST IN THE":puts "      TUNNELS"
+  puts WHICH WAY? (NS,W OR E)
+  if NG>15 then puts "(OR G TO GIVE UP!)";end
+  puts:puts Wstr:Jstr=RIGHTstr(Jstr+RIGHTstr(Wstr,1),8)
   if Wstr="G" then F[56]=1:RETURN;end
   if Jstr<>Gstr[MP] then NG=NG+1
 end until !(Jstr<>Gstr[MP])
@@ -523,11 +523,11 @@ end until !(Jstr<>Gstr[MP])
 end
 
 def m4400
-  CLS:PRINT
-  PRINT TAB(EL/2-9);"MYSTERY OF SILVER"
-  PRINT TAB(EL/2-9);"    MOUNTAIN"
-  PRINT "======================================"
-  PRINT:PRINT:RETURN
+  CLS:puts
+  puts TAB(EL/2-9)+"MYSTERY OF SILVER"
+  puts TAB(EL/2-9)+"    MOUNTAIN"
+  puts "======================================"
+  puts:puts:RETURN
 end
 
 def m4450
@@ -555,19 +555,19 @@ def m4600
 end
 
 def m4630
-  F[69]=R:m4640:m4760:PRINT "BYE...":STOP
+  F[69]=R:m4640:m4760:puts "BYE...":STOP
 end
 
 def m4640
-  PRINT:PRINT "PLEASE ENTER A FILE NAME":INPUT FLstr
+  puts:puts "PLEASE ENTER A FILE NAME":INPUT FLstr
   RETURN
 end
 
 def m4670
   REM READ DATA FILE
   REM
-  PRINT "OK. SEARCHING FOR ";FLstr
-  X=OPENIN(FLstr):PRINT "OK. LOADING"
+  puts "OK. SEARCHING FOR "+FLstr
+  X=OPENIN(FLstr):puts "OK. LOADING"
   FOR I=1 TO 80:INPUT#X,Estr[I]:NEXT
   FOR I=1 TO G:INPUT#X,C[I]:NEXT
   FOR I=1 TO 70:INPUT#X,F[I]:NEXT
@@ -578,21 +578,21 @@ end
 def m4760
   REM SAVE DATA FILE
   REM
-  X=OPENOUT(FLstr):PRINT "OK. SAVING"
-  FOR I=1 TO 80:PRINT#X,Estr[I]:NEXT
-  FOR I=1 TO G:PRINT#X,C[I]:NEXT
-  FOR I=1 TO 70:PRINT#X,F[I]:NEXT
-  PRINT#X,Gstr[1]:PRINT#X,Gstr[2]
+  X=OPENOUT(FLstr):puts "OK. SAVING"
+  FOR I=1 TO 80:puts#X,Estr[I]:NEXT
+  FOR I=1 TO G:puts#X,C[I]:NEXT
+  FOR I=1 TO 70:puts#X,F[I]:NEXT
+  puts#X,Gstr[1]:puts#X,Gstr[2]
   CLOSE#X:RETURN
 end
 
 def m4830
   LS=1:LP=1
   FOR I=1 TO LEN(Jstr)
-  if MIDstr(Jstr,I,1)=" " AND LL>EL then PRINT MIDstr(Jstr,LP,LS-LP):LL=I-LS:LP=LS+1;end
+  if MIDstr(Jstr,I,1)=" " AND LL>EL then puts MIDstr(Jstr,LP,LS-LP):LL=I-LS:LP=LS+1;end
   if MIDstr(Jstr,I,1)=" " then LS=I;end
   LL=LL+1:NEXT I
-  PRINT MIDstr(Jstr,LP,LEN(Jstr)-LP);
+  print MIDstr(Jstr,LP,LEN(Jstr)-LP);
   RETURN
 end
 
