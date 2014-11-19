@@ -1,10 +1,12 @@
-$EL=39
-$NO=88
-$NV=57
-$G=28
-m3380
-m30
-exit
+def start
+	$EL=39
+	$NO=88
+	$NV=57
+	$G=28
+	m3380
+	m30
+	exit
+end
 
 def m30
   m4400
@@ -323,6 +325,9 @@ def m800
 		$C[3]=81
   end
   return
+end
+
+def m1220
   m3330
   $Rstr="OK"
   $F[49]=0
@@ -564,6 +569,9 @@ def m1750
 		$F[65]=1
   end
   return
+end
+
+def m1890
   $Rstr="YOU SAID IT"
   if $B==84 then
     $Rstr="YOU MUST SAY THEM ONE BY ONE!"
@@ -596,6 +604,9 @@ def m1960
     m1290
   end
   return
+end
+
+def m1980
   if $B==3 then
     $F[29]=1
 		$Rstr="ZPV BSF JOWJTJCMF"
@@ -609,6 +620,9 @@ def m1960
 		m4260
   end
   return
+end
+
+def m2010
   if $B==2 || $B==14 then
     $Rstr="NOTHING TO TIE IT TO!"
   end
@@ -623,6 +637,9 @@ def m1960
 		$C[2]=72
   end
   return
+end
+
+def m2050
   if $H==1547 && $F[38]==1 then
     $Rstr="ALL RIGHT"
 		$R=16
@@ -649,6 +666,9 @@ def m1960
 		$Rstr="IT FALLS DOWN-BUMP!"
   end
   return
+end
+
+def m2120
   if $H==522 then
     $Rstr="OK"
 		$F[30]=1
@@ -682,6 +702,9 @@ def m1960
     m2380
   end
   return
+end
+
+def m2220
   if $B==76 || $B==38 then
     m1470
   end
@@ -710,6 +733,9 @@ def m1960
     $Rstr="IT IS LOCKED"
   end
   return
+end
+
+def m2310
   if $B>$G then
     $Rstr="IT DOES NOT BURN"
   end
@@ -747,6 +773,9 @@ def m2380
     $Rstr="IT LEAKS OUT!"
   end
   return
+end
+
+def m2420
   if $B!=22 || $R!=15 then
     $Rstr="DOES NOT GROW!"
 		return
@@ -783,6 +812,9 @@ def m2470
 		$Estr[71]="N"
   end
   return
+end
+
+def m2520
   if $B==16 then
     $B=22
 		m2450
@@ -804,6 +836,9 @@ def m2550
 		$F[13]=0
   end
   return
+end
+
+def m2580
   if $R==76 then
     $VB=4
 		m800
@@ -814,6 +849,9 @@ def m2550
 		m800
   end
   return
+end
+
+def m2610
   if ($B==3 && $F[29]==1) then
     $Rstr="TAKEN OFF"
 		$F[29]=0
@@ -826,10 +864,16 @@ def m2550
     m2950
   end
   return
+end
+
+def m2650
   if $H==3859 || $H==3339 || $H==1241 || $H==2241 || $H==751 then
     $Rstr="WITH WHAT?"
   end
   return
+end
+
+def m2670
   if $H==2340 then
     $Rstr="IT GOES ROUND"
   end
@@ -839,11 +883,17 @@ def m2550
 		m4260
   end
   return
+end
+
+def m2700
   if $R==14 || $R==51 then
     $Rstr="YOU HAVE DROWNED"
 		$F[56]=1
   end
   return
+end
+
+def m2720
   $Rstr="HOW?"
   return
 end
@@ -869,6 +919,9 @@ def m2730
     $F[30]=0
   end
   return
+end
+
+def m2800
   if $B==62 && $F[44]==0 then
     $Rstr="YOU DO NOT HAVE ANY"
   end
@@ -876,6 +929,9 @@ def m2730
     m3230
   end
   return
+end
+
+def m2830
   if $B==0 || $B>$G then
     return
   end
@@ -891,7 +947,7 @@ end
 
 def m2870
   if $B==10 then
-    $Rstr+"$B OJDF UVOF"
+    $Rstr="$B OJDF UVOF"
 		m4260
   end
   if $H==5233 then
@@ -906,6 +962,9 @@ def m2870
 		$Estr[56]="NS"
   end
   return
+end
+
+def m2920
   if $B==0 || $B>$G then
     return
   end
@@ -928,11 +987,17 @@ def m2950
     $Rstr="THEY ARE WEDGED IN!"
   end
   return
+end
+
+def m2990
   if ($B==67 || $B==68) && $C[9]==0 && $R==49 then
     $Rstr="OK"
 		$F[47]=1
   end
   return
+end
+
+def m3010
   if $R!=27 || $B!=63 then
     return
   end
@@ -952,6 +1017,9 @@ def m2950
   $F[56]=1
   m4260
   return
+end
+
+def m3050
   if $H==5861 then
     $H=5818
 		m2470
@@ -969,6 +1037,9 @@ def m3070
     m1290
   end
   return
+end
+
+def m3100
   if $H==7549 || $H==7649 then
     $Rstr="WHAT WITH?"
   end
@@ -976,19 +1047,31 @@ def m3070
     m1750
   end
   return
+end
+
+def m3130
   if $H==4870 && $C[21]==0 then
     $Rstr="THE KEY TURNS!"
 		$F[70]=1
   end
   return
+end
+
+def m3150
   if $H==1870 then
     $Rstr="HOW?"
   end
   return
+end
+
+def m3170
   if $R==48 then
     $Rstr="HOW?"
   end
   return
+end
+
+def m3190
   $Rstr="ARE YOU THIRSTY?"
   return
 end
@@ -1353,3 +1436,7 @@ end
 def mREAD
 	$DATA.shift
 end
+
+
+
+start
