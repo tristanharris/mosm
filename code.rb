@@ -10,11 +10,11 @@ def m30
   $Pstr=$Xstr[VAL(LEFTstr($Dstr,1))]+" "+$Ystr[VAL(MIDstr($Dstr,2,1))]+" "
   $Jstr=$Rstr+". "+"YOU ARE "+$Pstr+RIGHTstr($Dstr,LEN($Dstr)-2)+" ";m4830
   m3330;$Jstr=""
-  FOR $I=1 TO $G-1
+  for $I in 1..($G-1)
   READ $Ostr
   $Pstr=$Ystr[VAL(LEFTstr($Ostr,1))];m3350
   if $F[$I]=0 AND $C[$I]=$R then $Jstr=$Jstr+" "+$Pstr+" "+$Ostr+",";end
-  NEXT $I
+	end
   if $R=29 AND $F[48]=0 then $Jstr=$Jstr+" GRARGS FEASTING,";end
   if $R=29 AND $F[48]=1 then $Jstr=$Jstr+" A SLEEPING GRARG,";end
   if $R=12 OR $R=22 then $Jstr=$Jstr+" A PONY,";end
@@ -24,27 +24,27 @@ def m30
   if $Jstr<>"" then $Jstr=", YOU CAN SEE"+$Jstr;end
   $Jstr=$Jstr+" AND YOU CAN GO "
   m4830;print " "
-  FOR $I=1 TO LEN($Estr[$R)];print MIDstr($Estr[$R),$I,1]+","
-  NEXT $I;puts;puts
+  for $Iin 1..LEN($Estr[$R)];print MIDstr($Estr[$R),$I,1]+","
+	end;puts;puts
   $Rstr="PARDON?";puts "======================================"
   puts;puts;puts "WHAT WILL YOU DO NOW "
   INPUT $Istr
   if $Istr="SAVE GAME" then m4630;end
   $Vstr="";$Tstr="";$VB=0;$B=0
-  FOR $I=1 TO LEN($Istr)
+  for $I in 1..LEN($Istr)
   if MIDstr($Istr,$I,1)=" " AND $Vstr="" then $Vstr=LEFTstr($Istr,$I-1);end
   if MIDstr($Istr,$I+1,1)<>" " AND $Vstr<>"" then $Tstr=MIDstr($Istr,$I+1,LEN($Istr)-1);$I=LEN($Istr);end
-  NEXT $I;IF $Tstr="" then $Vstr=$Istr;end
+	end;IF $Tstr="" then $Vstr=$Istr;end
   while LEN($Vstr)<3; $Vstr=$RVstr+"O";end
   if $Vstr="PLAY" then $Vstr="BLO";end
   $RUstr=LEFTstr($Vstr,3)
-  FOR $I=1 TO $NV;IF MIDstr($Bstr,$I*3-2,3)=$RUstr then $VB=$I;I=$NV;end
-  NEXT $I;$F[36]=0
+  for $I in 1..$NV;IF MIDstr($Bstr,$I*3-2,3)=$RUstr then $VB=$I;I=$NV;end
+	end;$F[36]=0
 begin
   m3330
-  FOR $I=1 TO $NO;READ $Ostr;IF $I<=$G then m3350;end
+  for $I in 1..$NO;READ $Ostr;IF $I<=$G then m3350;end
   if $Tstr=$Ostr then $B=$I;$RI=$NO;end
-  NEXT $I
+  end
   if $B=0 AND $F[36]=0 AND $Tstr>"" then $Tstr=$RTstr+"S";$F[36]=1
 end until !($B=0 AND $F[36]=0 AND $Tstr>"")
   if $VB=0 then $VB=$NV+1;end
@@ -115,13 +115,13 @@ end
   if $R=37 AND $D=4 AND $Estr[37]="EW" then $R=67;$Rstr="THE PASSAGE WAS STEEP!";RETURN;end
   if $R=29 AND $D=3 then $F[48]=1;$F[20]=0;end
   if $R=8 AND $D=2 then $F[46]=0;end
-  $OM=$R;FOR $I=1 TO LEN($Estr[$R)]
+  $OM=$R;for $I in 1..LEN($Estr[$R])
   $Kstr=MIDstr($Estr[$OM),$I,1]
   if ($Kstr="N" OR $Kstr="U") AND $D=1 then $R=$R-10;end
   if $Kstr="E" AND $D=2 then $R=R+1;end
   if ($Kstr="S" OR $Kstr="D") AND $D=3 then $R=$R+10;end
   if $Kstr="W" AND $D=4 then $R=R-1;end
-  NEXT $I;$Rstr="OK"
+	end;$Rstr="OK"
   if $R=$OM then $Rstr="YOU CANNOT GO THAT WAY";end
   if (($OM=75 AND $D=2) OR ($OM=76 AND $D=4)) then $Rstr="OK. YOU CROSSED";end
   if $F[29]=1 then $F[39]=$F[39]+1;end
@@ -129,10 +129,10 @@ end
   RETURN
   m3330;$Rstr="OK";$F[49]=0
   print "YOU HAVE "
-  FOR $I=1 TO $G;READ $Ostr;m3350;IF $I=1 AND $C[1]=0 AND $F[44]=1 then $Ostr="COIN";end
+  for $I in 1..$G;READ $Ostr;m3350;IF $I=1 AND $C[1]=0 AND $F[44]=1 then $Ostr="COIN";end
   if !($I=$G AND $C[5]=0) then
   if $C[$I]=0 then print $Ostr+",";$F[49]=1;end
-  NEXT $I;IF $F[49]=0 then puts "NOTHING";end
+	end;IF $F[49]=0 then puts "NOTHING";end
 end
   puts;m3360;RETURN
 end
@@ -142,8 +142,8 @@ def m1290
   if $H=4177 OR $H=5177 then $B=16;m2380;RETURN;end
   if $B=38 then $Rstr="TOO HEAVY!";RETURN;end
   if $B=4 AND $F[43]=0 then $Rstr="IT IS FIRMLY NAILED ON!";RETURN;end
-  $CO=0;FOR $I=1 TO $G-1;IF $C[$I]=0 then $CO=$CO+1;end
-  NEXT $I;IF $CO>13 then $Rstr="YOU CANNOT CARRY ANYMORE";RETURN;end
+  $CO=0;for $I in 1..($G-1);IF $C[$I]=0 then $CO=$CO+1;end
+  end;IF $CO>13 then $Rstr="YOU CANNOT CARRY ANYMORE";RETURN;end
   if $B>$G then $Rstr="YOU CANNOT GET THE "+$Tstr;RETURN;end
   if $B=0 then RETURN;end
   if $C[$B]<>$R then $Rstr="IT IS NOT HERE";end
@@ -388,12 +388,12 @@ def m3290
 end
 
 def m3310
-  RESTORE;FOR $I=1 TO $R;READ $Dstr;NEXT $I
+	RESTORE;for $I in 1..$R;READ $Dstr;end
   RETURN
 end
 
 def m3330
-  RESTORE;FOR $I=1 TO 80;READ $Dstr;NEXT $I
+	RESTORE;for $I in 1..80;READ $Dstr;end
   RETURN
 end
 
@@ -409,8 +409,8 @@ end
 def m3380
   DIM $C[$G],$Estr[80],$F[70],$Xstr[6],$Ystr[6],$Gstr[2]
   m3330
-  FOR $I=1 TO $NO;READ $Tstr;NEXT $I
-  FOR $I=1 TO 6;READ $Xstr[$I],$Ystr[$I];NEXT $I
+	for $I in 1..$NO;READ $Tstr;end
+	for $I in 1..6;READ $Xstr[$I],$Ystr[$I];end
   $Bstr="NOOEOOSOOWOOUOODOOINVGETTAKEXAREAGIVSAYPICWEATIECLIRIGUSEOPE"
   $Bstr=$Bstr+"LIGFILPLAWATSWIEMPENTCROREMFEETURDIVBAILEATHRINSBLODROEATMOV"
   $Bstr=$Bstr+"INTRINCUTHOLBURPOISHOUNLWITDRICOUPAYMAKBRESTEGATREF"
@@ -500,7 +500,7 @@ end
   DATA 1,2,3,4,5,9,12,13,16,17,20,21,22
 
 def m4260
-  $Zstr="";FOR $I=1 TO LEN($Rstr)
+  $Zstr="";for $I in 1..LEN($Rstr)
   $Cstr=MIDstr($Rstr,$I,1);IF $Cstr<"A" then $Zstr=Zstr+$Cstr;else
   $C=ASC[$Cstr]-1;IF $C=64 then $C=90;end
   $Zstr=Zstr+CHRstr($C)
@@ -531,13 +531,13 @@ def m4400
 end
 
 def m4450
-  FOR $I=1 TO 80;READ $Estr[$I];NEXT $I
-  FOR $I=1 TO $G;READ $C[$I];NEXT $I
-  FOR $I=1 TO 13;READ $A;$F[$A]=1;NEXT $I
+	for $I in 1..80;READ $Estr[$I];end
+	for $I in 1..$G;READ $C[$I];end
+	for $I in 1..13;READ $A;$F[$A]=1;end
   $F[41]=INT(RND(1)*900)+100;$F[42]=INT(RND(1)*3)+2
   $F[44]=4;$F[57]=68;$F[58]=54;$F[59]=15;$F[52]=INT(RND(1)*3)
   $R=77;$Rstr="GOOD LUCK ON YOUR QUEST!"
-  $Gstr[1]="";FOR $I=1 TO 8
+  $Gstr[1]="";for $I in 1..8
   $Fstr=MIDstr($Bstr,1+INT(RND(1)*4)*3,1)
   $Gstr[1]=$Gstr[1]+$Fstr
   if $Fstr="N" then $Lstr="S";end
@@ -545,7 +545,7 @@ def m4450
   if $Fstr="E" then $Lstr="W";end
   if $Fstr="W" then $Lstr="E";end
   $Gstr[2]=$Lstr+$Gstr[2]
-  NEXT $I;RETURN
+	end;RETURN
 end
 
 def m4600
@@ -568,9 +568,9 @@ def m4670
   REM
   puts "OK. SEARCHING FOR "+$FLstr
   $X=OPENIN($FLstr);puts "OK. LOADING"
-  FOR $I=1 TO 80;INPUT#$X,$Estr[$I];NEXT
-  FOR $I=1 TO $G;INPUT#$X,$C[$I];NEXT
-  FOR $I=1 TO 70;INPUT#$X,$F[$I];NEXT
+	for $I in 1..80;INPUT#$X,$Estr[$I];end
+	for $I in 1..$G;INPUT#$X,$C[$I];end
+	for $I in 1..70;INPUT#$X,$F[$I];end
   INPUT#$X,$Gstr[1];INPUT#$X,$Gstr[2]
   CLOSE#$X;RETURN
 end
@@ -579,19 +579,19 @@ def m4760
   REM SAVE DATA FILE
   REM
   $X=OPENOUT($FLstr);puts "OK. SAVING"
-  FOR $I=1 TO 80;puts#$X,$Estr[$I];NEXT
-  FOR $I=1 TO $G;puts#$X,$C[$I];NEXT
-  FOR $I=1 TO 70;puts#$X,$F[$I];NEXT
+	for $I in 1..80;puts#$X,$Estr[$I];end
+	for $I in 1..$G;puts#$X,$C[$I];end
+	for $I in 1..70;puts#$X,$F[$I];end
   puts#$X,$Gstr[1];puts#$X,$Gstr[2]
   CLOSE#$X;RETURN
 end
 
 def m4830
   $LS=1;$LP=1
-  FOR $I=1 TO LEN($Jstr)
+  for $I in 1..LEN($Jstr)
   if MIDstr($Jstr,$I,1)=" " AND $LL>$EL then puts MIDstr($Jstr,$LP,$LS-$LP);$LL=$I-$LS;$LP=$LS+1;end
   if MIDstr($Jstr,$I,1)=" " then $LS=$I;end
-  $LL=LL+1;NEXT $I
+	$LL=LL+1;end
   print MIDstr($Jstr,$LP,LEN($Jstr)-$LP);
   RETURN
 end
