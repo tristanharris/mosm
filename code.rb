@@ -96,7 +96,7 @@ end
   if $R=29 && $F[48]=0 then $Rstr="GRARGS WILL SEE YOU!";return;end
   if $R=73 || $R=42 || $R=9 || $R=10 then $Rstr=$X3str;$F[55]=1;return;end
 end
-  if $C[8]=0 && (($R=52 && $D=2) || ($R=31 && $D<>3))THEN $Rstr="THE BOAT IS TOO HEAVY";return
+	if $C[8]=0 && (($R=52 && $D=2) || ($R=31 && $D<>3)) then $Rstr="THE BOAT IS TOO HEAVY";return;end
   if $C[8]<>0 && (($R=52 && $D=4) || ($R=31 && $D=3)) then $Rstr="YOU CANNOT SWIM";return;end
   if $R=52 && $C[8] && $D=4 && $F[30]=0 then $Rstr="$NO POWER!";return;end
   if $R=41 && $D=3 && $F[31]=0 then $Rstr="UIF CPBU JT TJOLJOH!";m4260;return;end
