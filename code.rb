@@ -220,7 +220,7 @@ def m800
 		return
   end
   if $R==52 && $C[8] && $D==4 && $F[30]==0 then
-    $Rstr="$NO POWER!"
+    $Rstr="NO POWER!"
 		return
   end
   if $R==41 && $D==3 && $F[31]==0 then
