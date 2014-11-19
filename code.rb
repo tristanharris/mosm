@@ -16,12 +16,12 @@ def m30
   m3330
   $Jstr=""
   for $I in 1..($G-1)
-  $Ostr=mREAD
-  $Pstr=$Ystr[VAL(LEFTstr($Ostr,1))]
-  m3350
-  if $F[$I]==0 && $C[$I]==$R then
-    $Jstr=$Jstr+" "+$Pstr+" "+$Ostr+","
-  end
+		$Ostr=mREAD
+		$Pstr=$Ystr[VAL(LEFTstr($Ostr,1))]
+		m3350
+		if $F[$I]==0 && $C[$I]==$R then
+			$Jstr=$Jstr+" "+$Pstr+" "+$Ostr+","
+		end
 	end
   if $R==29 && $F[48]==0 then
     $Jstr=$Jstr+" GRARGS FEASTING,"
@@ -48,7 +48,7 @@ def m30
   m4830
   print " "
   for $I in 1..LEN($Estr[$R])
-  print MIDstr($Estr[$R],$I,1)+","
+		print MIDstr($Estr[$R],$I,1)+","
 	end
   puts
   puts
@@ -66,47 +66,48 @@ def m30
   $VB=0
   $B=0
   for $I in 1..LEN($Istr)
-  if MIDstr($Istr,$I,1)==" " && $Vstr=="" then
-    $Vstr=LEFTstr($Istr,$I-1)
-  end
-  if MIDstr($Istr,$I+1,1)!=" " && $Vstr!="" then
-    $Tstr=MIDstr($Istr,$I+1,LEN($Istr)-1)
-  $I=LEN($Istr)
-  end
+		if MIDstr($Istr,$I,1)==" " && $Vstr=="" then
+			$Vstr=LEFTstr($Istr,$I-1)
+		end
+		if MIDstr($Istr,$I+1,1)!=" " && $Vstr!="" then
+			$Tstr=MIDstr($Istr,$I+1,LEN($Istr)-1)
+			$I=LEN($Istr)
+		end
 	end
   if $Tstr=="" then
     $Vstr=$Istr
   end
   while LEN($Vstr)<3
-   $Vstr=$RVstr+"O"
+    $Vstr=$RVstr+"O"
   end
   if $Vstr=="PLAY" then
     $Vstr="BLO"
   end
   $RUstr=LEFTstr($Vstr,3)
   for $I in 1..$NV
-  if MIDstr($Bstr,$I*3-2,3)==$RUstr then
-    $VB=$I
-  $I=$NV
-  end
+		if MIDstr($Bstr,$I*3-2,3)==$RUstr then
+			$VB=$I
+			$I=$NV
+		end
 	end
   $F[36]=0
-begin
-  m3330
-  for $I in 1..$NO
-  $Ostr=mREAD
-  if $I<=$G then
-    m3350
-  end
-  if $Tstr==$Ostr then
-    $B=$I
-  $RI=$NO
-  end
-  end
-  if $B==0 && $F[36]==0 && $Tstr!="" then
-    $Tstr=$RTstr+"S"
-  $F[36]=1
-end until !($B=0 && $F[36]=0 && $Tstr!="")
+	begin
+		m3330
+		for $I in 1..$NO
+			$Ostr=mREAD
+			if $I<=$G then
+				m3350
+			end
+			if $Tstr==$Ostr then
+				$B=$I
+				$RI=$NO
+			end
+		end
+		if $B==0 && $F[36]==0 && $Tstr!="" then
+			$Tstr=$Tstr+"S"
+			$F[36]=1
+		end
+	end until !($B=0 && $F[36]=0 && $Tstr!="")
   if $VB==0 then
     $VB=$NV+1
   end
@@ -120,52 +121,53 @@ end until !($B=0 && $F[36]=0 && $Tstr!="")
     $Rstr="YOU CANNOT "+$Istr
   end
   if !($B>$G || $B==0) then
-  if !($VB==8 || $VB==9 || $VB==14 || $VB==17 || $VB==44 || $VB>54) then
-  if $VB<$NV && $C[$B]!=0 then
-    $Rstr="YOU DO NOT HAVE THE "+$Tstr
-  m30
-  end
-end
-end
+		if !($VB==8 || $VB==9 || $VB==14 || $VB==17 || $VB==44 || $VB>54) then
+			if $VB<$NV && $C[$B]!=0 then
+				$Rstr="YOU DO NOT HAVE THE "+$Tstr
+				m30
+			end
+		end
+	end
   if $R==56 && $F[35]==0 && $VB!=37 && $VB!=53 then
     $Rstr=$X1str+" HAS GOT YOU!"
-  m30
+		m30
   end
   if !($VB==44 || $VB==47 || $VB==19 || $VB==57 || $VB==49) then
-  if $R==48 && $F[63]==0 then
-    $Rstr=$X9str
-  m30
-  end
-end
+		if $R==48 && $F[63]==0 then
+			$Rstr=$X9str
+			m30
+		end
+	end
   $H=VAL(STRstr($R)+STRstr($B))
   send([:m800,:m800,:m800,:m800,:m800,:m800,:m1220,:m1290,:m1290,:m1470,:m1470,:m1750,:m1890,
-  :m1960,:m1980,:m2010,:m2050,:m2870,:m2120,:m2220,:m2310,:m2380,:m2420,:m2450,:m2470,:m2520,
-  :m2550,:m2580,:m2610,:m2650,:m2670,:m2700,:m2720,:m2730,:m2830,:m2800,:m2870,:m2730,:m2920,
-  :m2950,:m2990,:m3010,:m3050,:m3070,:m2310,:m2990,:m3070,:m3010,:m2120,:m3190,:m1470,:m3100,
-  :m2870,:m3150,:m1290,:m1290,:m3170,:m3200][$VB])
+		:m1960,:m1980,:m2010,:m2050,:m2870,:m2120,:m2220,:m2310,:m2380,:m2420,:m2450,:m2470,:m2520,
+		:m2550,:m2580,:m2610,:m2650,:m2670,:m2700,:m2720,:m2730,:m2830,:m2800,:m2870,:m2730,:m2920,
+		:m2950,:m2990,:m3010,:m3050,:m3070,:m2310,:m2990,:m3070,:m3010,:m2120,:m3190,:m1470,:m3100,
+		:m2870,:m3150,:m1290,:m1290,:m3170,:m3200][$VB])
   if !$F[62]==1 then
-  if $R==41 then
-    $F[67]==$F[67]+1
-  if $F[67]==10 then
-    $F[56]=1
-  $Rstr="YOU SANK!"
-  end
-  end
-  if $R==56 && $F[35]==0 && $C[10]!=0 then
-    $Rstr=$X1str+" GETS YOU!"
-  $F[56]=1
-  end
-  if $F[56]==0 then
-    m30
-  end
-  m4400
-  puts $Rstr
-  puts "YOU HAVE FAILED IN YOUR QUEST!"
-  puts
-  puts "BUT YOU ARE GRANTED ANOTHER TRY"
-  m3360
-  RUN
-end
+		if $R==41 then
+			$F[67]==$F[67]+1
+			if $F[67]==10 then
+				$F[56]=1
+				$Rstr="YOU SANK!"
+			end
+		end
+		if $R==56 && $F[35]==0 && $C[10]!=0 then
+			$Rstr=$X1str+" GETS YOU!"
+			$F[56]=1
+		end
+		if $F[56]==0 then
+			m30
+		end
+		m4400
+		puts $Rstr
+		puts "YOU HAVE FAILED IN YOUR QUEST!"
+		puts
+		puts "BUT YOU ARE GRANTED ANOTHER TRY"
+		m3360
+		RUN
+	end
+
   m4400
   puts "HOOOOOOORRRRRAAAAAYYYYYY!"
   puts
@@ -173,6 +175,7 @@ end
   puts "QUEST AND BROUGHT PEACE TO"
   puts "THE LAND"
   exit
+end
 
 def m800
   $D=$VB
@@ -183,125 +186,125 @@ def m800
     $D=3
   end
   if !(!(($R==75 && $D==2) || ($R==76 && $D==4)) || $F[64]==1) then
-  $Rstr="$B USPMM TUPQT ZPV DSPTTJOH"
-  m4260
-  return
-end
+		$Rstr="$B USPMM TUPQT ZPV DSPTTJOH"
+		m4260
+		return
+	end
   if $F[64]==1 then
     $F[64]=0
   end
   if !($F[51]==1 || $F[29]==1) then
-  if $F[55]==1 then
-    $F[56]=1
-  $Rstr="GRARGS HAVE GOT YOOU!"
-  return
-  end
-  if $R==29 && $F[48]==0 then
-    $Rstr="GRARGS WILL SEE YOU!"
-  return
-  end
-  if $R==73 || $R==42 || $R==9 || $R==10 then
-    $Rstr=$X3str
-  $F[55]=1
-  return
-  end
-end
+		if $F[55]==1 then
+			$F[56]=1
+			$Rstr="GRARGS HAVE GOT YOOU!"
+			return
+		end
+		if $R==29 && $F[48]==0 then
+			$Rstr="GRARGS WILL SEE YOU!"
+			return
+		end
+		if $R==73 || $R==42 || $R==9 || $R==10 then
+			$Rstr=$X3str
+			$F[55]=1
+			return
+		end
+	end
 	if $C[8]==0 && (($R==52 && $D==2) || ($R==31 && $D!=3)) then
     $Rstr="THE BOAT IS TOO HEAVY"
-  return
+		return
   end
   if $C[8]!=0 && (($R==52 && $D==4) || ($R==31 && $D==3)) then
     $Rstr="YOU CANNOT SWIM"
-  return
+		return
   end
   if $R==52 && $C[8] && $D==4 && $F[30]==0 then
     $Rstr="$NO POWER!"
-  return
+		return
   end
   if $R==41 && $D==3 && $F[31]==0 then
     $Rstr="UIF CPBU JT TJOLJOH!"
-  m4260
-  return
+		m4260
+		return
   end
   if $R==33 && $D==1 && $F[32]==0 then
     $Rstr="OGBAN'S BOAR BLOCK YOUR PATH"
-  return
+		return
   end
   if (($R==3 && $D==2) || ($R==4 && $D==4)) && $F[45]==0 then
     $Rstr=$X5str
-  return
+		return
   end
   if $R==35 && $C[13]!=$R then
     $Rstr="THE ICE IS BREAKING!"
-  return
+		return
   end
   if $R==5 && ($D==2 || $D==4) then
     m4310
   end
   if $R==4 && $D==4 then
     $Rstr="PASSAGE IS TOO STEEP"
-  return
+		return
   end
   if $R==7 && $D==2 && $F[46]==0 then
     $Rstr="A HUGE HOUND BARS YOUR WAY"
-  return
+		return
   end
   if ($R==38 || $R==37) && $F[50]==0 then
     $Rstr="JU JT UPP EBSL"
-  m4260
-  return
+		m4260
+		return
   end
   if $R==49 && $D==2 && $F[54]==0 then
     $Rstr="MYSTERIOUS FORCES HOLD YOU BACK"
-  return
+		return
   end
   if $R==49 && $D==3 && $F[68]==0 then
     $Rstr="YOU MEET OGBAN!!!"
-  $F[56]=1
-  return
+		$F[56]=1
+		return
   end
   if $R==38 && $F[65]==0 then
     $Rstr="RATS NIBBLE YOUR ANKLES"
-  return
+		return
   end
   if $R==58 && ($D==1 || $D==4) && $F[66]==0 then
     $Rstr="YOU GET CAUGHT IN THE WEBS!"
-  return
+		return
   end
   if $R==48 && $D==4 && $F[70]==0 then
     $Rstr="THE DOOR DOES NOT OPEN"
-  return
+		return
   end
   if $R==40 && $F[47]==1 then
     $F[68]=1
   end
   if $R==37 && $D==4 && $Estr[37]=="EW" then
     $R=67
-  $Rstr="THE PASSAGE WAS STEEP!"
-  return
+		$Rstr="THE PASSAGE WAS STEEP!"
+		return
   end
   if $R==29 && $D==3 then
     $F[48]=1
-  $F[20]=0
+		$F[20]=0
   end
   if $R==8 && $D==2 then
     $F[46]=0
   end
   $OM=$R
   for $I in 1..LEN($Estr[$R])
-  $Kstr=MIDstr($Estr[$OM],$I,1)
-  if ($Kstr=="N" || $Kstr=="U") && $D==1 then
-    $R=$R-10
-  end
-  if $Kstr=="E" && $D==2 then
-    $R=R+1
-  end
-  if ($Kstr=="S" || $Kstr=="D") && $D==3 then
-    $R=$R+10
-  end
-  if $Kstr=="W" && $D==4 then
-    $R=R-1
-  end
+		$Kstr=MIDstr($Estr[$OM],$I,1)
+		if ($Kstr=="N" || $Kstr=="U") && $D==1 then
+			$R=$R-10
+		end
+		if $Kstr=="E" && $D==2 then
+			$R=$R+1
+		end
+		if ($Kstr=="S" || $Kstr=="D") && $D==3 then
+			$R=$R+10
+		end
+		if $Kstr=="W" && $D==4 then
+			$R=$R-1
+		end
 	end
   $Rstr="OK"
   if $R==$OM then
@@ -315,9 +318,9 @@ end
   end
   if $F[39]>5 && $F[29]==1 then
     $Rstr="CPPUT IBWF XPSO PVU"
-  m4260
-   $F[29]=0
-  $C[3]=81
+		m4260
+    $F[29]=0
+		$C[3]=81
   end
   return
   m3330
@@ -325,21 +328,21 @@ end
   $F[49]=0
   print "YOU HAVE "
   for $I in 1..$G
-  $Ostr=mREAD
-  m3350
-  if $I==1 && $C[1]==0 && $F[44]==1 then
-    $Ostr="COIN"
-  end
-  if !($I==$G && $C[5]==0) then
-  if $C[$I]==0 then
-    print $Ostr+","
-  $F[49]=1
-  end
+		$Ostr=mREAD
+		m3350
+		if $I==1 && $C[1]==0 && $F[44]==1 then
+			$Ostr="COIN"
+		end
+		if !($I==$G && $C[5]==0) then
+			if $C[$I]==0 then
+				print $Ostr+","
+				$F[49]=1
+			end
+		end
+		if $F[49]==0 then
+			puts "NOTHING"
+		end
 	end
-  if $F[49]==0 then
-    puts "NOTHING"
-  end
-end
   puts
   m3360
   return
@@ -348,34 +351,34 @@ end
 def m1290
   if $H==6577 then
     $Rstr="HOW?"
-  return
+		return
   end
   if $H==4177 || $H==5177 then
     $B=16
-  m2380
-  return
+		m2380
+		return
   end
   if $B==38 then
     $Rstr="TOO HEAVY!"
-  return
+		return
   end
   if $B==4 && $F[43]==0 then
     $Rstr="IT IS FIRMLY NAILED ON!"
-  return
+		return
   end
   $CO=0
   for $I in 1..($G-1)
-  if $C[$I]==0 then
-    $CO=$CO+1
-  end
+		if $C[$I]==0 then
+			$CO=$CO+1
+		end
   end
   if $CO>13 then
     $Rstr="YOU CANNOT CARRY ANYMORE"
-  return
+		return
   end
   if $B>$G then
     $Rstr="YOU CANNOT GET THE "+$Tstr
-  return
+		return
   end
   if $B==0 then
     return
@@ -391,7 +394,7 @@ def m1290
   end
   if $C[$B]==$R && $F[$B]==0 then
     $C[$B]=0
-  $Rstr="YOU HAVE THE "+$Tstr
+		$Rstr="YOU HAVE THE "+$Tstr
   end
   if $B==28 then
     $C[5]=81
@@ -424,54 +427,54 @@ def m1470
   end
   if $H==8080 then
     $Rstr="AHA!"
-  $F[1]=0
+		$F[1]=0
   end
   if $H==7029 then
     $Rstr="OK"
-  $F[2]=0
+		$F[2]=0
   end
   if $B==20 then
     $Rstr="NBUDIFT JO QPDLFU"
-  m4260
-  $C[26]=0
+		m4260
+		$C[26]=0
   end
   if $H==1648 then
     $Rstr="THEREARE SOME LETTERS '"+$Gstr[2]+"'"
   end
   if $H==7432 then
     $Rstr="UIFZ BSF BQQMF USFFT"
-  m4260
-  $F[5]=0
+		m4260
+		$F[5]=0
   end
   if $H==2134 || $H==2187 then
     $Rstr="OK"
-  $F[16]=0
+		$F[16]=0
   end
   if $B==35 then
     $Rstr="IT IS FISHY!"
-  $F[17]=0
+		$F[17]=0
   end
   if $H==3438 then
     $Rstr="OK"
-  $F[22]=0
+		$F[22]=0
   end
   if $H==242 then
     $Rstr="A FADED INSCRIPTION"
   end
   if ($H==1443 || $H==1485) && $F[33]==0 then
     $Rstr="$B HMJNNFSJOH GSPN UIF EFQUIT"
-  m4260
+		m4260
   end
   if ($H==1443 || $H==1485) && $F[33]==1 then
     $Rstr="SOMETHING HERE..."
-  $F[12]=0
+		$F[12]=0
   end
   if $H==2479 || $H==2444 then
     $Rstr="THERE IS A HANDLE"
   end
   if $B==9 then
     $Rstr="UIF MBCFM SFBET 'QPJTPO'"
-  m4260
+		m4260
   end
   if $H==4055 then
     m3290
@@ -493,7 +496,7 @@ def m1470
   end
   if $H==6970 then
     $Rstr="YOU FOUND SOMETHING"
-  $F[4]=0
+		$F[4]=0
   end
   if $H==2066 then
     $Rstr="A LARGE CUPBOARD IN THE CORNER"
@@ -503,7 +506,7 @@ def m1470
   end
   if $H==248 then
     $Rstr="A GBEFE XPSE - 'N S I T'"
-  m4260
+		m4260
   end
   return
 end
@@ -523,65 +526,65 @@ def m1750
   end
   if ($H==7562 || $H==7662) && $F[44]>0 && $C[1]==0 then
     $Rstr="HE TAKES IT"
-  $F[64]=1
+		$F[64]=1
   end
   if $F[64]==1 then
     $F[44]=$F[44]-1
   end
   if $B==1 then
     $Rstr="HE TAKES THEM ALL!"
-  $C[1]=81
-  $F[64]=1
-  $F[44]=0
+		$C[1]=81
+		$F[64]=1
+		$F[44]=0
   end
   if $H==2228 && $C[5]==81 then
     $Rstr=$XBstr+"NORTH"
-  $C[28]=81
-  $R=12
+		$C[28]=81
+		$R=12
   end
   if ($H==2228 && $C[5]==81) || $H==225 then
     $Rstr=$XBstr+"NORTH"
-  $R=12
+		$R=12
   end
   if ($H==1228 && $C[5]==81) || $H==125 then
     $Rstr=$XBstr+"SOUTH"
-  $R=12
+		$R=12
   end
   if $R==7 || $R==33 then
     $Rstr="HE EATS IT!"
-  $C[$B]=81
+		$C[$B]=81
   end
   if $H==711 then
     $F[46]=1
-  $Rstr="HE IS DISTRACTED"
+		$Rstr="HE IS DISTRACTED"
   end
   if $H==385 || $H==3824 then
     $Rstr="THEY SCURRY AWAY"
-  $C[$B]=81
-  $F[65]=1
+		$C[$B]=81
+		$F[65]=1
   end
   return
   $Rstr="YOU SAID IT"
   if $B==84 then
     $Rstr="YOU MUST SAY THEM ONE BY ONE!"
-  return
+		return
   end
   if $R!=47 || $B<71 || $B>75 || $C[27]!=0 then
     return
   end
   if $B==71 && $F[60]==0 then
     $Rstr=$X7str
-  $F[60]=1
-  return
+		$F[60]=1
+		return
   end
   if $B==72 && $F[60]==1 && $F[61]==0 then
     $Rstr=$X8str
-  $F[61]=1
-  return
+		$F[61]=1
+		return
   end
   if $B==($F[52]+73) && $F[60]==1 && $F[61]==1 then
     $F[62]=1
-  return
+		return
   end
   $Rstr="THE WRONG SACRED WORD!"
   $F[56]=1
@@ -595,15 +598,15 @@ def m1960
   return
   if $B==3 then
     $F[29]=1
-  $Rstr="ZPV BSF JOWJTJCMF"
-  $F[55]=0
-  m4260
+		$Rstr="ZPV BSF JOWJTJCMF"
+		$F[55]=0
+		m4260
   end
   if $B==20 then
     $F[51]=1
-  $Rstr="ZPV BSF EJTHVJTFE"
-  $F[55]=0
-  m4260
+		$Rstr="ZPV BSF EJTHVJTFE"
+		$F[55]=0
+		m4260
   end
   return
   if $B==2 || $B==14 then
@@ -611,18 +614,18 @@ def m1960
   end
   if $H==7214 then
     $Rstr="IT IS TIED"
-  $C[14]=72
-  $F[53]=1
+		$C[14]=72
+		$F[53]=1
   end
   if $H==722 then
     $Rstr="OK"
-  $F[40]=1
-  $C[2]=72
+		$F[40]=1
+		$C[2]=72
   end
   return
   if $H==1547 && $F[38]==1 then
     $Rstr="ALL RIGHT"
-  $R=16
+		$R=16
   end
   if $B==14 || $B==2 then
     $Rstr="NOT ATTACHED TO ANYTHING!"
@@ -632,36 +635,36 @@ def m1960
   end
   if $H==7214 && $F[53]==1 then
     $Rstr="GOING DOWN"
-  $R=71
+		$R=71
   end
   if $H==722 && $F[40]==1 then
     $R=71
-  $Rstr="IT IS TORN"
-  $C[2]=81
-  $F[40]=0
+		$Rstr="IT IS TORN"
+		$C[2]=81
+		$F[40]=0
   end
   if $H==7114 && $F[53]==1 then
     $C[14]=71
-  $F[53]=0
-  $Rstr="IT FALLS DOWN-BUMP!"
+		$F[53]=0
+		$Rstr="IT FALLS DOWN-BUMP!"
   end
   return
   if $H==522 then
     $Rstr="OK"
-  $F[30]=1
+		$F[30]=1
   end
   if $B==1 || $B==62 || $B==5 || $B==28 || $B==11 || $B==24 then
     m1750
   end
   if $H==416 then
     $Rstr="ZPV IBWF LFQU BGMPBU"
-  $F[31]=1
-  m4260
-  return
+		$F[31]=1
+		m4260
+		return
   end
   if $H==4116 then
     $Rstr="IT IS NOT BIG ENOUGH!"
-  return
+		return
   end
   if $B==18 || $B==7 then
     m2470
@@ -684,18 +687,18 @@ def m1960
   end
   if $H==2030 then
     $F[9]=0
-  $Rstr="OK"
+		$Rstr="OK"
   end
   if $H==6030 then
     $Rstr="OK"
-  $F[3]=0
+		$F[3]=0
   end
   if $H==2444 || $H==1870 then
     $Rstr="YOU ARE NOT STRONG ENOUGH"
   end
   if $H==3756 then
     $Rstr="A PASSAGE!"
-  $Estr[37]="EW"
+		$Estr[37]="EW"
   end
   if $H==5960 then
     m3260
@@ -718,15 +721,15 @@ def m1960
   end
   if ($B==23 || $H==6970) && $C[26]!=0 then
     $Rstr="OP NBUDIFT"
-  m4260
+		m4260
   end
   if $B==23 && $C[26]==0 then
     $Rstr="A BRIGHT "+$Vstr
-  $F[50]=1
+		$F[50]=1
   end
   if $H==6970 && $C[26]==0 then
     $F[43]=1
-  $Rstr="IT HAS TURNED TO ASHES"
+		$Rstr="IT HAS TURNED TO ASHES"
   end
   return
 end
@@ -734,11 +737,11 @@ end
 def m2380
   if ($B==16 || $B==6) && ($R==41 || $R==51) then
     $Rstr="YOU CAPSIZED!"
-  $F[56]=1
+		$F[56]=1
   end
   if $H==6516 && $C[16]==0 then
     $Rstr="IT IS NOW FULL"
-  $F[34]=1
+		$F[34]=1
   end
   if $H==656 then
     $Rstr="IT LEAKS OUT!"
@@ -746,7 +749,7 @@ def m2380
   return
   if $B!=22 || $R!=15 then
     $Rstr="DOES NOT GROW!"
-  return
+		return
   end
   $Rstr="OK"
   $F[34]=1
@@ -756,8 +759,8 @@ end
 def m2450
   if $B==22 && $F[37]==1 && $F[34]==1 then
     $Rstr=$X2str
-  $F[38]=1
-  m4260
+		$F[38]=1
+		m4260
   end
   return
 end
@@ -768,21 +771,21 @@ def m2470
   end
   if $H==5818 then
     $Rstr="YOU CLEARED THE WEBS"
-  $F[66]=1
+		$F[66]=1
   end
   if $H==187 then
     $Rstr="THE DOOR BROKE!"
-  $Estr[18]="NS"
-  $Estr[28]="NS"
+		$Estr[18]="NS"
+		$Estr[28]="NS"
   end
   if $H==717 then
     $Rstr="YOU BROKE THROUGH"
-  $Estr[71]="N"
+		$Estr[71]="N"
   end
   return
   if $B==16 then
     $B=22
-  m2450
+		m2450
   end
   if $H==499 then
     $Rstr="WHERE?"
@@ -793,31 +796,31 @@ end
 def m2550
   if $H==4337 then
     $VB=2
-  m800
-  return
+		m800
+		return
   end
   if $R==36 then
     $Rstr="YOU FOUND SOMETHING"
-  $F[13]=0
+		$F[13]=0
   end
   return
   if $R==76 then
     $VB=4
-  m800
-  return
+		m800
+		return
   end
   if $R==75 then
     $VB=2
-  m800
+		m800
   end
   return
   if ($B==3 && $F[29]==1) then
     $Rstr="TAKEN OFF"
-  $F[29]=0
+		$F[29]=0
   end
   if ($B==20 && $F[51]==1) then
     $Rstr="OK"
-  $F[51]=0
+		$F[51]=0
   end
   if $B==36 || $B==50 then
     m2950
@@ -832,13 +835,13 @@ def m2550
   end
   if $H==2445 then
     $Rstr="UIF HBUFT PQFQ, UIF QPPM FNQUJFT"
-  $F[33]=1
-  m4260
+		$F[33]=1
+		m4260
   end
   return
   if $R==14 || $R==51 then
     $Rstr="YOU HAVE DROWNED"
-  $F[56]=1
+		$F[56]=1
   end
   return
   $Rstr="HOW?"
@@ -853,14 +856,14 @@ def m2730
   $Rstr="DONE"
   if $H==418 || $H==518 then
     $Rstr="YOU DROWNED!"
-  $F[56]=1
+		$F[56]=1
   end
   if $B==8 && $F[30]==1 then
     $C[2]=$R
   end
   if $B==16 && $F[34]==1 then
     $Rstr="YOU LOST THE WATER!"
-  $F[34]=0
+		$F[34]=0
   end
   if $B==2 && $F[30]==1 then
     $F[30]=0
@@ -880,8 +883,8 @@ def m2730
   $C[$B]=$R
   if $H==3317 then
     $Rstr="ZPV DBVHIU UIF CPBS"
-  $F[32]=1
-  m4260
+		$F[32]=1
+		m4260
   end
   return
 end
@@ -889,7 +892,7 @@ end
 def m2870
   if $B==10 then
     $Rstr+"$B OJDF UVOF"
-  m4260
+		m4260
   end
   if $H==5233 then
     $Rstr="WHAT WITH?"
@@ -899,8 +902,8 @@ def m2870
   end
   if $H==5610 then
     $F[35]=1
-  $Rstr=$X1str+" IS FREE!"
-  $Estr[56]="NS"
+		$Rstr=$X1str+" IS FREE!"
+		$Estr[56]="NS"
   end
   return
   if $B==0 || $B>$G then
@@ -908,7 +911,7 @@ def m2870
   end
   if $B==5 || $B==24 then
     $Rstr="YUM YUM!"
-  $C[$B]=81
+		$C[$B]=81
   end
   return
 end
@@ -916,7 +919,7 @@ end
 def m2950
   if $R==4 && $B==50 then
     $F[45]=1
-  $Rstr="YOU REVEALED A STEEP PASSAGE"
+		$Rstr="YOU REVEALED A STEEP PASSAGE"
   end
   if $R==3 && $B==50 then
     $Rstr="YOU CANNOT MOVE RUBBLE FROM HERE"
@@ -927,23 +930,23 @@ def m2950
   return
   if ($B==67 || $B==68) && $C[9]==0 && $R==49 then
     $Rstr="OK"
-  $F[47]=1
+		$F[47]=1
   end
   return
   if $R!=27 || $B!=63 then
     return
   end
   begin puts
-  puts "HOW MANY TIMES?"
-  INPUT $MR
-  if $MR==0 then
-    puts "A NUMBER"
-  end
+		puts "HOW MANY TIMES?"
+		INPUT $MR
+		if $MR==0 then
+			puts "A NUMBER"
+		end
   end until $MR>0
   if $MR==$F[42] then
     $Rstr="A ROCK DOOR OPENS"
-  $Estr[27]="EW"
-  return
+		$Estr[27]="EW"
+		return
   end
   $Rstr="ZPV IBWF NJTUSFBUFE UIF CFMM!"
   $F[56]=1
@@ -951,7 +954,7 @@ def m2950
   return
   if $H==5861 then
     $H=5818
-  m2470
+		m2470
   end
   return
 end
@@ -959,8 +962,8 @@ end
 def m3070
   if ($H==4864 || $H==4819) && $C[19]==0 then
     $Rstr=$X6str
-  $F[63]=1
-  m4260
+		$F[63]=1
+		m4260
   end
   if $B==27 then
     m1290
@@ -975,7 +978,7 @@ def m3070
   return
   if $H==4870 && $C[21]==0 then
     $Rstr="THE KEY TURNS!"
-  $F[70]=1
+		$F[70]=1
   end
   return
   if $H==1870 then
@@ -1014,7 +1017,7 @@ def m3260
   $Rstr="WRONG!"
   if $CN==$F[41] then
     $Rstr="IT OPENS"
-  $F[21]=0
+		$F[21]=0
   end
   return
 end
@@ -1031,7 +1034,7 @@ end
 def m3310
 	mRESTORE
   for $I in 1..$R
-  $Dstr=mREAD
+		$Dstr=mREAD
   end
   return
 end
@@ -1039,7 +1042,7 @@ end
 def m3330
 	mRESTORE
   for $I in 1..80
-  $Dstr=mREAD
+		$Dstr=mREAD
   end
   return
 end
@@ -1064,11 +1067,11 @@ def m3380
   $Gstr=[]
   m3330
 	for $I in 1..$NO
-  $Tstr=mREAD
+		$Tstr=mREAD
   end
 	for $I in 1..6
-  $Xstr[$I]=mREAD
-  $Ystr[$I]=mREAD
+		$Xstr[$I]=mREAD
+		$Ystr[$I]=mREAD
   end
   $Bstr="NOOEOOSOOWOOUOODOOINVGETTAKEXAREAGIVSAYPICWEATIECLIRIGUSEOPE"
   $Bstr=$Bstr+"LIGFILPLAWATSWIEMPENTCROREMFEETURDIVBAILEATHRINSBLODROEATMOV"
@@ -1088,11 +1091,11 @@ def m3380
   puts
   puts "   1. START A NEW GAME"
   puts "OR 2. CONTINUE A SAVED GAME"
-begin
-  puts
-  puts
-  puts "TYPE IN EITHER 1 OR 2"
-  INPUT $C
+	begin
+		puts
+		puts
+		puts "TYPE IN EITHER 1 OR 2"
+		INPUT $C
   end until !($C!=1 && $C!=2)
   if $C==1 then
     m4450
@@ -1174,16 +1177,16 @@ end
 def m4260
   $Zstr=""
   for $I in 1..LEN($Rstr)
-  $Cstr=MIDstr($Rstr,$I,1)
-  if $Cstr<"A" then
-    $Zstr=Zstr+$Cstr
-  else
-  $C=ASC[$Cstr]-1
-  if $C==64 then
-    $C=90
-  end
-  $Zstr=Zstr+CHRstr($C)
-end
+		$Cstr=MIDstr($Rstr,$I,1)
+		if $Cstr<"A" then
+			$Zstr=Zstr+$Cstr
+		else
+			$C=ASC[$Cstr]-1
+			if $C==64 then
+				$C=90
+			end
+			$Zstr=Zstr+CHRstr($C)
+		end
 	end
   $Rstr=$Zstr
   return
@@ -1192,25 +1195,26 @@ end
 def m4310
   $Jstr="SSSSSSSS"
   $NG=0
-begin
-  $MP=$D/2
-  m4400
-  puts "YOU ARE LOST IN THE"
-  puts "      TUNNELS"
-  puts "WHICH WAY? (NS,W OR E)"
-  if $NG>15 then
-    puts "(OR $G TO GIVE UP!)"
-  end
-  puts
-  puts $Wstr
-  $Jstr=RIGHTstr($Jstr+RIGHTstr($Wstr,1),8)
-  if $Wstr=="$G" then
-    $F[56]=1
-  return
-  end
-  if $Jstr!=$Gstr[$MP] then
-    $NG=NG+1
-end until !($Jstr!=$Gstr[$MP])
+	begin
+		$MP=$D/2
+		m4400
+		puts "YOU ARE LOST IN THE"
+		puts "      TUNNELS"
+		puts "WHICH WAY? (NS,W OR E)"
+		if $NG>15 then
+			puts "(OR $G TO GIVE UP!)"
+		end
+		puts
+		puts $Wstr
+		$Jstr=RIGHTstr($Jstr+RIGHTstr($Wstr,1),8)
+		if $Wstr=="$G" then
+			$F[56]=1
+		return
+		end
+		if $Jstr!=$Gstr[$MP] then
+			$NG=NG+1
+		end
+	end until !($Jstr!=$Gstr[$MP])
   return
 end
 
@@ -1227,14 +1231,14 @@ end
 
 def m4450
 	for $I in 1..80
-  $Estr[$I]=mREAD
+		$Estr[$I]=mREAD
   end
 	for $I in 1..$G
-  $C[$I]=mREAD
+		$C[$I]=mREAD
   end
 	for $I in 1..13
-  $A=mREAD
-  $F[$A]=1
+		$A=mREAD
+		$F[$A]=1
   end
   $F[41]=INT(RND(1)*900)+100
   $F[42]=INT(RND(1)*3)+2
@@ -1247,21 +1251,21 @@ def m4450
   $Rstr="GOOD LUCK ON YOUR QUEST!"
   $Gstr[1]=""
   for $I in 1..8
-  $Fstr=MIDstr($Bstr,1+INT(RND(1)*4)*3,1)
-  $Gstr[1]=$Gstr[1]+$Fstr
-  if $Fstr=="N" then
-    $Lstr="S"
-  end
-  if $Fstr=="S" then
-    $Lstr="N"
-  end
-  if $Fstr=="E" then
-    $Lstr="W"
-  end
-  if $Fstr=="W" then
-    $Lstr="E"
-  end
-  $Gstr[2]=$Lstr+$Gstr[2]
+		$Fstr=MIDstr($Bstr,1+INT(RND(1)*4)*3,1)
+		$Gstr[1]=$Gstr[1]+$Fstr
+		if $Fstr=="N" then
+			$Lstr="S"
+		end
+		if $Fstr=="S" then
+			$Lstr="N"
+		end
+		if $Fstr=="E" then
+			$Lstr="W"
+		end
+		if $Fstr=="W" then
+			$Lstr="E"
+		end
+		$Gstr[2]=$Lstr+$Gstr[2]
 	end
   return
 end
@@ -1332,15 +1336,15 @@ def m4830
   $LS=1
   $LP=1
   for $I in 1..LEN($Jstr)
-  if MIDstr($Jstr,$I,1)==" " && $LL>$EL then
-    puts MIDstr($Jstr,$LP,$LS-$LP)
-  $LL=$I-$LS
-  $LP=$LS+1
-  end
-  if MIDstr($Jstr,$I,1)==" " then
-    $LS=$I
-  end
-	$LL=LL+1
+		if MIDstr($Jstr,$I,1)==" " && $LL>$EL then
+			puts MIDstr($Jstr,$LP,$LS-$LP)
+			$LL=$I-$LS
+			$LP=$LS+1
+		end
+		if MIDstr($Jstr,$I,1)==" " then
+			$LS=$I
+		end
+		$LL=LL+1
   end
   print MIDstr($Jstr,$LP,LEN($Jstr)-$LP)
   return
