@@ -73,7 +73,7 @@ def m30
 		end
 		if MIDstr($Istr,$I+1,1)!=" " && $Vstr!="" then
 			$Tstr=MIDstr($Istr,$I+1,LEN($Istr)-1)
-			$I=LEN($Istr)
+			break
 		end
 	end
   if $Tstr=="" then
@@ -85,11 +85,11 @@ def m30
   if $Vstr=="PLAY" then
     $Vstr="BLO"
   end
-  $RUstr=LEFTstr($Vstr,3)
+  $Ustr=LEFTstr($Vstr,3)
   for $I in 1..$NV
-		if MIDstr($Bstr,$I*3-2,3)==$RUstr then
+		if MIDstr($Bstr,$I*3-2,3)==$Ustr then
 			$VB=$I
-			$I=$NV
+			break
 		end
 	end
   $F[36]=0
@@ -102,7 +102,7 @@ def m30
 			end
 			if $Tstr==$Ostr then
 				$B=$I
-				$RI=$NO
+				break
 			end
 		end
 		if $B==0 && $F[36]==0 && $Tstr!="" then
@@ -114,7 +114,7 @@ def m30
     $VB=$NV+1
   end
   if $Tstr=="" then
-    $Rstr="$I NEED TWO WORDS"
+    $Rstr="I NEED TWO WORDS"
   end
   if $VB>$NV then
     $Rstr="TRY SOMETHING ELSE"
@@ -145,7 +145,7 @@ def m30
 		:m1960,:m1980,:m2010,:m2050,:m2870,:m2120,:m2220,:m2310,:m2380,:m2420,:m2450,:m2470,:m2520,
 		:m2550,:m2580,:m2610,:m2650,:m2670,:m2700,:m2720,:m2730,:m2830,:m2800,:m2870,:m2730,:m2920,
 		:m2950,:m2990,:m3010,:m3050,:m3070,:m2310,:m2990,:m3070,:m3010,:m2120,:m3190,:m1470,:m3100,
-		:m2870,:m3150,:m1290,:m1290,:m3170,:m3200][$VB])
+		:m2870,:m3150,:m1290,:m1290,:m3170,:m3200][$VB-1])
   if !($F[62]==1) then
 		if $R==41 then
 			$F[67]==$F[67]+1
@@ -1292,7 +1292,7 @@ def m4310
 		$Jstr=RIGHTstr($Jstr+RIGHTstr($Wstr,1),8)
 		if $Wstr=="$G" then
 			$F[56]=1
-		return
+			return
 		end
 		if $Jstr!=$Gstr[$MP] then
 			$NG=NG+1
@@ -1442,6 +1442,7 @@ def TAB(len)
 end
 
 def mINPUT
+	print '?'
 	gets.chomp
 end
 
