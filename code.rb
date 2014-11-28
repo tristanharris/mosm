@@ -1317,7 +1317,7 @@ def m4450
 		$Estr[$I]=mREAD
   end
 	for $I in 1..$G
-		$C[$I]=mREAD
+		$C[$I]=mREAD.to_i
   end
 	for $I in 1..13
 		$A=mREAD.to_i
