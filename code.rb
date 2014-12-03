@@ -11,7 +11,7 @@ def start
 end
 
 def m30
-  m4400
+  print_titles
   $LL=0
   m3310
   $Pstr=$Xstr[VAL(LEFTstr($Dstr,1))]+" "+$Ystr[VAL(MIDstr($Dstr,2,1))]+" "
@@ -63,7 +63,7 @@ def m30
   puts "WHAT WILL YOU DO NOW "
   $Istr=mINPUT
   if $Istr=="SAVE GAME" then
-    m4630
+    save_game
   end
   $Vstr=""
   $Tstr=""
@@ -163,16 +163,16 @@ def m30
 		if $F[56]==0 then
 			m30
 		end
-		m4400
+		print_titles
 		puts $Rstr
 		puts "YOU HAVE FAILED IN YOUR QUEST!"
 		puts
 		puts "BUT YOU ARE GRANTED ANOTHER TRY"
-		m3360
+		pause
 		RUN
 	end
 
-  m4400
+  print_titles
   puts "HOOOOOOORRRRRAAAAAYYYYYY!"
   puts
   puts "YOU HAVE SUCCEEDED IN YOUR"
@@ -351,7 +351,7 @@ def m1220
 		end
 	end
   puts
-  m3360
+  pause
   return
 end
 
@@ -1137,10 +1137,9 @@ def m3350
   return
 end
 
-def m3360
+def pause
   puts "PRESS return TO CONTINUE"
   $Zstr=mINPUT
-  return
 end
 
 def m3380
@@ -1171,7 +1170,7 @@ def m3380
   $X8str="TOWERS FALL DOWN!"
   $X9str="THE WIZARD HAS YOU IN HIS GLARE"
   $XBstr="HE LEADS YOU "
-  m4400
+  print_titles
   puts "DO YOU WANT TO"
   puts
   puts "   1. START A NEW GAME"
@@ -1186,7 +1185,7 @@ def m3380
     m4450
   end
   if $Cx==2 then
-    m4600
+    load_game
   end
   return
 end
@@ -1282,7 +1281,7 @@ def m4310
   $NG=0
 	begin
 		$MP=$D/2
-		m4400
+		print_titles
 		puts "YOU ARE LOST IN THE"
 		puts "      TUNNELS"
 		puts "WHICH WAY? (NS,W OR E)"
@@ -1303,7 +1302,7 @@ def m4310
   return
 end
 
-def m4400
+def print_titles
   system('clear')
   puts
   puts TAB($EL/2-9)+"MYSTERY OF SILVER"
@@ -1311,7 +1310,6 @@ def m4400
   puts "======================================"
   puts
   puts
-  return
 end
 
 def m4450
@@ -1355,30 +1353,28 @@ def m4450
   return
 end
 
-def m4600
-  m4640
-  m4670
+def load_game
+  get_filename
+  read_file
   $R=$F[69]
   $Rstr="OK. CARRY ON"
-  return
 end
 
-def m4630
+def save_game
   $F[69]=$R
-  m4640
-  m4760
+  get_filename
+  write_file
   puts "BYE..."
   exit
 end
 
-def m4640
+def get_filename
   puts
   puts "PLEASE ENTER A FILE NAME"
   $FLstr=mINPUT
-  return
 end
 
-def m4670
+def read_file
   #READ DATA FILE
   puts "OK. SEARCHING FOR "+$FLstr
 	File.open($FLstr, 'r') do |x|
@@ -1387,7 +1383,7 @@ def m4670
 	end
 end
 
-def m4760
+def write_file
   #SAVE DATA FILE
 	File.open($FLstr, 'w') do |x|
 		puts "OK. SAVING"
