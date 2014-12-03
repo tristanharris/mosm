@@ -1,3 +1,5 @@
+require 'json'
+
 def start
 	$EL=39
 	$NO=88
@@ -1372,47 +1374,25 @@ end
 def m4640
   puts
   puts "PLEASE ENTER A FILE NAME"
-  $FLstr=mINOUT
+  $FLstr=mINPUT
   return
 end
 
 def m4670
   #READ DATA FILE
-  #puts "OK. SEARCHING FOR "+$FLstr
-  #$X=OPENIN($FLstr)
-  #puts "OK. LOADING"
-	#for $I in 1..80
-  #INPUT#$X,$Estr[$I]
-  #end
-	#for $I in 1..$G
-  #INPUT#$X,$C[$I]
-  #end
-	#for $I in 1..70
-  #INPUT#$X,$F[$I]
-  #end
-  #INPUT#$X,$Gstr[1]
-  #INPUT#$X,$Gstr[2]
-  #CLOSE#$X
-  return
+  puts "OK. SEARCHING FOR "+$FLstr
+	File.open($FLstr, 'r') do |x|
+		puts "OK. LOADING"
+		$Estr, $C, $F, $Gstr = JSON.parse(x.gets)
+	end
 end
 
 def m4760
   #SAVE DATA FILE
-  #$X=OPENOUT($FLstr)
-  #puts "OK. SAVING"
-	#for $I in 1..80
-  #puts#$X,$Estr[$I]
-  #end
-	#for $I in 1..$G
-  #puts#$X,$C[$I]
-  #end
-	#for $I in 1..70
-  #puts#$X,$F[$I]
-  #end
-  #puts#$X,$Gstr[1]
-  #puts#$X,$Gstr[2]
-  #CLOSE#$X
-  return
+	File.open($FLstr, 'w') do |x|
+		puts "OK. SAVING"
+		x.puts [$Estr, $C, $F, $Gstr].to_json
+	end
 end
 
 def m4830
