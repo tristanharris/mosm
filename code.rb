@@ -1235,7 +1235,7 @@ def m4310
 		print_titles
 		puts "YOU ARE LOST IN THE"
 		puts "      TUNNELS"
-		puts "WHICH WAY? (NS,W OR E)"
+		puts "WHICH WAY? (N,S,W OR E)"
 		if $NG>15 then
 			puts "(OR G TO GIVE UP!)"
 		end
