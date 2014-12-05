@@ -1215,13 +1215,13 @@ def decode
   for $I in 1..LEN($Rstr)
 		$Cstr=MIDstr($Rstr,$I,1)
 		if $Cstr<"A" then
-			$Zstr=Zstr+$Cstr
+			$Zstr=$Zstr+$Cstr
 		else
-			$C=ASC[$Cstr]-1
+			$C=$Cstr.ord-1
 			if $C==64 then
 				$C=90
 			end
-			$Zstr=Zstr+CHRstr($C)
+			$Zstr=$Zstr+CHRstr($C)
 		end
 	end
   $Rstr=$Zstr
@@ -1247,7 +1247,7 @@ def m4310
 			return
 		end
 		if $Jstr!=$Gstr[$MP] then
-			$NG=NG+1
+			$NG=$NG+1
 		end
 	end until !($Jstr!=$Gstr[$MP])
 end
