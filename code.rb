@@ -5,12 +5,12 @@ def start
 	$NO=88
 	$NV=57
 	$G=28
-	m3380
-	m30
+	setup
+	turn
 	exit
 end
 
-def m30
+def turn
   print_titles
   $LL=0
   m3310
@@ -22,7 +22,7 @@ def m30
   for $I in 1..($G-1)
 		$Ostr=mREAD
 		$Pstr=$Ystr[VAL(LEFTstr($Ostr,1))]
-		m3350
+		strip_leading
 		if $F[$I]==0 && $C[$I]==$R then
 			$Jstr=$Jstr+" "+$Pstr+" "+$Ostr+","
 		end
@@ -100,7 +100,7 @@ def m30
 		for $I in 1..$NO
 			$Ostr=mREAD
 			if $I<=$G then
-				m3350
+				strip_leading
 			end
 			if $Tstr==$Ostr then
 				$B=$I
@@ -128,18 +128,18 @@ def m30
 		if !($VB==8 || $VB==9 || $VB==14 || $VB==17 || $VB==44 || $VB>54) then
 			if $VB<$NV && $C[$B]!=0 then
 				$Rstr="YOU DO NOT HAVE THE "+$Tstr
-				m30
+				turn
 			end
 		end
 	end
   if $R==56 && $F[35]==0 && $VB!=37 && $VB!=53 then
     $Rstr=$X1str+" HAS GOT YOU!"
-		m30
+		turn
   end
   if !($VB==44 || $VB==47 || $VB==19 || $VB==57 || $VB==49) then
 		if $R==48 && $F[63]==0 then
 			$Rstr=$X9str
-			m30
+			turn
 		end
 	end
   $H=VAL(STRstr($R)+STRstr($B))
@@ -161,7 +161,7 @@ def m30
 			$F[56]=1
 		end
 		if $F[56]==0 then
-			m30
+			turn
 		end
 		print_titles
 		puts $Rstr
@@ -191,7 +191,7 @@ def m800
   end
   if !(!(($R==75 && $D==2) || ($R==76 && $D==4)) || $F[64]==1) then
 		$Rstr="$B USPMM TUPQT ZPV DSPTTJOH"
-		m4260
+		decode
 		return
 	end
   if $F[64]==1 then
@@ -227,7 +227,7 @@ def m800
   end
   if $R==41 && $D==3 && $F[31]==0 then
     $Rstr="UIF CPBU JT TJOLJOH!"
-		m4260
+		decode
 		return
   end
   if $R==33 && $D==1 && $F[32]==0 then
@@ -255,7 +255,7 @@ def m800
   end
   if ($R==38 || $R==37) && $F[50]==0 then
     $Rstr="JU JT UPP EBSL"
-		m4260
+		decode
 		return
   end
   if $R==49 && $D==2 && $F[54]==0 then
@@ -322,7 +322,7 @@ def m800
   end
   if $F[39]>5 && $F[29]==1 then
     $Rstr="CPPUT IBWF XPSO PVU"
-		m4260
+		decode
     $F[29]=0
 		$C[3]=81
   end
@@ -336,7 +336,7 @@ def m1220
   print "YOU HAVE "
   for $I in 1..$G
 		$Ostr=mREAD
-		m3350
+		strip_leading
 		if $I==1 && $C[1]==0 && $F[44]==1 then
 			$Ostr="COIN"
 		end
@@ -442,7 +442,7 @@ def m1470
   end
   if $B==20 then
     $Rstr="NBUDIFT JO QPDLFU"
-		m4260
+		decode
 		$C[26]=0
   end
   if $H==1648 then
@@ -450,7 +450,7 @@ def m1470
   end
   if $H==7432 then
     $Rstr="UIFZ BSF BQQMF USFFT"
-		m4260
+		decode
 		$F[5]=0
   end
   if $H==2134 || $H==2187 then
@@ -470,7 +470,7 @@ def m1470
   end
   if ($H==1443 || $H==1485) && $F[33]==0 then
     $Rstr="$B HMJNNFSJOH GSPN UIF EFQUIT"
-		m4260
+		decode
   end
   if ($H==1443 || $H==1485) && $F[33]==1 then
     $Rstr="SOMETHING HERE..."
@@ -481,7 +481,7 @@ def m1470
   end
   if $B==9 then
     $Rstr="UIF MBCFM SFBET 'QPJTPO'"
-		m4260
+		decode
   end
   if $H==4055 then
     m3290
@@ -513,7 +513,7 @@ def m1470
   end
   if $H==248 then
     $Rstr="A GBEFE XPSE - 'N S I T'"
-		m4260
+		decode
   end
   return
 end
@@ -613,13 +613,13 @@ def m1980
     $F[29]=1
 		$Rstr="ZPV BSF JOWJTJCMF"
 		$F[55]=0
-		m4260
+		decode
   end
   if $B==20 then
     $F[51]=1
 		$Rstr="ZPV BSF EJTHVJTFE"
 		$F[55]=0
-		m4260
+		decode
   end
   return
 end
@@ -681,7 +681,7 @@ def m2120
   if $H==416 then
     $Rstr="ZPV IBWF LFQU BGMPBU"
 		$F[31]=1
-		m4260
+		decode
 		return
   end
   if $H==4116 then
@@ -749,7 +749,7 @@ def m2310
   end
   if ($B==23 || $H==6970) && $C[26]!=0 then
     $Rstr="OP NBUDIFT"
-		m4260
+		decode
   end
   if $B==23 && $C[26]==0 then
     $Rstr="A BRIGHT "+$Vstr
@@ -791,7 +791,7 @@ def m2450
   if $B==22 && $F[37]==1 && $F[34]==1 then
     $Rstr=$X2str
 		$F[38]=1
-		m4260
+		decode
   end
   return
 end
@@ -882,7 +882,7 @@ def m2670
   if $H==2445 then
     $Rstr="UIF HBUFT PQFQ, UIF QPPM FNQUJFT"
 		$F[33]=1
-		m4260
+		decode
   end
   return
 end
@@ -942,7 +942,7 @@ def m2830
   if $H==3317 then
     $Rstr="ZPV DBVHIU UIF CPBS"
 		$F[32]=1
-		m4260
+		decode
   end
   return
 end
@@ -950,7 +950,7 @@ end
 def m2870
   if $B==10 then
     $Rstr="$B OJDF UVOF"
-		m4260
+		decode
   end
   if $H==5233 then
     $Rstr="WHAT WITH?"
@@ -1017,7 +1017,7 @@ def m3010
   end
   $Rstr="ZPV IBWF NJTUSFBUFE UIF CFMM!"
   $F[56]=1
-  m4260
+  decode
   return
 end
 
@@ -1033,7 +1033,7 @@ def m3070
   if ($H==4864 || $H==4819) && $C[19]==0 then
     $Rstr=$X6str
 		$F[63]=1
-		m4260
+		decode
   end
   if $B==27 then
     m1290
@@ -1096,7 +1096,7 @@ end
 def m3260
   puts
   $Rstr="XIBU JT UIF DPEF"
-  m4260
+  decode
   puts $Rstr
   $CN=mINPUT
   $Rstr="WRONG!"
@@ -1132,9 +1132,8 @@ def m3330
   return
 end
 
-def m3350
+def strip_leading
   $Ostr=RIGHTstr($Ostr,LEN($Ostr)-1)
-  return
 end
 
 def pause
@@ -1142,7 +1141,7 @@ def pause
   $Zstr=mINPUT
 end
 
-def m3380
+def setup
   $C=Array.new($G+1,0)
   $Estr=Array.new(80+1,'')
   $F=Array.new(70+1,0)
@@ -1187,7 +1186,6 @@ def m3380
   if $Cx==2 then
     load_game
   end
-  return
 end
 
 def mRESTORE
@@ -1258,7 +1256,7 @@ def mRESTORE
 	}.chomp.gsub(/\s*DATA\s*/,',')[2..-1].gsub('"','').split(',')
 end
 
-def m4260
+def decode
   $Zstr=""
   for $I in 1..LEN($Rstr)
 		$Cstr=MIDstr($Rstr,$I,1)
