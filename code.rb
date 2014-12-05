@@ -693,7 +693,6 @@ def use
   if $B==16 || $B==6 then
     fill
   end
-  return
 end
 
 def open
@@ -724,7 +723,6 @@ def open
   if $H==4870 then
     $Rstr="IT IS LOCKED"
   end
-  return
 end
 
 def burn
@@ -749,7 +747,6 @@ def burn
     $F[43]=1
 		$Rstr="IT HAS TURNED TO ASHES"
   end
-  return
 end
 
 def fill
@@ -764,7 +761,6 @@ def fill
   if $H==656 then
     $Rstr="IT LEAKS OUT!"
   end
-  return
 end
 
 def plant
@@ -774,7 +770,6 @@ def plant
   end
   $Rstr="OK"
   $F[34]=1
-  return
 end
 
 def water
@@ -783,7 +778,6 @@ def water
 		$F[38]=1
 		decode
   end
-  return
 end
 
 def swing
@@ -803,7 +797,6 @@ def swing
     $Rstr="YOU BROKE THROUGH"
 		$Estr[71]="N"
   end
-  return
 end
 
 def empty
@@ -814,7 +807,6 @@ def empty
   if $H==499 then
     $Rstr="WHERE?"
   end
-  return
 end
 
 def enter
@@ -827,7 +819,6 @@ def enter
     $Rstr="YOU FOUND SOMETHING"
 		$F[13]=0
   end
-  return
 end
 
 def cross
@@ -840,7 +831,6 @@ def cross
     $VB=2
 		go
   end
-  return
 end
 
 def remove
@@ -855,14 +845,12 @@ def remove
   if $B==36 || $B==50 then
     move
   end
-  return
 end
 
 def feed
   if $H==3859 || $H==3339 || $H==1241 || $H==2241 || $H==751 then
     $Rstr="WITH WHAT?"
   end
-  return
 end
 
 def turn
@@ -874,7 +862,6 @@ def turn
 		$F[33]=1
 		decode
   end
-  return
 end
 
 def dive
@@ -882,12 +869,10 @@ def dive
     $Rstr="YOU HAVE DROWNED"
 		$F[56]=1
   end
-  return
 end
 
 def bail
   $Rstr="HOW?"
-  return
 end
 
 def drop
@@ -910,7 +895,6 @@ def drop
   if $B==2 && $F[30]==1 then
     $F[30]=0
   end
-  return
 end
 
 def insert
@@ -920,7 +904,6 @@ def insert
   if $H==5762 && $C[1]==0 && $F[44]>0 then
     m3230
   end
-  return
 end
 
 def throw
@@ -934,7 +917,6 @@ def throw
 		$F[32]=1
 		decode
   end
-  return
 end
 
 def make
@@ -953,7 +935,6 @@ def make
 		$Rstr=$X1str+" IS FREE!"
 		$Estr[56]="NS"
   end
-  return
 end
 
 def eat
@@ -964,7 +945,6 @@ def eat
     $Rstr="YUM YUM!"
 		$C[$B]=81
   end
-  return
 end
 
 def move
@@ -978,7 +958,6 @@ def move
   if $H==7136 then
     $Rstr="THEY ARE WEDGED IN!"
   end
-  return
 end
 
 def into
@@ -986,7 +965,6 @@ def into
     $Rstr="OK"
 		$F[47]=1
   end
-  return
 end
 
 def ring
@@ -1008,7 +986,6 @@ def ring
   $Rstr="ZPV IBWF NJTUSFBUFE UIF CFMM!"
   $F[56]=1
   decode
-  return
 end
 
 def cut
@@ -1016,7 +993,6 @@ def cut
     $H=5818
 		swing
   end
-  return
 end
 
 def hold
@@ -1028,7 +1004,6 @@ def hold
   if $B==27 then
     take
   end
-  return
 end
 
 def pay
@@ -1038,7 +1013,6 @@ def pay
   if $B==1 || $B==62 then
     give
   end
-  return
 end
 
 def m3130
@@ -1046,32 +1020,27 @@ def m3130
     $Rstr="THE KEY TURNS!"
 		$F[70]=1
   end
-  return
 end
 
 def break
   if $H==1870 then
     $Rstr="HOW?"
   end
-  return
 end
 
 def reflect
   if $R==48 then
     $Rstr="HOW?"
   end
-  return
 end
 
 def drink
   $Rstr="ARE YOU THIRSTY?"
-  return
 end
 
 def m3210
   $Rstr="HE TAKES IT AND SAYS '"+STRstr($F[42])+" RINGS ARE NEEDED'"
   $C[25]=81
-  return
 end
 
 def m3230
@@ -1080,7 +1049,6 @@ def m3230
   if $F[44]==0 then
     $C[1]=81
   end
-  return
 end
 
 def m3260
@@ -1094,7 +1062,6 @@ def m3260
     $Rstr="IT OPENS"
 		$F[21]=0
   end
-  return
 end
 
 def m3290
@@ -1103,7 +1070,6 @@ def m3290
   m3310
   $R=$T
   $Rstr=$X4str+RIGHTstr($Dstr,LEN($Dstr)-2)
-  return
 end
 
 def m3310
@@ -1111,7 +1077,6 @@ def m3310
   for $I in 1..$R
 		$Dstr=mREAD
   end
-  return
 end
 
 def m3330
@@ -1119,7 +1084,6 @@ def m3330
   for $I in 1..80
 		$Dstr=mREAD
   end
-  return
 end
 
 def strip_leading
@@ -1261,7 +1225,6 @@ def decode
 		end
 	end
   $Rstr=$Zstr
-  return
 end
 
 def m4310
@@ -1287,7 +1250,6 @@ def m4310
 			$NG=NG+1
 		end
 	end until !($Jstr!=$Gstr[$MP])
-  return
 end
 
 def print_titles
@@ -1338,7 +1300,6 @@ def m4450
 		end
 		$Gstr[2]=$Lstr+$Gstr[2]
 	end
-  return
 end
 
 def load_game
@@ -1394,7 +1355,6 @@ def m4830
 		$LL=$LL+1
   end
   print MIDstr($Jstr,$LP,LEN($Jstr)-$LP)
-  return
 end
 
 def mREAD
