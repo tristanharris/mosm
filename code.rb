@@ -6,11 +6,11 @@ def start
 	$NV=57
 	$G=28
 	setup
-	turn
+	main
 	exit
 end
 
-def turn
+def main
   print_titles
   $LL=0
   m3310
@@ -128,26 +128,26 @@ def turn
 		if !($VB==8 || $VB==9 || $VB==14 || $VB==17 || $VB==44 || $VB>54) then
 			if $VB<$NV && $C[$B]!=0 then
 				$Rstr="YOU DO NOT HAVE THE "+$Tstr
-				turn
+				main
 			end
 		end
 	end
   if $R==56 && $F[35]==0 && $VB!=37 && $VB!=53 then
     $Rstr=$X1str+" HAS GOT YOU!"
-		turn
+		main
   end
   if !($VB==44 || $VB==47 || $VB==19 || $VB==57 || $VB==49) then
 		if $R==48 && $F[63]==0 then
 			$Rstr=$X9str
-			turn
+			main
 		end
 	end
   $H=VAL(STRstr($R)+STRstr($B))
-  send([:m800,:m800,:m800,:m800,:m800,:m800,:m1220,:m1290,:m1290,:m1470,:m1470,:m1750,:m1890,
-		:m1960,:m1980,:m2010,:m2050,:m2870,:m2120,:m2220,:m2310,:m2380,:m2420,:m2450,:m2470,:m2520,
-		:m2550,:m2580,:m2610,:m2650,:m2670,:m2700,:m2720,:m2730,:m2830,:m2800,:m2870,:m2730,:m2920,
-		:m2950,:m2990,:m3010,:m3050,:m3070,:m2310,:m2990,:m3070,:m3010,:m2120,:m3190,:m1470,:m3100,
-		:m2870,:m3150,:m1290,:m1290,:m3170,:m3200][$VB-1])
+  send([:go,:go,:go,:go,:go,:go,:inventory,:take,:take,:examine,:examine,:give,:say,
+		:pick,:wear,:tie,:climb,:make,:use,:open,:burn,:fill,:plant,:water,:swing,:empty,
+		:enter,:cross,:remove,:feed,:turn,:dive,:bail,:drop,:throw,:insert,:make,:drop,:eat,
+		:move,:into,:ring,:cut,:hold,:burn,:into,:hold,:ring,:use,:drink,:examine,:pay,
+		:make,:break,:take,:take,:reflect,:noop][$VB-1])
   if !($F[62]==1) then
 		if $R==41 then
 			$F[67]==$F[67]+1
@@ -161,7 +161,7 @@ def turn
 			$F[56]=1
 		end
 		if $F[56]==0 then
-			turn
+			main
 		end
 		print_titles
 		puts $Rstr
@@ -181,7 +181,7 @@ def turn
   exit
 end
 
-def m800
+def go
   $D=$VB
   if $D==5 then
     $D=1
@@ -326,10 +326,9 @@ def m800
     $F[29]=0
 		$C[3]=81
   end
-  return
 end
 
-def m1220
+def inventory
   m3330
   $Rstr="OK"
   $F[49]=0
@@ -352,17 +351,16 @@ def m1220
 	end
   puts
   pause
-  return
 end
 
-def m1290
+def take
   if $H==6577 then
     $Rstr="HOW?"
 		return
   end
   if $H==4177 || $H==5177 then
     $B=16
-		m2380
+		fill
 		return
   end
   if $B==38 then
@@ -418,16 +416,15 @@ def m1290
   if $B==2 then
     $F[30]=0
   end
-  return
 end
 
-def m1470
+def examine
   $Rstr="YOU SEE WHAT YOU MIGHT EXPECT!"
   if $B>0 then
     $Rstr="NOTHING SPECIAL"
   end
   if $B==46 || $B==88 then
-    m2550
+    enter
   end
   if $H==8076 then
     $Rstr="IT IS EMPTY"
@@ -515,10 +512,9 @@ def m1470
     $Rstr="A GBEFE XPSE - 'N S I T'"
 		decode
   end
-  return
 end
 
-def m1750
+def give
   if $R==64 then
     $Rstr="HE GIVES IT BACK!"
   end
@@ -570,10 +566,9 @@ def m1750
 		$C[$B]=81
 		$F[65]=1
   end
-  return
 end
 
-def m1890
+def say
   $Rstr="YOU SAID IT"
   if $B==84 then
     $Rstr="YOU MUST SAY THEM ONE BY ONE!"
@@ -598,17 +593,15 @@ def m1890
   end
   $Rstr="THE WRONG SACRED WORD!"
   $F[56]=1
-  return
 end
 
-def m1960
+def pick
   if $B==5 || $B==10 then
-    m1290
+    take
   end
-  return
 end
 
-def m1980
+def wear
   if $B==3 then
     $F[29]=1
 		$Rstr="ZPV BSF JOWJTJCMF"
@@ -621,10 +614,9 @@ def m1980
 		$F[55]=0
 		decode
   end
-  return
 end
 
-def m2010
+def tie
   if $B==2 || $B==14 then
     $Rstr="NOTHING TO TIE IT TO!"
   end
@@ -638,10 +630,9 @@ def m2010
 		$F[40]=1
 		$C[2]=72
   end
-  return
 end
 
-def m2050
+def climb
   if $H==1547 && $F[38]==1 then
     $Rstr="ALL RIGHT"
 		$R=16
@@ -667,16 +658,15 @@ def m2050
 		$F[53]=0
 		$Rstr="IT FALLS DOWN-BUMP!"
   end
-  return
 end
 
-def m2120
+def use
   if $H==522 then
     $Rstr="OK"
 		$F[30]=1
   end
   if $B==1 || $B==62 || $B==5 || $B==28 || $B==11 || $B==24 then
-    m1750
+    give
   end
   if $H==416 then
     $Rstr="ZPV IBWF LFQU BGMPBU"
@@ -689,26 +679,26 @@ def m2120
 		return
   end
   if $B==18 || $B==7 then
-    m2470
+    swing
   end
   if $B==13 then
-    m2730
+    drop
   end
   if $B==19 then
-    m3070
+    hold
   end
   if $B==10 then
-    m2870
+    make
   end
   if $B==16 || $B==6 then
-    m2380
+    fill
   end
   return
 end
 
-def m2220
+def open
   if $B==76 || $B==38 then
-    m1470
+    examine
   end
   if $H==2030 then
     $F[9]=0
@@ -737,7 +727,7 @@ def m2220
   return
 end
 
-def m2310
+def burn
   if $B>$G then
     $Rstr="IT DOES NOT BURN"
   end
@@ -762,7 +752,7 @@ def m2310
   return
 end
 
-def m2380
+def fill
   if ($B==16 || $B==6) && ($R==41 || $R==51) then
     $Rstr="YOU CAPSIZED!"
 		$F[56]=1
@@ -777,7 +767,7 @@ def m2380
   return
 end
 
-def m2420
+def plant
   if $B!=22 || $R!=15 then
     $Rstr="DOES NOT GROW!"
 		return
@@ -787,7 +777,7 @@ def m2420
   return
 end
 
-def m2450
+def water
   if $B==22 && $F[37]==1 && $F[34]==1 then
     $Rstr=$X2str
 		$F[38]=1
@@ -796,7 +786,7 @@ def m2450
   return
 end
 
-def m2470
+def swing
   if $B==7 || $B==18 then
     $Rstr="THWACK!"
   end
@@ -816,10 +806,10 @@ def m2470
   return
 end
 
-def m2520
+def empty
   if $B==16 then
     $B=22
-		m2450
+		water
   end
   if $H==499 then
     $Rstr="WHERE?"
@@ -827,10 +817,10 @@ def m2520
   return
 end
 
-def m2550
+def enter
   if $H==4337 then
     $VB=2
-		m800
+		go
 		return
   end
   if $R==36 then
@@ -840,20 +830,20 @@ def m2550
   return
 end
 
-def m2580
+def cross
   if $R==76 then
     $VB=4
-		m800
+		go
 		return
   end
   if $R==75 then
     $VB=2
-		m800
+		go
   end
   return
 end
 
-def m2610
+def remove
   if ($B==3 && $F[29]==1) then
     $Rstr="TAKEN OFF"
 		$F[29]=0
@@ -863,19 +853,19 @@ def m2610
 		$F[51]=0
   end
   if $B==36 || $B==50 then
-    m2950
+    move
   end
   return
 end
 
-def m2650
+def feed
   if $H==3859 || $H==3339 || $H==1241 || $H==2241 || $H==751 then
     $Rstr="WITH WHAT?"
   end
   return
 end
 
-def m2670
+def turn
   if $H==2340 then
     $Rstr="IT GOES ROUND"
   end
@@ -887,7 +877,7 @@ def m2670
   return
 end
 
-def m2700
+def dive
   if $R==14 || $R==51 then
     $Rstr="YOU HAVE DROWNED"
 		$F[56]=1
@@ -895,12 +885,12 @@ def m2700
   return
 end
 
-def m2720
+def bail
   $Rstr="HOW?"
   return
 end
 
-def m2730
+def drop
   if $B==0 || $B>$G then
     return
   end
@@ -923,7 +913,7 @@ def m2730
   return
 end
 
-def m2800
+def insert
   if $B==62 && $F[44]==0 then
     $Rstr="YOU DO NOT HAVE ANY"
   end
@@ -933,7 +923,7 @@ def m2800
   return
 end
 
-def m2830
+def throw
   if $B==0 || $B>$G then
     return
   end
@@ -947,7 +937,7 @@ def m2830
   return
 end
 
-def m2870
+def make
   if $B==10 then
     $Rstr="$B OJDF UVOF"
 		decode
@@ -966,7 +956,7 @@ def m2870
   return
 end
 
-def m2920
+def eat
   if $B==0 || $B>$G then
     return
   end
@@ -977,7 +967,7 @@ def m2920
   return
 end
 
-def m2950
+def move
   if $R==4 && $B==50 then
     $F[45]=1
 		$Rstr="YOU REVEALED A STEEP PASSAGE"
@@ -991,7 +981,7 @@ def m2950
   return
 end
 
-def m2990
+def into
   if ($B==67 || $B==68) && $C[9]==0 && $R==49 then
     $Rstr="OK"
 		$F[47]=1
@@ -999,7 +989,7 @@ def m2990
   return
 end
 
-def m3010
+def ring
   if $R!=27 || $B!=63 then
     return
   end
@@ -1021,32 +1011,32 @@ def m3010
   return
 end
 
-def m3050
+def cut
   if $H==5861 then
     $H=5818
-		m2470
+		swing
   end
   return
 end
 
-def m3070
+def hold
   if ($H==4864 || $H==4819) && $C[19]==0 then
     $Rstr=$X6str
 		$F[63]=1
 		decode
   end
   if $B==27 then
-    m1290
+    take
   end
   return
 end
 
-def m3100
+def pay
   if $H==7549 || $H==7649 then
     $Rstr="WHAT WITH?"
   end
   if $B==1 || $B==62 then
-    m1750
+    give
   end
   return
 end
@@ -1059,21 +1049,21 @@ def m3130
   return
 end
 
-def m3150
+def break
   if $H==1870 then
     $Rstr="HOW?"
   end
   return
 end
 
-def m3170
+def reflect
   if $R==48 then
     $Rstr="HOW?"
   end
   return
 end
 
-def m3190
+def drink
   $Rstr="ARE YOU THIRSTY?"
   return
 end
@@ -1452,6 +1442,9 @@ end
 
 def LEN(str)
 	str.length
+end
+
+def noop
 end
 
 start
