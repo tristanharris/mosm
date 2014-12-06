@@ -2,7 +2,7 @@ require 'json'
 
 def start
   $EL=39
-  $NO=88
+  $num_objects=88
   $NV=57
   $G=28
   setup
@@ -17,14 +17,14 @@ def main
   $Pstr=$Xstr[VAL(LEFTstr($Dstr,1))]+" "+$Ystr[VAL(MIDstr($Dstr,2,1))]+" "
   $Jstr=$Rstr+". "+"YOU ARE "+$Pstr+RIGHTstr($Dstr,LEN($Dstr)-2)+" "
   m4830
-  m3330
+  restore_to_objects
   $Jstr=""
   for $I in 1..($G-1)
-    $Ostr=mREAD
-    $Pstr=$Ystr[VAL(LEFTstr($Ostr,1))]
+    $object_str=mREAD
+    $Pstr=$Ystr[VAL(LEFTstr($object_str,1))]
     strip_leading
     if $F[$I]==0 && $object_location[$I]==$room then
-      $Jstr=$Jstr+" "+$Pstr+" "+$Ostr+","
+      $Jstr=$Jstr+" "+$Pstr+" "+$object_str+","
     end
   end
   if $room==29 && $F[48]==0 then
@@ -89,20 +89,20 @@ def main
   end
   $Ustr=LEFTstr($Vstr,3)
   for $I in 1..$NV
-    if MIDstr($Bstr,$I*3-2,3)==$Ustr then
+    if MIDstr($cmd_list,$I*3-2,3)==$Ustr then
       $VB=$I
       break
     end
   end
   $F[36]=0
   begin
-    m3330
-    for $I in 1..$NO
-      $Ostr=mREAD
+    restore_to_objects
+    for $I in 1..$num_objects
+      $object_str=mREAD
       if $I<=$G then
         strip_leading
       end
-      if $Tstr==$Ostr then
+      if $Tstr==$object_str then
         $B=$I
         break
       end
@@ -243,7 +243,7 @@ def go
     return
   end
   if $room==5 && ($D==2 || $D==4) then
-    m4310
+    tunnels
   end
   if $room==4 && $D==4 then
     $Rstr="PASSAGE IS TOO STEEP"
@@ -329,19 +329,19 @@ def go
 end
 
 def inventory
-  m3330
+  restore_to_objects
   $Rstr="OK"
   $F[49]=0
   print "YOU HAVE "
   for $I in 1..$G
-    $Ostr=mREAD
+    $object_str=mREAD
     strip_leading
     if $I==1 && $object_location[1]==0 && $F[44]==1 then
-      $Ostr="COIN"
+      $object_str="COIN"
     end
     if !($I==$G && $object_location[5]==0) then
       if $object_location[$I]==0 then
-        print $Ostr+","
+        print $object_str+","
         $F[49]=1
       end
     end
@@ -1079,7 +1079,7 @@ def m3310
   end
 end
 
-def m3330
+def restore_to_objects
   mRESTORE
   for $I in 1..80
     $Dstr=mREAD
@@ -1087,7 +1087,7 @@ def m3330
 end
 
 def strip_leading
-  $Ostr=RIGHTstr($Ostr,LEN($Ostr)-1)
+  $object_str=RIGHTstr($object_str,LEN($object_str)-1)
 end
 
 def pause
@@ -1102,17 +1102,17 @@ def setup
   $Xstr=Array.new(6+1,'')
   $Ystr=Array.new(6+1,'')
   $Gstr=Array.new(2+1,'')
-  m3330
-  for $I in 1..$NO
+  restore_to_objects
+  for $I in 1..$num_objects
     $Tstr=mREAD
   end
   for $I in 1..6
     $Xstr[$I]=mREAD
     $Ystr[$I]=mREAD
   end
-  $Bstr="NOOEOOSOOWOOUOODOOINVGETTAKEXAREAGIVSAYPICWEATIECLIRIGUSEOPE"
-  $Bstr=$Bstr+"LIGFILPLAWATSWIEMPENTCROREMFEETURDIVBAILEATHRINSBLODROEATMOV"
-  $Bstr=$Bstr+"INTRINCUTHOLBURPOISHOUNLWITDRICOUPAYMAKBRESTEGATREF"
+  $cmd_list="NOOEOOSOOWOOUOODOOINVGETTAKEXAREAGIVSAYPICWEATIECLIRIGUSEOPE"
+  $cmd_list=$cmd_list+"LIGFILPLAWATSWIEMPENTCROREMFEETURDIVBAILEATHRINSBLODROEATMOV"
+  $cmd_list=$cmd_list+"INTRINCUTHOLBURPOISHOUNLWITDRICOUPAYMAKBRESTEGATREF"
   $X6str="XV SFGMFDUFE UIF XJABSET HMSBF! if JT EFBE"
   $X1str="THE GHOST OF THE GOBLIN GUARDIAN"
   $X2str="$B MBSHF WJOF HSPXT JO TFDPOET!"
@@ -1227,7 +1227,7 @@ def decode
   $Rstr=$Zstr
 end
 
-def m4310
+def tunnels
   $Jstr="SSSSSSSS"
   $NG=0
   begin
@@ -1242,7 +1242,7 @@ def m4310
     puts
     puts $Wstr
     $Jstr=RIGHTstr($Jstr+RIGHTstr($Wstr,1),8)
-    if $Wstr=="$G" then
+    if $Wstr=="G" then
       $F[56]=1
       return
     end
@@ -1284,7 +1284,7 @@ def new_game
   $Rstr="GOOD LUCK ON YOUR QUEST!"
   $Gstr[1]=""
   for $I in 1..8
-    $Fstr=MIDstr($Bstr,1+INT(RND(1)*4)*3,1)
+    $Fstr=MIDstr($cmd_list,1+INT(RND(1)*4)*3,1)
     $Gstr[1]=$Gstr[1]+$Fstr
     if $Fstr=="N" then
       $Lstr="S"
