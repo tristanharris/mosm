@@ -1,13 +1,13 @@
 require 'json'
 
 def start
-	$EL=39
-	$NO=88
-	$NV=57
-	$G=28
-	setup
-	main
-	exit
+  $EL=39
+  $NO=88
+  $NV=57
+  $G=28
+  setup
+  main
+  exit
 end
 
 def main
@@ -20,13 +20,13 @@ def main
   m3330
   $Jstr=""
   for $I in 1..($G-1)
-		$Ostr=mREAD
-		$Pstr=$Ystr[VAL(LEFTstr($Ostr,1))]
-		strip_leading
-		if $F[$I]==0 && $object_location[$I]==$room then
-			$Jstr=$Jstr+" "+$Pstr+" "+$Ostr+","
-		end
-	end
+    $Ostr=mREAD
+    $Pstr=$Ystr[VAL(LEFTstr($Ostr,1))]
+    strip_leading
+    if $F[$I]==0 && $object_location[$I]==$room then
+      $Jstr=$Jstr+" "+$Pstr+" "+$Ostr+","
+    end
+  end
   if $room==29 && $F[48]==0 then
     $Jstr=$Jstr+" GRARGS FEASTING,"
   end
@@ -52,8 +52,8 @@ def main
   m4830
   print " "
   for $I in 1..LEN($exits[$room])
-		print MIDstr($exits[$room],$I,1)+","
-	end
+    print MIDstr($exits[$room],$I,1)+","
+  end
   puts
   puts
   $Rstr="PARDON?"
@@ -70,14 +70,14 @@ def main
   $VB=0
   $B=0
   for $I in 1..LEN($Istr)
-		if MIDstr($Istr,$I,1)==" " && $Vstr=="" then
-			$Vstr=LEFTstr($Istr,$I-1)
-		end
-		if MIDstr($Istr,$I+1,1)!=" " && $Vstr!="" then
-			$Tstr=MIDstr($Istr,$I+1,LEN($Istr)-1)
-			break
-		end
-	end
+    if MIDstr($Istr,$I,1)==" " && $Vstr=="" then
+      $Vstr=LEFTstr($Istr,$I-1)
+    end
+    if MIDstr($Istr,$I+1,1)!=" " && $Vstr!="" then
+      $Tstr=MIDstr($Istr,$I+1,LEN($Istr)-1)
+      break
+    end
+  end
   if $Tstr=="" then
     $Vstr=$Istr
   end
@@ -89,29 +89,29 @@ def main
   end
   $Ustr=LEFTstr($Vstr,3)
   for $I in 1..$NV
-		if MIDstr($Bstr,$I*3-2,3)==$Ustr then
-			$VB=$I
-			break
-		end
-	end
+    if MIDstr($Bstr,$I*3-2,3)==$Ustr then
+      $VB=$I
+      break
+    end
+  end
   $F[36]=0
-	begin
-		m3330
-		for $I in 1..$NO
-			$Ostr=mREAD
-			if $I<=$G then
-				strip_leading
-			end
-			if $Tstr==$Ostr then
-				$B=$I
-				break
-			end
-		end
-		if $B==0 && $F[36]==0 && $Tstr!="" then
-			$Tstr=$Tstr+"S"
-			$F[36]=1
-		end
-	end until !($B==0 && $F[36]==0 && $Tstr!="")
+  begin
+    m3330
+    for $I in 1..$NO
+      $Ostr=mREAD
+      if $I<=$G then
+        strip_leading
+      end
+      if $Tstr==$Ostr then
+        $B=$I
+        break
+      end
+    end
+    if $B==0 && $F[36]==0 && $Tstr!="" then
+      $Tstr=$Tstr+"S"
+      $F[36]=1
+    end
+  end until !($B==0 && $F[36]==0 && $Tstr!="")
   if $VB==0 then
     $VB=$NV+1
   end
@@ -125,52 +125,52 @@ def main
     $Rstr="YOU CANNOT "+$Istr
   end
   if !($B>$G || $B==0) then
-		if !($VB==8 || $VB==9 || $VB==14 || $VB==17 || $VB==44 || $VB>54) then
-			if $VB<$NV && $object_location[$B]!=0 then
-				$Rstr="YOU DO NOT HAVE THE "+$Tstr
-				main
-			end
-		end
-	end
+    if !($VB==8 || $VB==9 || $VB==14 || $VB==17 || $VB==44 || $VB>54) then
+      if $VB<$NV && $object_location[$B]!=0 then
+        $Rstr="YOU DO NOT HAVE THE "+$Tstr
+        main
+      end
+    end
+  end
   if $room==56 && $F[35]==0 && $VB!=37 && $VB!=53 then
     $Rstr=$X1str+" HAS GOT YOU!"
-		main
+    main
   end
   if !($VB==44 || $VB==47 || $VB==19 || $VB==57 || $VB==49) then
-		if $room==48 && $F[63]==0 then
-			$Rstr=$X9str
-			main
-		end
-	end
+    if $room==48 && $F[63]==0 then
+      $Rstr=$X9str
+      main
+    end
+  end
   $H=VAL(STRstr($room)+STRstr($B))
   send([:go,:go,:go,:go,:go,:go,:inventory,:take,:take,:examine,:examine,:give,:say,
-		:pick,:wear,:tie,:climb,:make,:use,:open,:burn,:fill,:plant,:water,:swing,:empty,
-		:enter,:cross,:remove,:feed,:turn,:dive,:bail,:drop,:throw,:insert,:make,:drop,:eat,
-		:move,:into,:ring,:cut,:hold,:burn,:into,:hold,:ring,:use,:drink,:examine,:pay,
-		:make,:break,:take,:take,:reflect,:noop][$VB-1])
+    :pick,:wear,:tie,:climb,:make,:use,:open,:burn,:fill,:plant,:water,:swing,:empty,
+    :enter,:cross,:remove,:feed,:turn,:dive,:bail,:drop,:throw,:insert,:make,:drop,:eat,
+    :move,:into,:ring,:cut,:hold,:burn,:into,:hold,:ring,:use,:drink,:examine,:pay,
+    :make,:break,:take,:take,:reflect,:noop][$VB-1])
   if !($F[62]==1) then
-		if $room==41 then
-			$F[67]==$F[67]+1
-			if $F[67]==10 then
-				$F[56]=1
-				$Rstr="YOU SANK!"
-			end
-		end
-		if $room==56 && $F[35]==0 && $object_location[10]!=0 then
-			$Rstr=$X1str+" GETS YOU!"
-			$F[56]=1
-		end
-		if $F[56]==0 then
-			main
-		end
-		print_titles
-		puts $Rstr
-		puts "YOU HAVE FAILED IN YOUR QUEST!"
-		puts
-		puts "BUT YOU ARE GRANTED ANOTHER TRY"
-		pause
-		RUN
-	end
+    if $room==41 then
+      $F[67]==$F[67]+1
+      if $F[67]==10 then
+        $F[56]=1
+        $Rstr="YOU SANK!"
+      end
+    end
+    if $room==56 && $F[35]==0 && $object_location[10]!=0 then
+      $Rstr=$X1str+" GETS YOU!"
+      $F[56]=1
+    end
+    if $F[56]==0 then
+      main
+    end
+    print_titles
+    puts $Rstr
+    puts "YOU HAVE FAILED IN YOUR QUEST!"
+    puts
+    puts "BUT YOU ARE GRANTED ANOTHER TRY"
+    pause
+    RUN
+  end
 
   print_titles
   puts "HOOOOOOORRRRRAAAAAYYYYYY!"
@@ -190,126 +190,126 @@ def go
     $D=3
   end
   if !(!(($room==75 && $D==2) || ($room==76 && $D==4)) || $F[64]==1) then
-		$Rstr="$B USPMM TUPQT ZPV DSPTTJOH"
-		decode
-		return
-	end
+    $Rstr="$B USPMM TUPQT ZPV DSPTTJOH"
+    decode
+    return
+  end
   if $F[64]==1 then
     $F[64]=0
   end
   if !($F[51]==1 || $F[29]==1) then
-		if $F[55]==1 then
-			$F[56]=1
-			$Rstr="GRARGS HAVE GOT YOU!"
-			return
-		end
-		if $room==29 && $F[48]==0 then
-			$Rstr="GRARGS WILL SEE YOU!"
-			return
-		end
-		if $room==73 || $room==42 || $room==9 || $room==10 then
-			$Rstr=$X3str
-			$F[55]=1
-			return
-		end
-	end
-	if $object_location[8]==0 && (($room==52 && $D==2) || ($room==31 && $D!=3)) then
+    if $F[55]==1 then
+      $F[56]=1
+      $Rstr="GRARGS HAVE GOT YOU!"
+      return
+    end
+    if $room==29 && $F[48]==0 then
+      $Rstr="GRARGS WILL SEE YOU!"
+      return
+    end
+    if $room==73 || $room==42 || $room==9 || $room==10 then
+      $Rstr=$X3str
+      $F[55]=1
+      return
+    end
+  end
+  if $object_location[8]==0 && (($room==52 && $D==2) || ($room==31 && $D!=3)) then
     $Rstr="THE BOAT IS TOO HEAVY"
-		return
+    return
   end
   if $object_location[8]!=0 && (($room==52 && $D==4) || ($room==31 && $D==3)) then
     $Rstr="YOU CANNOT SWIM"
-		return
+    return
   end
   if $room==52 && $object_location[8] && $D==4 && $F[30]==0 then
     $Rstr="NO POWER!"
-		return
+    return
   end
   if $room==41 && $D==3 && $F[31]==0 then
     $Rstr="UIF CPBU JT TJOLJOH!"
-		decode
-		return
+    decode
+    return
   end
   if $room==33 && $D==1 && $F[32]==0 then
     $Rstr="OGBAN'S BOAR BLOCK YOUR PATH"
-		return
+    return
   end
   if (($room==3 && $D==2) || ($room==4 && $D==4)) && $F[45]==0 then
     $Rstr=$X5str
-		return
+    return
   end
   if $room==35 && $object_location[13]!=$room then
     $Rstr="THE ICE IS BREAKING!"
-		return
+    return
   end
   if $room==5 && ($D==2 || $D==4) then
     m4310
   end
   if $room==4 && $D==4 then
     $Rstr="PASSAGE IS TOO STEEP"
-		return
+    return
   end
   if $room==7 && $D==2 && $F[46]==0 then
     $Rstr="A HUGE HOUND BARS YOUR WAY"
-		return
+    return
   end
   if ($room==38 || $room==37) && $F[50]==0 then
     $Rstr="JU JT UPP EBSL"
-		decode
-		return
+    decode
+    return
   end
   if $room==49 && $D==2 && $F[54]==0 then
     $Rstr="MYSTERIOUS FORCES HOLD YOU BACK"
-		return
+    return
   end
   if $room==49 && $D==3 && $F[68]==0 then
     $Rstr="YOU MEET OGBAN!!!"
-		$F[56]=1
-		return
+    $F[56]=1
+    return
   end
   if $room==38 && $F[65]==0 then
     $Rstr="RATS NIBBLE YOUR ANKLES"
-		return
+    return
   end
   if $room==58 && ($D==1 || $D==4) && $F[66]==0 then
     $Rstr="YOU GET CAUGHT IN THE WEBS!"
-		return
+    return
   end
   if $room==48 && $D==4 && $F[70]==0 then
     $Rstr="THE DOOR DOES NOT OPEN"
-		return
+    return
   end
   if $room==40 && $F[47]==1 then
     $F[68]=1
   end
   if $room==37 && $D==4 && $exits[37]=="EW" then
     $room=67
-		$Rstr="THE PASSAGE WAS STEEP!"
-		return
+    $Rstr="THE PASSAGE WAS STEEP!"
+    return
   end
   if $room==29 && $D==3 then
     $F[48]=1
-		$F[20]=0
+    $F[20]=0
   end
   if $room==8 && $D==2 then
     $F[46]=0
   end
   $OM=$room
   for $I in 1..LEN($exits[$room])
-		$Kstr=MIDstr($exits[$OM],$I,1)
-		if ($Kstr=="N" || $Kstr=="U") && $D==1 then
-			$room=$room-10
-		end
-		if $Kstr=="E" && $D==2 then
-			$room=$room+1
-		end
-		if ($Kstr=="S" || $Kstr=="D") && $D==3 then
-			$room=$room+10
-		end
-		if $Kstr=="W" && $D==4 then
-			$room=$room-1
-		end
-	end
+    $Kstr=MIDstr($exits[$OM],$I,1)
+    if ($Kstr=="N" || $Kstr=="U") && $D==1 then
+      $room=$room-10
+    end
+    if $Kstr=="E" && $D==2 then
+      $room=$room+1
+    end
+    if ($Kstr=="S" || $Kstr=="D") && $D==3 then
+      $room=$room+10
+    end
+    if $Kstr=="W" && $D==4 then
+      $room=$room-1
+    end
+  end
   $Rstr="OK"
   if $room==$OM then
     $Rstr="YOU CANNOT GO THAT WAY"
@@ -322,9 +322,9 @@ def go
   end
   if $F[39]>5 && $F[29]==1 then
     $Rstr="CPPUT IBWF XPSO PVU"
-		decode
+    decode
     $F[29]=0
-		$object_location[3]=81
+    $object_location[3]=81
   end
 end
 
@@ -334,21 +334,21 @@ def inventory
   $F[49]=0
   print "YOU HAVE "
   for $I in 1..$G
-		$Ostr=mREAD
-		strip_leading
-		if $I==1 && $object_location[1]==0 && $F[44]==1 then
-			$Ostr="COIN"
-		end
-		if !($I==$G && $object_location[5]==0) then
-			if $object_location[$I]==0 then
-				print $Ostr+","
-				$F[49]=1
-			end
-		end
-		if $F[49]==0 then
-			puts "NOTHING"
-		end
-	end
+    $Ostr=mREAD
+    strip_leading
+    if $I==1 && $object_location[1]==0 && $F[44]==1 then
+      $Ostr="COIN"
+    end
+    if !($I==$G && $object_location[5]==0) then
+      if $object_location[$I]==0 then
+        print $Ostr+","
+        $F[49]=1
+      end
+    end
+    if $F[49]==0 then
+      puts "NOTHING"
+    end
+  end
   puts
   pause
 end
@@ -356,34 +356,34 @@ end
 def take
   if $H==6577 then
     $Rstr="HOW?"
-		return
+    return
   end
   if $H==4177 || $H==5177 then
     $B=16
-		fill
-		return
+    fill
+    return
   end
   if $B==38 then
     $Rstr="TOO HEAVY!"
-		return
+    return
   end
   if $B==4 && $F[43]==0 then
     $Rstr="IT IS FIRMLY NAILED ON!"
-		return
+    return
   end
   $CO=0
   for $I in 1..($G-1)
-		if $object_location[$I]==0 then
-			$CO=$CO+1
-		end
+    if $object_location[$I]==0 then
+      $CO=$CO+1
+    end
   end
   if $CO>13 then
     $Rstr="YOU CANNOT CARRY ANYMORE"
-		return
+    return
   end
   if $B>$G then
     $Rstr="YOU CANNOT GET THE "+$Tstr
-		return
+    return
   end
   if $B==0 then
     return
@@ -399,7 +399,7 @@ def take
   end
   if $object_location[$B]==$room && $F[$B]==0 then
     $object_location[$B]=0
-		$Rstr="YOU HAVE THE "+$Tstr
+    $Rstr="YOU HAVE THE "+$Tstr
   end
   if $B==28 then
     $object_location[5]=81
@@ -431,54 +431,54 @@ def examine
   end
   if $H==8080 then
     $Rstr="AHA!"
-		$F[1]=0
+    $F[1]=0
   end
   if $H==7029 then
     $Rstr="OK"
-		$F[2]=0
+    $F[2]=0
   end
   if $B==20 then
     $Rstr="NBUDIFT JO QPDLFU"
-		decode
-		$object_location[26]=0
+    decode
+    $object_location[26]=0
   end
   if $H==1648 then
     $Rstr="THEREARE SOME LETTERS '"+$Gstr[2]+"'"
   end
   if $H==7432 then
     $Rstr="UIFZ BSF BQQMF USFFT"
-		decode
-		$F[5]=0
+    decode
+    $F[5]=0
   end
   if $H==2134 || $H==2187 then
     $Rstr="OK"
-		$F[16]=0
+    $F[16]=0
   end
   if $B==35 then
     $Rstr="IT IS FISHY!"
-		$F[17]=0
+    $F[17]=0
   end
   if $H==3438 then
     $Rstr="OK"
-		$F[22]=0
+    $F[22]=0
   end
   if $H==242 then
     $Rstr="A FADED INSCRIPTION"
   end
   if ($H==1443 || $H==1485) && $F[33]==0 then
     $Rstr="$B HMJNNFSJOH GSPN UIF EFQUIT"
-		decode
+    decode
   end
   if ($H==1443 || $H==1485) && $F[33]==1 then
     $Rstr="SOMETHING HERE..."
-		$F[12]=0
+    $F[12]=0
   end
   if $H==2479 || $H==2444 then
     $Rstr="THERE IS A HANDLE"
   end
   if $B==9 then
     $Rstr="UIF MBCFM SFBET 'QPJTPO'"
-		decode
+    decode
   end
   if $H==4055 then
     m3290
@@ -500,7 +500,7 @@ def examine
   end
   if $H==6970 then
     $Rstr="YOU FOUND SOMETHING"
-		$F[4]=0
+    $F[4]=0
   end
   if $H==2066 then
     $Rstr="A LARGE CUPBOARD IN THE CORNER"
@@ -510,7 +510,7 @@ def examine
   end
   if $H==248 then
     $Rstr="A GBEFE XPSE - 'N S I T'"
-		decode
+    decode
   end
 end
 
@@ -529,42 +529,42 @@ def give
   end
   if ($H==7562 || $H==7662) && $F[44]>0 && $object_location[1]==0 then
     $Rstr="HE TAKES IT"
-		$F[64]=1
+    $F[64]=1
   end
   if $F[64]==1 then
     $F[44]=$F[44]-1
   end
   if $B==1 then
     $Rstr="HE TAKES THEM ALL!"
-		$object_location[1]=81
-		$F[64]=1
-		$F[44]=0
+    $object_location[1]=81
+    $F[64]=1
+    $F[44]=0
   end
   if $H==2228 && $object_location[5]==81 then
     $Rstr=$XBstr+"NORTH"
-		$object_location[28]=81
-		$room=12
+    $object_location[28]=81
+    $room=12
   end
   if ($H==2228 && $object_location[5]==81) || $H==225 then
     $Rstr=$XBstr+"NORTH"
-		$room=12
+    $room=12
   end
   if ($H==1228 && $object_location[5]==81) || $H==125 then
     $Rstr=$XBstr+"SOUTH"
-		$room=12
+    $room=12
   end
   if $room==7 || $room==33 then
     $Rstr="HE EATS IT!"
-		$object_location[$B]=81
+    $object_location[$B]=81
   end
   if $H==711 then
     $F[46]=1
-		$Rstr="HE IS DISTRACTED"
+    $Rstr="HE IS DISTRACTED"
   end
   if $H==385 || $H==3824 then
     $Rstr="THEY SCURRY AWAY"
-		$object_location[$B]=81
-		$F[65]=1
+    $object_location[$B]=81
+    $F[65]=1
   end
 end
 
@@ -572,24 +572,24 @@ def say
   $Rstr="YOU SAID IT"
   if $B==84 then
     $Rstr="YOU MUST SAY THEM ONE BY ONE!"
-		return
+    return
   end
   if $room!=47 || $B<71 || $B>75 || $object_location[27]!=0 then
     return
   end
   if $B==71 && $F[60]==0 then
     $Rstr=$X7str
-		$F[60]=1
-		return
+    $F[60]=1
+    return
   end
   if $B==72 && $F[60]==1 && $F[61]==0 then
     $Rstr=$X8str
-		$F[61]=1
-		return
+    $F[61]=1
+    return
   end
   if $B==($F[52]+73) && $F[60]==1 && $F[61]==1 then
     $F[62]=1
-		return
+    return
   end
   $Rstr="THE WRONG SACRED WORD!"
   $F[56]=1
@@ -604,15 +604,15 @@ end
 def wear
   if $B==3 then
     $F[29]=1
-		$Rstr="ZPV BSF JOWJTJCMF"
-		$F[55]=0
-		decode
+    $Rstr="ZPV BSF JOWJTJCMF"
+    $F[55]=0
+    decode
   end
   if $B==20 then
     $F[51]=1
-		$Rstr="ZPV BSF EJTHVJTFE"
-		$F[55]=0
-		decode
+    $Rstr="ZPV BSF EJTHVJTFE"
+    $F[55]=0
+    decode
   end
 end
 
@@ -622,20 +622,20 @@ def tie
   end
   if $H==7214 then
     $Rstr="IT IS TIED"
-		$object_location[14]=72
-		$F[53]=1
+    $object_location[14]=72
+    $F[53]=1
   end
   if $H==722 then
     $Rstr="OK"
-		$F[40]=1
-		$object_location[2]=72
+    $F[40]=1
+    $object_location[2]=72
   end
 end
 
 def climb
   if $H==1547 && $F[38]==1 then
     $Rstr="ALL RIGHT"
-		$room=16
+    $room=16
   end
   if $B==14 || $B==2 then
     $Rstr="NOT ATTACHED TO ANYTHING!"
@@ -645,38 +645,38 @@ def climb
   end
   if $H==7214 && $F[53]==1 then
     $Rstr="GOING DOWN"
-		$room=71
+    $room=71
   end
   if $H==722 && $F[40]==1 then
     $room=71
-		$Rstr="IT IS TORN"
-		$object_location[2]=81
-		$F[40]=0
+    $Rstr="IT IS TORN"
+    $object_location[2]=81
+    $F[40]=0
   end
   if $H==7114 && $F[53]==1 then
     $object_location[14]=71
-		$F[53]=0
-		$Rstr="IT FALLS DOWN-BUMP!"
+    $F[53]=0
+    $Rstr="IT FALLS DOWN-BUMP!"
   end
 end
 
 def use
   if $H==522 then
     $Rstr="OK"
-		$F[30]=1
+    $F[30]=1
   end
   if $B==1 || $B==62 || $B==5 || $B==28 || $B==11 || $B==24 then
     give
   end
   if $H==416 then
     $Rstr="ZPV IBWF LFQU BGMPBU"
-		$F[31]=1
-		decode
-		return
+    $F[31]=1
+    decode
+    return
   end
   if $H==4116 then
     $Rstr="IT IS NOT BIG ENOUGH!"
-		return
+    return
   end
   if $B==18 || $B==7 then
     swing
@@ -701,18 +701,18 @@ def open
   end
   if $H==2030 then
     $F[9]=0
-		$Rstr="OK"
+    $Rstr="OK"
   end
   if $H==6030 then
     $Rstr="OK"
-		$F[3]=0
+    $F[3]=0
   end
   if $H==2444 || $H==1870 then
     $Rstr="YOU ARE NOT STRONG ENOUGH"
   end
   if $H==3756 then
     $Rstr="A PASSAGE!"
-		$exits[37]="EW"
+    $exits[37]="EW"
   end
   if $H==5960 then
     m3260
@@ -737,26 +737,26 @@ def burn
   end
   if ($B==23 || $H==6970) && $object_location[26]!=0 then
     $Rstr="OP NBUDIFT"
-		decode
+    decode
   end
   if $B==23 && $object_location[26]==0 then
     $Rstr="A BRIGHT "+$Vstr
-		$F[50]=1
+    $F[50]=1
   end
   if $H==6970 && $object_location[26]==0 then
     $F[43]=1
-		$Rstr="IT HAS TURNED TO ASHES"
+    $Rstr="IT HAS TURNED TO ASHES"
   end
 end
 
 def fill
   if ($B==16 || $B==6) && ($room==41 || $room==51) then
     $Rstr="YOU CAPSIZED!"
-		$F[56]=1
+    $F[56]=1
   end
   if $H==6516 && $object_location[16]==0 then
     $Rstr="IT IS NOW FULL"
-		$F[34]=1
+    $F[34]=1
   end
   if $H==656 then
     $Rstr="IT LEAKS OUT!"
@@ -766,7 +766,7 @@ end
 def plant
   if $B!=22 || $room!=15 then
     $Rstr="DOES NOT GROW!"
-		return
+    return
   end
   $Rstr="OK"
   $F[34]=1
@@ -775,8 +775,8 @@ end
 def water
   if $B==22 && $F[37]==1 && $F[34]==1 then
     $Rstr=$X2str
-		$F[38]=1
-		decode
+    $F[38]=1
+    decode
   end
 end
 
@@ -786,23 +786,23 @@ def swing
   end
   if $H==5818 then
     $Rstr="YOU CLEARED THE WEBS"
-		$F[66]=1
+    $F[66]=1
   end
   if $H==187 then
     $Rstr="THE DOOR BROKE!"
-		$exits[18]="NS"
-		$exits[28]="NS"
+    $exits[18]="NS"
+    $exits[28]="NS"
   end
   if $H==717 then
     $Rstr="YOU BROKE THROUGH"
-		$exits[71]="N"
+    $exits[71]="N"
   end
 end
 
 def empty
   if $B==16 then
     $B=22
-		water
+    water
   end
   if $H==499 then
     $Rstr="WHERE?"
@@ -812,35 +812,35 @@ end
 def enter
   if $H==4337 then
     $VB=2
-		go
-		return
+    go
+    return
   end
   if $room==36 then
     $Rstr="YOU FOUND SOMETHING"
-		$F[13]=0
+    $F[13]=0
   end
 end
 
 def cross
   if $room==76 then
     $VB=4
-		go
-		return
+    go
+    return
   end
   if $room==75 then
     $VB=2
-		go
+    go
   end
 end
 
 def remove
   if ($B==3 && $F[29]==1) then
     $Rstr="TAKEN OFF"
-		$F[29]=0
+    $F[29]=0
   end
   if ($B==20 && $F[51]==1) then
     $Rstr="OK"
-		$F[51]=0
+    $F[51]=0
   end
   if $B==36 || $B==50 then
     move
@@ -859,15 +859,15 @@ def turn
   end
   if $H==2445 then
     $Rstr="UIF HBUFT PQFQ, UIF QPPM FNQUJFT"
-		$F[33]=1
-		decode
+    $F[33]=1
+    decode
   end
 end
 
 def dive
   if $room==14 || $room==51 then
     $Rstr="YOU HAVE DROWNED"
-		$F[56]=1
+    $F[56]=1
   end
 end
 
@@ -883,14 +883,14 @@ def drop
   $Rstr="DONE"
   if $H==418 || $H==518 then
     $Rstr="YOU DROWNED!"
-		$F[56]=1
+    $F[56]=1
   end
   if $B==8 && $F[30]==1 then
     $object_location[2]=$room
   end
   if $B==16 && $F[34]==1 then
     $Rstr="YOU LOST THE WATER!"
-		$F[34]=0
+    $F[34]=0
   end
   if $B==2 && $F[30]==1 then
     $F[30]=0
@@ -914,15 +914,15 @@ def throw
   $object_location[$B]=$room
   if $H==3317 then
     $Rstr="ZPV DBVHIU UIF CPBS"
-		$F[32]=1
-		decode
+    $F[32]=1
+    decode
   end
 end
 
 def make
   if $B==10 then
     $Rstr="$B OJDF UVOF"
-		decode
+    decode
   end
   if $H==5233 then
     $Rstr="WHAT WITH?"
@@ -932,8 +932,8 @@ def make
   end
   if $H==5610 then
     $F[35]=1
-		$Rstr=$X1str+" IS FREE!"
-		$exits[56]="NS"
+    $Rstr=$X1str+" IS FREE!"
+    $exits[56]="NS"
   end
 end
 
@@ -943,14 +943,14 @@ def eat
   end
   if $B==5 || $B==24 then
     $Rstr="YUM YUM!"
-		$object_location[$B]=81
+    $object_location[$B]=81
   end
 end
 
 def move
   if $room==4 && $B==50 then
     $F[45]=1
-		$Rstr="YOU REVEALED A STEEP PASSAGE"
+    $Rstr="YOU REVEALED A STEEP PASSAGE"
   end
   if $room==3 && $B==50 then
     $Rstr="YOU CANNOT MOVE RUBBLE FROM HERE"
@@ -963,7 +963,7 @@ end
 def into
   if ($B==67 || $B==68) && $object_location[9]==0 && $room==49 then
     $Rstr="OK"
-		$F[47]=1
+    $F[47]=1
   end
 end
 
@@ -972,16 +972,16 @@ def ring
     return
   end
   begin puts
-		puts "HOW MANY TIMES?"
-		$MR=mINPUT
-		if $MR==0 then
-			puts "A NUMBER"
-		end
+    puts "HOW MANY TIMES?"
+    $MR=mINPUT
+    if $MR==0 then
+      puts "A NUMBER"
+    end
   end until $MR>0
   if $MR==$F[42] then
     $Rstr="A ROCK DOOR OPENS"
-		$exits[27]="EW"
-		return
+    $exits[27]="EW"
+    return
   end
   $Rstr="ZPV IBWF NJTUSFBUFE UIF CFMM!"
   $F[56]=1
@@ -991,15 +991,15 @@ end
 def cut
   if $H==5861 then
     $H=5818
-		swing
+    swing
   end
 end
 
 def hold
   if ($H==4864 || $H==4819) && $object_location[19]==0 then
     $Rstr=$X6str
-		$F[63]=1
-		decode
+    $F[63]=1
+    decode
   end
   if $B==27 then
     take
@@ -1018,7 +1018,7 @@ end
 def m3130
   if $H==4870 && $object_location[21]==0 then
     $Rstr="THE KEY TURNS!"
-		$F[70]=1
+    $F[70]=1
   end
 end
 
@@ -1060,7 +1060,7 @@ def m3260
   $Rstr="WRONG!"
   if $CN==$F[41] then
     $Rstr="IT OPENS"
-		$F[21]=0
+    $F[21]=0
   end
 end
 
@@ -1073,16 +1073,16 @@ def m3290
 end
 
 def m3310
-	mRESTORE
+  mRESTORE
   for $I in 1..$room
-		$Dstr=mREAD
+    $Dstr=mREAD
   end
 end
 
 def m3330
-	mRESTORE
+  mRESTORE
   for $I in 1..80
-		$Dstr=mREAD
+    $Dstr=mREAD
   end
 end
 
@@ -1103,12 +1103,12 @@ def setup
   $Ystr=Array.new(6+1,'')
   $Gstr=Array.new(2+1,'')
   m3330
-	for $I in 1..$NO
-		$Tstr=mREAD
+  for $I in 1..$NO
+    $Tstr=mREAD
   end
-	for $I in 1..6
-		$Xstr[$I]=mREAD
-		$Ystr[$I]=mREAD
+  for $I in 1..6
+    $Xstr[$I]=mREAD
+    $Ystr[$I]=mREAD
   end
   $Bstr="NOOEOOSOOWOOUOODOOINVGETTAKEXAREAGIVSAYPICWEATIECLIRIGUSEOPE"
   $Bstr=$Bstr+"LIGFILPLAWATSWIEMPENTCROREMFEETURDIVBAILEATHRINSBLODROEATMOV"
@@ -1128,11 +1128,11 @@ def setup
   puts
   puts "   1. START A NEW GAME"
   puts "OR 2. CONTINUE A SAVED GAME"
-	begin
-		puts
-		puts
-		puts "TYPE IN EITHER 1 OR 2"
-		$Cx=mINPUT.to_i
+  begin
+    puts
+    puts
+    puts "TYPE IN EITHER 1 OR 2"
+    $Cx=mINPUT.to_i
   end until !($Cx!=1 && $Cx!=2)
   if $Cx==1 then
     new_game
@@ -1143,7 +1143,7 @@ def setup
 end
 
 def mRESTORE
-	$DATA=%q{
+  $DATA=%q{
   DATA 11HALF-DUG GRAVE,12GOBLIN GRAVEYARD
   DATA 11HOLLOW TOMB,23STALACTITES AND STALAGMITES
   DATA 11MAZE OF TUNNELS,11VAULTED CAVERN
@@ -1207,49 +1207,49 @@ def mRESTORE
   DATA 80,70,60,69,74,72,63,52,20,11,1,14,36,54,61,21,32,10,50
   DATA 29,59,34,13,80,30,81,47,74
   DATA 1,2,3,4,5,9,12,13,16,17,20,21,22
-	}.chomp.gsub(/\s*DATA\s*/,',')[2..-1].gsub('"','').split(',')
+  }.chomp.gsub(/\s*DATA\s*/,',')[2..-1].gsub('"','').split(',')
 end
 
 def decode
   $Zstr=""
   for $I in 1..LEN($Rstr)
-		$Cstr=MIDstr($Rstr,$I,1)
-		if $Cstr<"A" then
-			$Zstr=$Zstr+$Cstr
-		else
-			$object_location=$Cstr.ord-1
-			if $object_location==64 then
-				$object_location=90
-			end
-			$Zstr=$Zstr+CHRstr($object_location)
-		end
-	end
+    $Cstr=MIDstr($Rstr,$I,1)
+    if $Cstr<"A" then
+      $Zstr=$Zstr+$Cstr
+    else
+      $object_location=$Cstr.ord-1
+      if $object_location==64 then
+        $object_location=90
+      end
+      $Zstr=$Zstr+CHRstr($object_location)
+    end
+  end
   $Rstr=$Zstr
 end
 
 def m4310
   $Jstr="SSSSSSSS"
   $NG=0
-	begin
-		$MP=$D/2
-		print_titles
-		puts "YOU ARE LOST IN THE"
-		puts "      TUNNELS"
-		puts "WHICH WAY? (N,S,W OR E)"
-		if $NG>15 then
-			puts "(OR G TO GIVE UP!)"
-		end
-		puts
-		puts $Wstr
-		$Jstr=RIGHTstr($Jstr+RIGHTstr($Wstr,1),8)
-		if $Wstr=="$G" then
-			$F[56]=1
-			return
-		end
-		if $Jstr!=$Gstr[$MP] then
-			$NG=$NG+1
-		end
-	end until !($Jstr!=$Gstr[$MP])
+  begin
+    $MP=$D/2
+    print_titles
+    puts "YOU ARE LOST IN THE"
+    puts "      TUNNELS"
+    puts "WHICH WAY? (N,S,W OR E)"
+    if $NG>15 then
+      puts "(OR G TO GIVE UP!)"
+    end
+    puts
+    puts $Wstr
+    $Jstr=RIGHTstr($Jstr+RIGHTstr($Wstr,1),8)
+    if $Wstr=="$G" then
+      $F[56]=1
+      return
+    end
+    if $Jstr!=$Gstr[$MP] then
+      $NG=$NG+1
+    end
+  end until !($Jstr!=$Gstr[$MP])
 end
 
 def print_titles
@@ -1263,15 +1263,15 @@ def print_titles
 end
 
 def new_game
-	for $I in 1..80
-		$exits[$I]=mREAD
+  for $I in 1..80
+    $exits[$I]=mREAD
   end
-	for $I in 1..$G
-		$object_location[$I]=mREAD.to_i
+  for $I in 1..$G
+    $object_location[$I]=mREAD.to_i
   end
-	for $I in 1..13
-		$A=mREAD.to_i
-		$F[$A]=1
+  for $I in 1..13
+    $A=mREAD.to_i
+    $F[$A]=1
   end
   $F[41]=INT(RND(1)*900)+100
   $F[42]=INT(RND(1)*3)+2
@@ -1284,22 +1284,22 @@ def new_game
   $Rstr="GOOD LUCK ON YOUR QUEST!"
   $Gstr[1]=""
   for $I in 1..8
-		$Fstr=MIDstr($Bstr,1+INT(RND(1)*4)*3,1)
-		$Gstr[1]=$Gstr[1]+$Fstr
-		if $Fstr=="N" then
-			$Lstr="S"
-		end
-		if $Fstr=="S" then
-			$Lstr="N"
-		end
-		if $Fstr=="E" then
-			$Lstr="W"
-		end
-		if $Fstr=="W" then
-			$Lstr="E"
-		end
-		$Gstr[2]=$Lstr+$Gstr[2]
-	end
+    $Fstr=MIDstr($Bstr,1+INT(RND(1)*4)*3,1)
+    $Gstr[1]=$Gstr[1]+$Fstr
+    if $Fstr=="N" then
+      $Lstr="S"
+    end
+    if $Fstr=="S" then
+      $Lstr="N"
+    end
+    if $Fstr=="E" then
+      $Lstr="W"
+    end
+    if $Fstr=="W" then
+      $Lstr="E"
+    end
+    $Gstr[2]=$Lstr+$Gstr[2]
+  end
 end
 
 def load_game
@@ -1326,82 +1326,82 @@ end
 def read_file
   #READ DATA FILE
   puts "OK. SEARCHING FOR "+$filename
-	File.open($filename, 'r') do |x|
-		puts "OK. LOADING"
-		$exits, $object_location, $F, $Gstr = JSON.parse(x.gets)
-	end
+  File.open($filename, 'r') do |x|
+    puts "OK. LOADING"
+    $exits, $object_location, $F, $Gstr = JSON.parse(x.gets)
+  end
 end
 
 def write_file
   #SAVE DATA FILE
-	File.open($filename, 'w') do |x|
-		puts "OK. SAVING"
-		x.puts [$exits, $object_location, $F, $Gstr].to_json
-	end
+  File.open($filename, 'w') do |x|
+    puts "OK. SAVING"
+    x.puts [$exits, $object_location, $F, $Gstr].to_json
+  end
 end
 
 def m4830
   $LS=1
   $LP=1
   for $I in 1..LEN($Jstr)
-		if MIDstr($Jstr,$I,1)==" " && $LL>$EL then
-			puts MIDstr($Jstr,$LP,$LS-$LP)
-			$LL=$I-$LS
-			$LP=$LS+1
-		end
-		if MIDstr($Jstr,$I,1)==" " then
-			$LS=$I
-		end
-		$LL=$LL+1
+    if MIDstr($Jstr,$I,1)==" " && $LL>$EL then
+      puts MIDstr($Jstr,$LP,$LS-$LP)
+      $LL=$I-$LS
+      $LP=$LS+1
+    end
+    if MIDstr($Jstr,$I,1)==" " then
+      $LS=$I
+    end
+    $LL=$LL+1
   end
   print MIDstr($Jstr,$LP,LEN($Jstr)-$LP)
 end
 
 def mREAD
-	$DATA.shift
+  $DATA.shift
 end
 
 def TAB(len)
-	' '*len
+  ' '*len
 end
 
 def mINPUT
-	print '?'
-	gets.chomp
+  print '?'
+  gets.chomp
 end
 
 def RND(v)
-	raise unless v==1
-	rand
+  raise unless v==1
+  rand
 end
 
 def INT(v)
-	v.to_i
+  v.to_i
 end
 
 def MIDstr(str, start, len)
-	start -= 1
-	str[start...(start+len)]
+  start -= 1
+  str[start...(start+len)]
 end
 
 def LEFTstr(str, len)
-	str[0..(len-1)]
+  str[0..(len-1)]
 end
 
 def RIGHTstr(str, len)
-	str[-len..-1]
+  str[-len..-1]
 end
 
 def VAL(str)
-	str.to_i
+  str.to_i
 end
 
 def STRstr(num)
-	num.to_s
+  num.to_s
 end
 
 def LEN(str)
-	str.length
+  str.length
 end
 
 def noop
