@@ -146,7 +146,7 @@ def main
   send([:go,:go,:go,:go,:go,:go,:inventory,:take,:take,:examine,:examine,:give,:say,
     :pick,:wear,:tie,:climb,:make,:use,:open,:burn,:fill,:plant,:water,:swing,:empty,
     :enter,:cross,:remove,:feed,:turn,:dive,:bail,:drop,:throw,:insert,:make,:drop,:eat,
-    :move,:into,:ring,:cut,:hold,:burn,:into,:hold,:ring,:use,:drink,:examine,:pay,
+    :move,:into,:ring,:cut,:hold,:burn,:into,:hold,:unlock,:use,:drink,:examine,:pay,
     :make,:break,:take,:take,:reflect,:noop][$VB-1])
   if !($F[62]==1) then
     if $room==41 then
@@ -1015,7 +1015,7 @@ def pay
   end
 end
 
-def m3130
+def unlock
   if $H==4870 && $object_location[21]==0 then
     $Rstr="THE KEY TURNS!"
     $F[70]=1
