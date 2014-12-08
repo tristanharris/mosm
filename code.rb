@@ -169,7 +169,7 @@ def main
     puts
     puts "BUT YOU ARE GRANTED ANOTHER TRY"
     pause
-    RUN
+    start
   end
 
   print_titles
