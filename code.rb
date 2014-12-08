@@ -345,9 +345,9 @@ def inventory
         $F[49]=1
       end
     end
-    if $F[49]==0 then
-      puts "NOTHING"
-    end
+  end
+  if $F[49]==0 then
+    puts "NOTHING"
   end
   puts
   pause
