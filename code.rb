@@ -6,8 +6,11 @@ def start
   $NV=57
   $G=28
   setup
-  main
-  exit
+  while true
+    catch(:redraw) do
+      main
+    end
+  end
 end
 
 def main
@@ -128,18 +131,18 @@ def main
     if !($VB==8 || $VB==9 || $VB==14 || $VB==17 || $VB==44 || $VB>54) then
       if $VB<$NV && $object_location[$B]!=0 then
         $Rstr="YOU DO NOT HAVE THE "+$Tstr
-        main
+        Kernel.throw :redraw
       end
     end
   end
   if $room==56 && $F[35]==0 && $VB!=37 && $VB!=53 then
     $Rstr=$X1str+" HAS GOT YOU!"
-    main
+    Kernel.throw :redraw
   end
   if !($VB==44 || $VB==47 || $VB==19 || $VB==57 || $VB==49) then
     if $room==48 && $F[63]==0 then
       $Rstr=$X9str
-      main
+      Kernel.throw :redraw
     end
   end
   $H=VAL(STRstr($room)+STRstr($B))
@@ -161,7 +164,7 @@ def main
       $F[56]=1
     end
     if $F[56]==0 then
-      main
+      Kernel.throw :redraw
     end
     print_titles
     puts $Rstr
