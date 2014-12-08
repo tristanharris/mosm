@@ -190,7 +190,7 @@ def go
     $D=3
   end
   if !(!(($room==75 && $D==2) || ($room==76 && $D==4)) || $F[64]==1) then
-    $Rstr="$B USPMM TUPQT ZPV DSPTTJOH"
+    $Rstr="B USPMM TUPQT ZPV DSPTTJOH"
     decode
     return
   end
@@ -466,7 +466,7 @@ def examine
     $Rstr="A FADED INSCRIPTION"
   end
   if ($H==1443 || $H==1485) && $F[33]==0 then
-    $Rstr="$B HMJNNFSJOH GSPN UIF EFQUIT"
+    $Rstr="B HMJNNFSJOH GSPN UIF EFQUIT"
     decode
   end
   if ($H==1443 || $H==1485) && $F[33]==1 then
@@ -921,7 +921,7 @@ end
 
 def make
   if $B==10 then
-    $Rstr="$B OJDF UVOF"
+    $Rstr="B OJDF UVOF"
     decode
   end
   if $H==5233 then
@@ -1115,7 +1115,7 @@ def setup
   $cmd_list=$cmd_list+"INTRINCUTHOLBURPOISHOUNLWITDRICOUPAYMAKBRESTEGATREF"
   $X6str="XV SFGMFDUFE UIF XJABSET HMSBF! if JT EFBE"
   $X1str="THE GHOST OF THE GOBLIN GUARDIAN"
-  $X2str="$B MBSHF WJOF HSPXT JO TFDPOET!"
+  $X2str="B MBSHF WJOF HSPXT JO TFDPOET!"
   $X3str="A GRARG PATROL APPROACHES"
   $X4str="MAGIC WORDS LIE AT THE CROSSROADS, THE FOUNTAIN AND THE "
   $X5str="A PILE OF RUBBLE BLOCKS YOUR PATH"
