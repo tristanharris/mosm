@@ -1407,4 +1407,8 @@ end
 def noop
 end
 
+def CHRstr(value)
+	value.chr
+end
+
 start
