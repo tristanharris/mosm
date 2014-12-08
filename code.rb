@@ -13,10 +13,10 @@ end
 def main
   print_titles
   $LL=0
-  m3310
+  restore_to_current_room
   $Pstr=$Xstr[VAL(LEFTstr($Dstr,1))]+" "+$Ystr[VAL(MIDstr($Dstr,2,1))]+" "
   $Jstr=$Rstr+". "+"YOU ARE "+$Pstr+RIGHTstr($Dstr,LEN($Dstr)-2)+" "
-  m4830
+  format_description
   restore_to_objects
   $Jstr=""
   for $I in 1..($G-1)
@@ -49,7 +49,7 @@ def main
     $Jstr=", YOU CAN SEE"+$Jstr
   end
   $Jstr=$Jstr+" AND YOU CAN GO "
-  m4830
+  format_description
   print " "
   for $I in 1..LEN($exits[$room])
     print MIDstr($exits[$room],$I,1)+","
@@ -481,7 +481,7 @@ def examine
     decode
   end
   if $H==4055 then
-    m3290
+    examine_sub
   end
   if $H==2969 && $F[49]==1 then
     $Rstr="VERY UGLY!"
@@ -519,7 +519,7 @@ def give
     $Rstr="HE GIVES IT BACK!"
   end
   if $H==6425 then
-    m3210
+    give_ring
   end
   if $room==75 || $room==76 then
     $Rstr="HE DOES NOT WANT IT"
@@ -715,7 +715,7 @@ def open
     $exits[37]="EW"
   end
   if $H==5960 then
-    m3260
+    open_sub
   end
   if $H==6970 then
     $Rstr="IT FALLS OFF ITS HINGES"
@@ -902,7 +902,7 @@ def insert
     $Rstr="YOU DO NOT HAVE ANY"
   end
   if $H==5762 && $object_location[1]==0 && $F[44]>0 then
-    m3230
+    insert_sub
   end
 end
 
@@ -1038,12 +1038,12 @@ def drink
   $Rstr="ARE YOU THIRSTY?"
 end
 
-def m3210
+def give_ring
   $Rstr="HE TAKES IT AND SAYS '"+STRstr($F[42])+" RINGS ARE NEEDED'"
   $object_location[25]=81
 end
 
-def m3230
+def insert_sub
   $F[44]=$F[44]-1
   $Rstr="A NUMBER APPEARS - "+STRstr($F[41])
   if $F[44]==0 then
@@ -1051,7 +1051,7 @@ def m3230
   end
 end
 
-def m3260
+def open_sub
   puts
   $Rstr="XIBU JT UIF DPEF"
   decode
@@ -1064,15 +1064,15 @@ def m3260
   end
 end
 
-def m3290
+def examine_sub
   $T=$room
   $room=$F[$F[52]+57]
-  m3310
+  restore_to_current_room
   $room=$T
   $Rstr=$X4str+RIGHTstr($Dstr,LEN($Dstr)-2)
 end
 
-def m3310
+def restore_to_current_room
   mRESTORE
   for $I in 1..$room
     $Dstr=mREAD
@@ -1340,7 +1340,7 @@ def write_file
   end
 end
 
-def m4830
+def format_description
   $LS=1
   $LP=1
   for $I in 1..LEN($Jstr)
