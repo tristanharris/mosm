@@ -1143,7 +1143,7 @@ def setup
 end
 
 def mRESTORE
-  $DATA = [
+  rooms = [
     "1HALF-DUG GRAVE", "12GOBLIN GRAVEYARD",
     "11HOLLOW TOMB", "23STALACTITES AND STALAGMITES",
     "11MAZE OF TUNNELS", "11VAULTED CAVERN",
@@ -1183,19 +1183,28 @@ def mRESTORE
     "31BURNT-OUT CAMPFIRE", "16ORCHARD",
     "62END OF A BRIDGE", "62END OF A BRIDGE",
     "61CROSSROADS", "41WINDING ROAD",
-    "11VILLAGE OF RUSTIC HOUSES", "11WHITE COTTAGE",
+    "11VILLAGE OF RUSTIC HOUSES", "11WHITE COTTAGE"
+  ]
+  marked_objects = [
     "3COINS", "1SHEET", "3BOOTS", "1HORSESHOE", "3APPLES", "1BUCKET", "4AXE", "1BOAT", "1PHIAL",
     "3REEDS", "1BONE", "1SHIELD", "3PLANKS", "1ROPE", "1RING", "1JUG", "1NET", "1SWORD",
     "1SILVER PLATE", "1UNIFORM", "1KEY", "3SEEDS", "1LAMP", "3BREAD", "1BROOCH", "3MATCHES",
-    "2STONE OF DESTINY", "4APPLE", "BED", "CUPBOARD", "BRIDGE", "TREES", "SAIL", "KILN",
+    "2STONE OF DESTINY", "4APPLE"
+  ]
+  objects = [
+    "BED", "CUPBOARD", "BRIDGE", "TREES", "SAIL", "KILN",
     "KETCH", "BRICKS", "WINDMILL", "SACKS", "OGBAN'S BOAR", "WHEEL",
     "PONY", "GRAVESTONES", "POOL", "GATES", "HANDLE", "HUT", "VINE", "INSCRIPTIONS", "TROLL", "RUBBLE",
     "HOUND", "FOUNTAIN", "CIRCLE", "MOSAICS", "BOOKS", "CASKS", "WELL", "WALLS", "RATS", "SAFE",
     "COBWEBS", "COIN", "BELL", "UP SILVER PLATE", "STONES", "KITCHENS", "GOBLET", "WINE",
     "GRARGS", "DOOR", "AWAKE", "GUIDE", "PROTECT", "LEAD", "HELP", "CHEST", "WATER",
     "STABLES", "SLUICE GATES", "POT", "STATUE", "PINNACLE", "MUSIC", "MAGIC WORDS",
-    "MISTY POOL", "WELL BOTTOM", "OLD KILN", "MOUNTAIN HUT",
-    "IN", "A", "NEAR", "THE", "BY", "SOME", "ON", "AN", "", "", "AT", "A SMALL",
+    "MISTY POOL", "WELL BOTTOM", "OLD KILN", "MOUNTAIN HUT"
+  ]
+  sentence_pairs = [
+    "IN", "A", "NEAR", "THE", "BY", "SOME", "ON", "AN", "", "", "AT", "A SMALL"
+  ]
+  exits = [
     "E", "ESW", "WE", "EW", "EW", "ESW", "ESW", "ES", "EW", "SW",
     "S", "N", "ES", "SW", "S", "NW", "N", "N", "ES", "NSW",
     "NS", "E", "NSW", "N", "NES", "EW", "W", "S", "NS", "N",
@@ -1203,11 +1212,16 @@ def mRESTORE
     "NS", "E", "NSEW", "WU", "UD", "NS", "E", "SW", "NSE", "NW",
     "NE", "EW", "NSW", "E", "WN", "S", "E", "NEW", "NW", "S",
     "ES", "SW", "NES", "EW", "SW", "NE", "EW", "ESW", "SW", "ND",
-    " ", "E", "NEW", "EW", "NEW", "EW", "EW", "NEW", "NEW", "WU",
+    " ", "E", "NEW", "EW", "NEW", "EW", "EW", "NEW", "NEW", "WU"
+  ]
+  object_locations = [
     80, 70, 60, 69, 74, 72, 63, 52, 20, 11, 1, 14, 36, 54, 61, 21, 32, 10, 50,
-    29, 59, 34, 13, 80, 30, 81, 47, 74,
+    29, 59, 34, 13, 80, 30, 81, 47, 74
+  ]
+  f_data = [
     1, 2, 3, 4, 5, 9, 12, 13, 16, 17, 20, 21, 22
   ]
+  $DATA = rooms + marked_objects + objects + sentence_pairs + exits + object_locations + f_data
 end
 
 def decode
