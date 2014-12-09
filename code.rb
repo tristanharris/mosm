@@ -185,16 +185,15 @@ def main
 end
 
 def go
-  $D=$VB
-  if $D==5 then
-    $D=1
+  direction=$VB
+  if direction==5 then
+    direction=1
   end
-  if $D==6 then
-    $D=3
+  if direction==6 then
+    direction=3
   end
-  if !(!(($room==75 && $D==2) || ($room==76 && $D==4)) || $F[64]==1) then
-    $response_message="B USPMM TUPQT ZPV DSPTTJOH"
-    decode
+  if !(!(($room==75 && direction==2) || ($room==76 && direction==4)) || $F[64]==1) then
+    $response_message=decode("B USPMM TUPQT ZPV DSPTTJOH")
     return
   end
   if $F[64]==1 then
@@ -216,28 +215,27 @@ def go
       return
     end
   end
-  if $object_location[8]==0 && (($room==52 && $D==2) || ($room==31 && $D!=3)) then
+  if $object_location[8]==0 && (($room==52 && direction==2) || ($room==31 && direction!=3)) then
     $response_message="THE BOAT IS TOO HEAVY"
     return
   end
-  if $object_location[8]!=0 && (($room==52 && $D==4) || ($room==31 && $D==3)) then
+  if $object_location[8]!=0 && (($room==52 && direction==4) || ($room==31 && direction==3)) then
     $response_message="YOU CANNOT SWIM"
     return
   end
-  if $room==52 && $object_location[8] && $D==4 && $F[30]==0 then
+  if $room==52 && $object_location[8] && direction==4 && $F[30]==0 then
     $response_message="NO POWER!"
     return
   end
-  if $room==41 && $D==3 && $F[31]==0 then
-    $response_message="UIF CPBU JT TJOLJOH!"
-    decode
+  if $room==41 && direction==3 && $F[31]==0 then
+    $response_message=decode("UIF CPBU JT TJOLJOH!")
     return
   end
-  if $room==33 && $D==1 && $F[32]==0 then
+  if $room==33 && direction==1 && $F[32]==0 then
     $response_message="OGBAN'S BOAR BLOCK YOUR PATH"
     return
   end
-  if (($room==3 && $D==2) || ($room==4 && $D==4)) && $F[45]==0 then
+  if (($room==3 && direction==2) || ($room==4 && direction==4)) && $F[45]==0 then
     $response_message=$X5str
     return
   end
@@ -245,27 +243,26 @@ def go
     $response_message="THE ICE IS BREAKING!"
     return
   end
-  if $room==5 && ($D==2 || $D==4) then
-    tunnels
+  if $room==5 && (direction==2 || direction==4) then
+    tunnels(direction)
   end
-  if $room==4 && $D==4 then
+  if $room==4 && direction==4 then
     $response_message="PASSAGE IS TOO STEEP"
     return
   end
-  if $room==7 && $D==2 && $F[46]==0 then
+  if $room==7 && direction==2 && $F[46]==0 then
     $response_message="A HUGE HOUND BARS YOUR WAY"
     return
   end
   if ($room==38 || $room==37) && $F[50]==0 then
-    $response_message="JU JT UPP EBSL"
-    decode
+    $response_message=decode("JU JT UPP EBSL")
     return
   end
-  if $room==49 && $D==2 && $F[54]==0 then
+  if $room==49 && direction==2 && $F[54]==0 then
     $response_message="MYSTERIOUS FORCES HOLD YOU BACK"
     return
   end
-  if $room==49 && $D==3 && $F[68]==0 then
+  if $room==49 && direction==3 && $F[68]==0 then
     $response_message="YOU MEET OGBAN!!!"
     $F[56]=1
     return
@@ -274,42 +271,42 @@ def go
     $response_message="RATS NIBBLE YOUR ANKLES"
     return
   end
-  if $room==58 && ($D==1 || $D==4) && $F[66]==0 then
+  if $room==58 && (direction==1 || direction==4) && $F[66]==0 then
     $response_message="YOU GET CAUGHT IN THE WEBS!"
     return
   end
-  if $room==48 && $D==4 && $F[70]==0 then
+  if $room==48 && direction==4 && $F[70]==0 then
     $response_message="THE DOOR DOES NOT OPEN"
     return
   end
   if $room==40 && $F[47]==1 then
     $F[68]=1
   end
-  if $room==37 && $D==4 && $exits[37]=="EW" then
+  if $room==37 && direction==4 && $exits[37]=="EW" then
     $room=67
     $response_message="THE PASSAGE WAS STEEP!"
     return
   end
-  if $room==29 && $D==3 then
+  if $room==29 && direction==3 then
     $F[48]=1
     $F[20]=0
   end
-  if $room==8 && $D==2 then
+  if $room==8 && direction==2 then
     $F[46]=0
   end
   $OM=$room
   for i in 1..LEN($exits[$room])
     $Kstr=MIDstr($exits[$OM],i,1)
-    if ($Kstr=="N" || $Kstr=="U") && $D==1 then
+    if ($Kstr=="N" || $Kstr=="U") && direction==1 then
       $room=$room-10
     end
-    if $Kstr=="E" && $D==2 then
+    if $Kstr=="E" && direction==2 then
       $room=$room+1
     end
-    if ($Kstr=="S" || $Kstr=="D") && $D==3 then
+    if ($Kstr=="S" || $Kstr=="D") && direction==3 then
       $room=$room+10
     end
-    if $Kstr=="W" && $D==4 then
+    if $Kstr=="W" && direction==4 then
       $room=$room-1
     end
   end
@@ -317,15 +314,14 @@ def go
   if $room==$OM then
     $response_message="YOU CANNOT GO THAT WAY"
   end
-  if (($OM==75 && $D==2) || ($OM==76 && $D==4)) then
+  if (($OM==75 && direction==2) || ($OM==76 && direction==4)) then
     $response_message="OK. YOU CROSSED"
   end
   if $F[29]==1 then
     $F[39]=$F[39]+1
   end
   if $F[39]>5 && $F[29]==1 then
-    $response_message="CPPUT IBWF XPSO PVU"
-    decode
+    $response_message=decode("CPPUT IBWF XPSO PVU")
     $F[29]=0
     $object_location[3]=81
   end
@@ -441,16 +437,14 @@ def examine
     $F[2]=0
   end
   if $B==20 then
-    $response_message="NBUDIFT JO QPDLFU"
-    decode
+    $response_message=decode("NBUDIFT JO QPDLFU")
     $object_location[26]=0
   end
   if $H==1648 then
     $response_message="THERE ARE SOME LETTERS '"+$tunnel_maze_directions[2]+"'"
   end
   if $H==7432 then
-    $response_message="UIFZ BSF BQQMF USFFT"
-    decode
+    $response_message=decode("UIFZ BSF BQQMF USFFT")
     $F[5]=0
   end
   if $H==2134 || $H==2187 then
@@ -469,8 +463,7 @@ def examine
     $response_message="A FADED INSCRIPTION"
   end
   if ($H==1443 || $H==1485) && $F[33]==0 then
-    $response_message="B HMJNNFSJOH GSPN UIF EFQUIT"
-    decode
+    $response_message=decode("B HMJNNFSJOH GSPN UIF EFQUIT")
   end
   if ($H==1443 || $H==1485) && $F[33]==1 then
     $response_message="SOMETHING HERE..."
@@ -480,8 +473,7 @@ def examine
     $response_message="THERE IS A HANDLE"
   end
   if $B==9 then
-    $response_message="UIF MBCFM SFBET 'QPJTPO'"
-    decode
+    $response_message=decode("UIF MBCFM SFBET 'QPJTPO'")
   end
   if $H==4055 then
     examine_sub
@@ -512,8 +504,7 @@ def examine
     $response_message="THERE ARE NINE STONES"
   end
   if $H==248 then
-    $response_message="A GBEFE XPSE - 'N S I T'"
-    decode
+    $response_message=decode("A GBEFE XPSE - 'N S I T'")
   end
 end
 
@@ -607,15 +598,13 @@ end
 def wear
   if $B==3 then
     $F[29]=1
-    $response_message="ZPV BSF JOWJTJCMF"
+    $response_message=decode("ZPV BSF JOWJTJCMF")
     $F[55]=0
-    decode
   end
   if $B==20 then
     $F[51]=1
-    $response_message="ZPV BSF EJTHVJTFE"
+    $response_message=decode("ZPV BSF EJTHVJTFE")
     $F[55]=0
-    decode
   end
 end
 
@@ -672,9 +661,8 @@ def use
     give
   end
   if $H==416 then
-    $response_message="ZPV IBWF LFQU BGMPBU"
+    $response_message=decode("ZPV IBWF LFQU BGMPBU")
     $F[31]=1
-    decode
     return
   end
   if $H==4116 then
@@ -739,8 +727,7 @@ def burn
     $response_message="NOT BRIGHT ENOUGH"
   end
   if ($B==23 || $H==6970) && $object_location[26]!=0 then
-    $response_message="OP NBUDIFT"
-    decode
+    $response_message=decode("OP NBUDIFT")
   end
   if $B==23 && $object_location[26]==0 then
     $response_message="A BRIGHT "+$Vstr
@@ -777,9 +764,8 @@ end
 
 def water
   if $B==22 && $F[37]==1 && $F[34]==1 then
-    $response_message=$X2str
+    $response_message=decode($X2str)
     $F[38]=1
-    decode
   end
 end
 
@@ -861,9 +847,8 @@ def turn
     $response_message="IT GOES ROUND"
   end
   if $H==2445 then
-    $response_message="UIF HBUFT PQFQ, UIF QPPM FNQUJFT"
+    $response_message=decode("UIF HBUFT PQFQ, UIF QPPM FNQUJFT")
     $F[33]=1
-    decode
   end
 end
 
@@ -916,16 +901,14 @@ def throw
   $response_message="DID NOT GO FAR!"
   $object_location[$B]=$room
   if $H==3317 then
-    $response_message="ZPV DBVHIU UIF CPBS"
+    $response_message=decode("ZPV DBVHIU UIF CPBS")
     $F[32]=1
-    decode
   end
 end
 
 def make
   if $B==10 then
-    $response_message="B OJDF UVOF"
-    decode
+    $response_message=decode("B OJDF UVOF")
   end
   if $H==5233 then
     $response_message="WHAT WITH?"
@@ -986,9 +969,8 @@ def ring
     $exits[27]="EW"
     return
   end
-  $response_message="ZPV IBWF NJTUSFBUFE UIF CFMM!"
+  $response_message=decode("ZPV IBWF NJTUSFBUFE UIF CFMM!")
   $F[56]=1
-  decode
 end
 
 def cut
@@ -1000,9 +982,8 @@ end
 
 def hold
   if ($H==4864 || $H==4819) && $object_location[19]==0 then
-    $response_message=$X6str
+    $response_message=decode($X6str)
     $F[63]=1
-    decode
   end
   if $B==27 then
     take
@@ -1056,8 +1037,7 @@ end
 
 def open_sub
   puts
-  $response_message="XIBU JT UIF DPEF"
-  decode
+  $response_message=decode("XIBU JT UIF DPEF")
   puts $response_message
   $CN=mINPUT
   $response_message="WRONG!"
@@ -1227,28 +1207,28 @@ def mRESTORE
   $DATA = rooms + marked_objects + objects + sentence_pairs + exits + object_locations + f_data
 end
 
-def decode
-  $Zstr=""
-  for i in 1..LEN($response_message)
-    $Cstr=MIDstr($response_message,i,1)
-    if $Cstr<"A" then
-      $Zstr=$Zstr+$Cstr
+def decode(coded_string)
+  decoded_string=""
+  for i in 1..LEN(coded_string)
+    char=MIDstr(coded_string,i,1)
+    if char<"A" then
+      decoded_string=decoded_string+char
     else
-      $object_location=$Cstr.ord-1
+      $object_location=char.ord-1
       if $object_location==64 then
         $object_location=90
       end
-      $Zstr=$Zstr+CHRstr($object_location)
+      decoded_string=decoded_string+CHRstr($object_location)
     end
   end
-  $response_message=$Zstr
+  return decoded_string
 end
 
-def tunnels
+def tunnels(direction)
   $Jstr="SSSSSSSS"
   $NG=0
   begin
-    $MP=$D/2
+    $MP=direction/2
     print_titles
     puts "YOU ARE LOST IN THE"
     puts "      TUNNELS"
