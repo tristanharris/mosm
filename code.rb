@@ -17,14 +17,14 @@ def main
   print_titles
   $LL=0
   restore_to_current_room
-  $Pstr=$Xstr[VAL(LEFTstr($Dstr,1))]+" "+$Ystr[VAL(MIDstr($Dstr,2,1))]+" "
+  $Pstr=$prepositions[VAL(LEFTstr($Dstr,1))]+" "+$determiners[VAL(MIDstr($Dstr,2,1))]+" "
   $Jstr=$Rstr+". "+"YOU ARE "+$Pstr+RIGHTstr($Dstr,LEN($Dstr)-2)+" "
   format_description
   restore_to_objects
   $Jstr=""
   for $I in 1..($G-1)
     $object_str=mREAD
-    $Pstr=$Ystr[VAL(LEFTstr($object_str,1))]
+    $Pstr=$determiners[VAL(LEFTstr($object_str,1))]
     strip_leading
     if $F[$I]==0 && $object_location[$I]==$room then
       $Jstr=$Jstr+" "+$Pstr+" "+$object_str+","
@@ -446,7 +446,7 @@ def examine
     $object_location[26]=0
   end
   if $H==1648 then
-    $Rstr="THERE ARE SOME LETTERS '"+$Gstr[2]+"'"
+    $Rstr="THERE ARE SOME LETTERS '"+$tunnel_maze_directions[2]+"'"
   end
   if $H==7432 then
     $Rstr="UIFZ BSF BQQMF USFFT"
@@ -1102,16 +1102,16 @@ def setup
   $object_location=Array.new($G+1,0)
   $exits=Array.new(80+1,'')
   $F=Array.new(70+1,0)
-  $Xstr=Array.new(6+1,'')
-  $Ystr=Array.new(6+1,'')
-  $Gstr=Array.new(2+1,'')
+  $prepositions=Array.new(6+1,'')
+  $determiners=Array.new(6+1,'')
+  $tunnel_maze_directions=Array.new(2+1,'')
   restore_to_objects
   for $I in 1..$num_objects
     $Tstr=mREAD
   end
   for $I in 1..6
-    $Xstr[$I]=mREAD
-    $Ystr[$I]=mREAD
+    $prepositions[$I]=mREAD
+    $determiners[$I]=mREAD
   end
   $cmd_list="NOOEOOSOOWOOUOODOOINVGETTAKEXAREAGIVSAYPICWEATIECLIRIGUSEOPE"
   $cmd_list=$cmd_list+"LIGFILPLAWATSWIEMPENTCROREMFEETURDIVBAILEATHRINSBLODROEATMOV"
@@ -1263,10 +1263,10 @@ def tunnels
       $F[56]=1
       return
     end
-    if $Jstr!=$Gstr[$MP] then
+    if $Jstr!=$tunnel_maze_directions[$MP] then
       $NG=$NG+1
     end
-  end until !($Jstr!=$Gstr[$MP])
+  end until !($Jstr!=$tunnel_maze_directions[$MP])
 end
 
 def print_titles
@@ -1299,10 +1299,10 @@ def new_game
   $F[52]=INT(RND(1)*3)
   $room=77
   $Rstr="GOOD LUCK ON YOUR QUEST!"
-  $Gstr[1]=""
+  $tunnel_maze_directions[1]=""
   for $I in 1..8
     $Fstr=MIDstr($cmd_list,1+INT(RND(1)*4)*3,1)
-    $Gstr[1]=$Gstr[1]+$Fstr
+    $tunnel_maze_directions[1]=$tunnel_maze_directions[1]+$Fstr
     if $Fstr=="N" then
       $Lstr="S"
     end
@@ -1315,7 +1315,7 @@ def new_game
     if $Fstr=="W" then
       $Lstr="E"
     end
-    $Gstr[2]=$Lstr+$Gstr[2]
+    $tunnel_maze_directions[2]=$Lstr+$tunnel_maze_directions[2]
   end
 end
 
@@ -1345,7 +1345,7 @@ def read_file
   puts "OK. SEARCHING FOR "+$filename
   File.open($filename, 'r') do |x|
     puts "OK. LOADING"
-    $exits, $object_location, $F, $Gstr = JSON.parse(x.gets)
+    $exits, $object_location, $F, $tunnel_maze_directions = JSON.parse(x.gets)
   end
 end
 
@@ -1353,7 +1353,7 @@ def write_file
   #SAVE DATA FILE
   File.open($filename, 'w') do |x|
     puts "OK. SAVING"
-    x.puts [$exits, $object_location, $F, $Gstr].to_json
+    x.puts [$exits, $object_location, $F, $tunnel_maze_directions].to_json
   end
 end
 
