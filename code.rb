@@ -22,11 +22,11 @@ def main
   format_description
   restore_to_objects
   $Jstr=""
-  for $I in 1..($G-1)
+  for i in 1..($G-1)
     $object_str=mREAD
     $Pstr=$determiners[VAL(LEFTstr($object_str,1))]
     strip_leading
-    if $F[$I]==0 && $object_location[$I]==$room then
+    if $F[i]==0 && $object_location[i]==$room then
       $Jstr=$Jstr+" "+$Pstr+" "+$object_str+","
     end
   end
@@ -54,8 +54,8 @@ def main
   $Jstr=$Jstr+" AND YOU CAN GO "
   format_description
   print " "
-  for $I in 1..LEN($exits[$room])
-    print MIDstr($exits[$room],$I,1)+","
+  for i in 1..LEN($exits[$room])
+    print MIDstr($exits[$room],i,1)+","
   end
   puts
   puts
@@ -64,25 +64,25 @@ def main
   puts
   puts
   puts "WHAT WILL YOU DO NOW "
-  $Istr=mINPUT
-  if $Istr=="SAVE GAME" then
+  cmd_string=mINPUT
+  if cmd_string=="SAVE GAME" then
     save_game
   end
   $Vstr=""
   $Tstr=""
   $VB=0
   $B=0
-  for $I in 1..LEN($Istr)
-    if MIDstr($Istr,$I,1)==" " && $Vstr=="" then
-      $Vstr=LEFTstr($Istr,$I-1)
+  for i in 1..LEN(cmd_string)
+    if MIDstr(cmd_string,i,1)==" " && $Vstr=="" then
+      $Vstr=LEFTstr(cmd_string,i-1)
     end
-    if MIDstr($Istr,$I+1,1)!=" " && $Vstr!="" then
-      $Tstr=MIDstr($Istr,$I+1,LEN($Istr)-1)
+    if MIDstr(cmd_string,i+1,1)!=" " && $Vstr!="" then
+      $Tstr=MIDstr(cmd_string,i+1,LEN(cmd_string)-1)
       break
     end
   end
   if $Tstr=="" then
-    $Vstr=$Istr
+    $Vstr=cmd_string
   end
   while LEN($Vstr)<3
     $Vstr=$Vstr+"O"
@@ -91,22 +91,22 @@ def main
     $Vstr="BLO"
   end
   $Ustr=LEFTstr($Vstr,3)
-  for $I in 1..$NV
-    if MIDstr($cmd_list,$I*3-2,3)==$Ustr then
-      $VB=$I
+  for i in 1..$NV
+    if MIDstr($cmd_list,i*3-2,3)==$Ustr then
+      $VB=i
       break
     end
   end
   $F[36]=0
   begin
     restore_to_objects
-    for $I in 1..$num_objects
+    for i in 1..$num_objects
       $object_str=mREAD
-      if $I<=$G then
+      if i<=$G then
         strip_leading
       end
       if $Tstr==$object_str then
-        $B=$I
+        $B=i
         break
       end
     end
@@ -125,7 +125,7 @@ def main
     $Rstr="TRY SOMETHING ELSE"
   end
   if $VB>$NV && $B==0 then
-    $Rstr="YOU CANNOT "+$Istr
+    $Rstr="YOU CANNOT "+cmd_string
   end
   if !($B>$G || $B==0) then
     if !($VB==8 || $VB==9 || $VB==14 || $VB==17 || $VB==44 || $VB>54) then
@@ -298,8 +298,8 @@ def go
     $F[46]=0
   end
   $OM=$room
-  for $I in 1..LEN($exits[$room])
-    $Kstr=MIDstr($exits[$OM],$I,1)
+  for i in 1..LEN($exits[$room])
+    $Kstr=MIDstr($exits[$OM],i,1)
     if ($Kstr=="N" || $Kstr=="U") && $D==1 then
       $room=$room-10
     end
@@ -336,14 +336,14 @@ def inventory
   $Rstr="OK"
   $F[49]=0
   print "YOU HAVE "
-  for $I in 1..$G
+  for i in 1..$G
     $object_str=mREAD
     strip_leading
-    if $I==1 && $object_location[1]==0 && $F[44]==1 then
+    if i==1 && $object_location[1]==0 && $F[44]==1 then
       $object_str="COIN"
     end
-    if !($I==$G && $object_location[5]==0) then
-      if $object_location[$I]==0 then
+    if !(i==$G && $object_location[5]==0) then
+      if $object_location[i]==0 then
         print $object_str+","
         $F[49]=1
       end
@@ -375,8 +375,8 @@ def take
     return
   end
   $CO=0
-  for $I in 1..($G-1)
-    if $object_location[$I]==0 then
+  for i in 1..($G-1)
+    if $object_location[i]==0 then
       $CO=$CO+1
     end
   end
@@ -1077,14 +1077,14 @@ end
 
 def restore_to_current_room
   mRESTORE
-  for $I in 1..$room
+  for i in 1..$room
     $Dstr=mREAD
   end
 end
 
 def restore_to_objects
   mRESTORE
-  for $I in 1..80
+  for i in 1..80
     $Dstr=mREAD
   end
 end
@@ -1106,12 +1106,12 @@ def setup
   $determiners=Array.new(6+1,'')
   $tunnel_maze_directions=Array.new(2+1,'')
   restore_to_objects
-  for $I in 1..$num_objects
+  for i in 1..$num_objects
     $Tstr=mREAD
   end
-  for $I in 1..6
-    $prepositions[$I]=mREAD
-    $determiners[$I]=mREAD
+  for i in 1..6
+    $prepositions[i]=mREAD
+    $determiners[i]=mREAD
   end
   $cmd_list="NOOEOOSOOWOOUOODOOINVGETTAKEXAREAGIVSAYPICWEATIECLIRIGUSEOPE"
   $cmd_list=$cmd_list+"LIGFILPLAWATSWIEMPENTCROREMFEETURDIVBAILEATHRINSBLODROEATMOV"
@@ -1229,8 +1229,8 @@ end
 
 def decode
   $Zstr=""
-  for $I in 1..LEN($Rstr)
-    $Cstr=MIDstr($Rstr,$I,1)
+  for i in 1..LEN($Rstr)
+    $Cstr=MIDstr($Rstr,i,1)
     if $Cstr<"A" then
       $Zstr=$Zstr+$Cstr
     else
@@ -1280,15 +1280,15 @@ def print_titles
 end
 
 def new_game
-  for $I in 1..80
-    $exits[$I]=mREAD
+  for i in 1..80
+    $exits[i]=mREAD
   end
-  for $I in 1..$G
-    $object_location[$I]=mREAD.to_i
+  for i in 1..$G
+    $object_location[i]=mREAD.to_i
   end
-  for $I in 1..13
-    $A=mREAD.to_i
-    $F[$A]=1
+  for i in 1..13
+    a=mREAD.to_i
+    $F[a]=1
   end
   $F[41]=INT(RND(1)*900)+100
   $F[42]=INT(RND(1)*3)+2
@@ -1300,7 +1300,7 @@ def new_game
   $room=77
   $Rstr="GOOD LUCK ON YOUR QUEST!"
   $tunnel_maze_directions[1]=""
-  for $I in 1..8
+  for i in 1..8
     $Fstr=MIDstr($cmd_list,1+INT(RND(1)*4)*3,1)
     $tunnel_maze_directions[1]=$tunnel_maze_directions[1]+$Fstr
     if $Fstr=="N" then
@@ -1358,20 +1358,20 @@ def write_file
 end
 
 def format_description
-  $LS=1
-  $LP=1
-  for $I in 1..LEN($Jstr)
-    if MIDstr($Jstr,$I,1)==" " && $LL>$EL then
-      puts MIDstr($Jstr,$LP,$LS-$LP)
-      $LL=$I-$LS
-      $LP=$LS+1
+  ls=1
+  lp=1
+  for i in 1..LEN($Jstr)
+    if MIDstr($Jstr,i,1)==" " && $LL>$EL then
+      puts MIDstr($Jstr,lp,ls-lp)
+      $LL=i-ls
+      lp=ls+1
     end
-    if MIDstr($Jstr,$I,1)==" " then
-      $LS=$I
+    if MIDstr($Jstr,i,1)==" " then
+      ls=i
     end
     $LL=$LL+1
   end
-  print MIDstr($Jstr,$LP,LEN($Jstr)-$LP)
+  print MIDstr($Jstr,lp,LEN($Jstr)-lp)
 end
 
 def mREAD
