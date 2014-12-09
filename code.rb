@@ -1211,7 +1211,7 @@ def mRESTORE
     "E", "ESW", "WE", "EW", "EW", "ESW", "ESW", "ES", "EW", "SW",
     "S", "N", "ES", "SW", "S", "NW", "N", "N", "ES", "NSW",
     "NS", "E", "NSW", "N", "NES", "EW", "W", "S", "NS", "N",
-    "NES", "W", "NS", "$D", "NES", "SW", "E", "NW", "NS", "S",
+    "NES", "W", "NS", "D", "NES", "SW", "E", "NW", "NS", "S",
     "NS", "E", "NSEW", "WU", "UD", "NS", "E", "SW", "NSE", "NW",
     "NE", "EW", "NSW", "E", "WN", "S", "E", "NEW", "NW", "S",
     "ES", "SW", "NES", "EW", "SW", "NE", "EW", "ESW", "SW", "ND",
