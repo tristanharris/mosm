@@ -1,10 +1,10 @@
 require 'json'
 
 def start
-  $EL=39
+  $line_length=39
   $num_objects=88
   $NV=57
-  $G=28
+  $num_marked_objects=28
   setup
   while true
     catch(:redraw) do
@@ -18,11 +18,11 @@ def main
   $LL=0
   restore_to_current_room
   $Pstr=$prepositions[VAL(LEFTstr($Dstr,1))]+" "+$determiners[VAL(MIDstr($Dstr,2,1))]+" "
-  $Jstr=$Rstr+". "+"YOU ARE "+$Pstr+RIGHTstr($Dstr,LEN($Dstr)-2)+" "
+  $Jstr=$response_message+". "+"YOU ARE "+$Pstr+RIGHTstr($Dstr,LEN($Dstr)-2)+" "
   format_description
   restore_to_objects
   $Jstr=""
-  for i in 1..($G-1)
+  for i in 1..($num_marked_objects-1)
     $object_str=mREAD
     $Pstr=$determiners[VAL(LEFTstr($object_str,1))]
     strip_leading
@@ -59,7 +59,7 @@ def main
   end
   puts
   puts
-  $Rstr="PARDON?"
+  $response_message="PARDON?"
   puts "======================================"
   puts
   puts
@@ -102,7 +102,7 @@ def main
     restore_to_objects
     for i in 1..$num_objects
       $object_str=mREAD
-      if i<=$G then
+      if i<=$num_marked_objects then
         strip_leading
       end
       if $Tstr==$object_str then
@@ -119,29 +119,29 @@ def main
     $VB=$NV+1
   end
   if $Tstr=="" then
-    $Rstr="I NEED TWO WORDS"
+    $response_message="I NEED TWO WORDS"
   end
   if $VB>$NV then
-    $Rstr="TRY SOMETHING ELSE"
+    $response_message="TRY SOMETHING ELSE"
   end
   if $VB>$NV && $B==0 then
-    $Rstr="YOU CANNOT "+cmd_string
+    $response_message="YOU CANNOT "+cmd_string
   end
-  if !($B>$G || $B==0) then
+  if !($B>$num_marked_objects || $B==0) then
     if !($VB==8 || $VB==9 || $VB==14 || $VB==17 || $VB==44 || $VB>54) then
       if $VB<$NV && $object_location[$B]!=0 then
-        $Rstr="YOU DO NOT HAVE THE "+$Tstr
+        $response_message="YOU DO NOT HAVE THE "+$Tstr
         Kernel.throw :redraw
       end
     end
   end
   if $room==56 && $F[35]==0 && $VB!=37 && $VB!=53 then
-    $Rstr=$X1str+" HAS GOT YOU!"
+    $response_message=$X1str+" HAS GOT YOU!"
     Kernel.throw :redraw
   end
   if !($VB==44 || $VB==47 || $VB==19 || $VB==57 || $VB==49) then
     if $room==48 && $F[63]==0 then
-      $Rstr=$X9str
+      $response_message=$X9str
       Kernel.throw :redraw
     end
   end
@@ -156,18 +156,18 @@ def main
       $F[67]==$F[67]+1
       if $F[67]==10 then
         $F[56]=1
-        $Rstr="YOU SANK!"
+        $response_message="YOU SANK!"
       end
     end
     if $room==56 && $F[35]==0 && $object_location[10]!=0 then
-      $Rstr=$X1str+" GETS YOU!"
+      $response_message=$X1str+" GETS YOU!"
       $F[56]=1
     end
     if $F[56]==0 then
       Kernel.throw :redraw
     end
     print_titles
-    puts $Rstr
+    puts $response_message
     puts "YOU HAVE FAILED IN YOUR QUEST!"
     puts
     puts "BUT YOU ARE GRANTED ANOTHER TRY"
@@ -193,7 +193,7 @@ def go
     $D=3
   end
   if !(!(($room==75 && $D==2) || ($room==76 && $D==4)) || $F[64]==1) then
-    $Rstr="B USPMM TUPQT ZPV DSPTTJOH"
+    $response_message="B USPMM TUPQT ZPV DSPTTJOH"
     decode
     return
   end
@@ -203,83 +203,83 @@ def go
   if !($F[51]==1 || $F[29]==1) then
     if $F[55]==1 then
       $F[56]=1
-      $Rstr="GRARGS HAVE GOT YOU!"
+      $response_message="GRARGS HAVE GOT YOU!"
       return
     end
     if $room==29 && $F[48]==0 then
-      $Rstr="GRARGS WILL SEE YOU!"
+      $response_message="GRARGS WILL SEE YOU!"
       return
     end
     if $room==73 || $room==42 || $room==9 || $room==10 then
-      $Rstr=$X3str
+      $response_message=$X3str
       $F[55]=1
       return
     end
   end
   if $object_location[8]==0 && (($room==52 && $D==2) || ($room==31 && $D!=3)) then
-    $Rstr="THE BOAT IS TOO HEAVY"
+    $response_message="THE BOAT IS TOO HEAVY"
     return
   end
   if $object_location[8]!=0 && (($room==52 && $D==4) || ($room==31 && $D==3)) then
-    $Rstr="YOU CANNOT SWIM"
+    $response_message="YOU CANNOT SWIM"
     return
   end
   if $room==52 && $object_location[8] && $D==4 && $F[30]==0 then
-    $Rstr="NO POWER!"
+    $response_message="NO POWER!"
     return
   end
   if $room==41 && $D==3 && $F[31]==0 then
-    $Rstr="UIF CPBU JT TJOLJOH!"
+    $response_message="UIF CPBU JT TJOLJOH!"
     decode
     return
   end
   if $room==33 && $D==1 && $F[32]==0 then
-    $Rstr="OGBAN'S BOAR BLOCK YOUR PATH"
+    $response_message="OGBAN'S BOAR BLOCK YOUR PATH"
     return
   end
   if (($room==3 && $D==2) || ($room==4 && $D==4)) && $F[45]==0 then
-    $Rstr=$X5str
+    $response_message=$X5str
     return
   end
   if $room==35 && $object_location[13]!=$room then
-    $Rstr="THE ICE IS BREAKING!"
+    $response_message="THE ICE IS BREAKING!"
     return
   end
   if $room==5 && ($D==2 || $D==4) then
     tunnels
   end
   if $room==4 && $D==4 then
-    $Rstr="PASSAGE IS TOO STEEP"
+    $response_message="PASSAGE IS TOO STEEP"
     return
   end
   if $room==7 && $D==2 && $F[46]==0 then
-    $Rstr="A HUGE HOUND BARS YOUR WAY"
+    $response_message="A HUGE HOUND BARS YOUR WAY"
     return
   end
   if ($room==38 || $room==37) && $F[50]==0 then
-    $Rstr="JU JT UPP EBSL"
+    $response_message="JU JT UPP EBSL"
     decode
     return
   end
   if $room==49 && $D==2 && $F[54]==0 then
-    $Rstr="MYSTERIOUS FORCES HOLD YOU BACK"
+    $response_message="MYSTERIOUS FORCES HOLD YOU BACK"
     return
   end
   if $room==49 && $D==3 && $F[68]==0 then
-    $Rstr="YOU MEET OGBAN!!!"
+    $response_message="YOU MEET OGBAN!!!"
     $F[56]=1
     return
   end
   if $room==38 && $F[65]==0 then
-    $Rstr="RATS NIBBLE YOUR ANKLES"
+    $response_message="RATS NIBBLE YOUR ANKLES"
     return
   end
   if $room==58 && ($D==1 || $D==4) && $F[66]==0 then
-    $Rstr="YOU GET CAUGHT IN THE WEBS!"
+    $response_message="YOU GET CAUGHT IN THE WEBS!"
     return
   end
   if $room==48 && $D==4 && $F[70]==0 then
-    $Rstr="THE DOOR DOES NOT OPEN"
+    $response_message="THE DOOR DOES NOT OPEN"
     return
   end
   if $room==40 && $F[47]==1 then
@@ -287,7 +287,7 @@ def go
   end
   if $room==37 && $D==4 && $exits[37]=="EW" then
     $room=67
-    $Rstr="THE PASSAGE WAS STEEP!"
+    $response_message="THE PASSAGE WAS STEEP!"
     return
   end
   if $room==29 && $D==3 then
@@ -313,18 +313,18 @@ def go
       $room=$room-1
     end
   end
-  $Rstr="OK"
+  $response_message="OK"
   if $room==$OM then
-    $Rstr="YOU CANNOT GO THAT WAY"
+    $response_message="YOU CANNOT GO THAT WAY"
   end
   if (($OM==75 && $D==2) || ($OM==76 && $D==4)) then
-    $Rstr="OK. YOU CROSSED"
+    $response_message="OK. YOU CROSSED"
   end
   if $F[29]==1 then
     $F[39]=$F[39]+1
   end
   if $F[39]>5 && $F[29]==1 then
-    $Rstr="CPPUT IBWF XPSO PVU"
+    $response_message="CPPUT IBWF XPSO PVU"
     decode
     $F[29]=0
     $object_location[3]=81
@@ -333,16 +333,16 @@ end
 
 def inventory
   restore_to_objects
-  $Rstr="OK"
+  $response_message="OK"
   $F[49]=0
   print "YOU HAVE "
-  for i in 1..$G
+  for i in 1..$num_marked_objects
     $object_str=mREAD
     strip_leading
     if i==1 && $object_location[1]==0 && $F[44]==1 then
       $object_str="COIN"
     end
-    if !(i==$G && $object_location[5]==0) then
+    if !(i==$num_marked_objects && $object_location[5]==0) then
       if $object_location[i]==0 then
         print $object_str+","
         $F[49]=1
@@ -358,7 +358,7 @@ end
 
 def take
   if $H==6577 then
-    $Rstr="HOW?"
+    $response_message="HOW?"
     return
   end
   if $H==4177 || $H==5177 then
@@ -367,42 +367,42 @@ def take
     return
   end
   if $B==38 then
-    $Rstr="TOO HEAVY!"
+    $response_message="TOO HEAVY!"
     return
   end
   if $B==4 && $F[43]==0 then
-    $Rstr="IT IS FIRMLY NAILED ON!"
+    $response_message="IT IS FIRMLY NAILED ON!"
     return
   end
   $CO=0
-  for i in 1..($G-1)
+  for i in 1..($num_marked_objects-1)
     if $object_location[i]==0 then
       $CO=$CO+1
     end
   end
   if $CO>13 then
-    $Rstr="YOU CANNOT CARRY ANYMORE"
+    $response_message="YOU CANNOT CARRY ANYMORE"
     return
   end
-  if $B>$G then
-    $Rstr="YOU CANNOT GET THE "+$Tstr
+  if $B>$num_marked_objects then
+    $response_message="YOU CANNOT GET THE "+$Tstr
     return
   end
   if $B==0 then
     return
   end
   if $object_location[$B]!=$room then
-    $Rstr="IT IS NOT HERE"
+    $response_message="IT IS NOT HERE"
   end
   if $F[$B]==1 then
-    $Rstr="WHAT "+$Tstr+"?"
+    $response_message="WHAT "+$Tstr+"?"
   end
   if $object_location[$B]==0 then
-    $Rstr="YOU ALREADY HAVE IT"
+    $response_message="YOU ALREADY HAVE IT"
   end
   if $object_location[$B]==$room && $F[$B]==0 then
     $object_location[$B]=0
-    $Rstr="YOU HAVE THE "+$Tstr
+    $response_message="YOU HAVE THE "+$Tstr
   end
   if $B==28 then
     $object_location[5]=81
@@ -422,171 +422,171 @@ def take
 end
 
 def examine
-  $Rstr="YOU SEE WHAT YOU MIGHT EXPECT!"
+  $response_message="YOU SEE WHAT YOU MIGHT EXPECT!"
   if $B>0 then
-    $Rstr="NOTHING SPECIAL"
+    $response_message="NOTHING SPECIAL"
   end
   if $B==46 || $B==88 then
     enter
   end
   if $H==8076 then
-    $Rstr="IT IS EMPTY"
+    $response_message="IT IS EMPTY"
   end
   if $H==8080 then
-    $Rstr="AHA!"
+    $response_message="AHA!"
     $F[1]=0
   end
   if $H==7029 then
-    $Rstr="OK"
+    $response_message="OK"
     $F[2]=0
   end
   if $B==20 then
-    $Rstr="NBUDIFT JO QPDLFU"
+    $response_message="NBUDIFT JO QPDLFU"
     decode
     $object_location[26]=0
   end
   if $H==1648 then
-    $Rstr="THERE ARE SOME LETTERS '"+$tunnel_maze_directions[2]+"'"
+    $response_message="THERE ARE SOME LETTERS '"+$tunnel_maze_directions[2]+"'"
   end
   if $H==7432 then
-    $Rstr="UIFZ BSF BQQMF USFFT"
+    $response_message="UIFZ BSF BQQMF USFFT"
     decode
     $F[5]=0
   end
   if $H==2134 || $H==2187 then
-    $Rstr="OK"
+    $response_message="OK"
     $F[16]=0
   end
   if $B==35 then
-    $Rstr="IT IS FISHY!"
+    $response_message="IT IS FISHY!"
     $F[17]=0
   end
   if $H==3438 then
-    $Rstr="OK"
+    $response_message="OK"
     $F[22]=0
   end
   if $H==242 then
-    $Rstr="A FADED INSCRIPTION"
+    $response_message="A FADED INSCRIPTION"
   end
   if ($H==1443 || $H==1485) && $F[33]==0 then
-    $Rstr="B HMJNNFSJOH GSPN UIF EFQUIT"
+    $response_message="B HMJNNFSJOH GSPN UIF EFQUIT"
     decode
   end
   if ($H==1443 || $H==1485) && $F[33]==1 then
-    $Rstr="SOMETHING HERE..."
+    $response_message="SOMETHING HERE..."
     $F[12]=0
   end
   if $H==2479 || $H==2444 then
-    $Rstr="THERE IS A HANDLE"
+    $response_message="THERE IS A HANDLE"
   end
   if $B==9 then
-    $Rstr="UIF MBCFM SFBET 'QPJTPO'"
+    $response_message="UIF MBCFM SFBET 'QPJTPO'"
     decode
   end
   if $H==4055 then
     examine_sub
   end
   if $H==2969 && $F[49]==1 then
-    $Rstr="VERY UGLY!"
+    $response_message="VERY UGLY!"
   end
   if $H==7158 || $H==7186 then
-    $Rstr="THERE ARE LOOSE BRICKS"
+    $response_message="THERE ARE LOOSE BRICKS"
   end
   if $room==49 then
-    $Rstr="VERY INTERESTING!"
+    $response_message="VERY INTERESTING!"
   end
   if $B==52 || $B==82 || $B==81 then
-    $Rstr="INTERESTING!"
+    $response_message="INTERESTING!"
   end
   if $H==6978 then
-    $Rstr="THERE IS A WOODEN DOOR"
+    $response_message="THERE IS A WOODEN DOOR"
   end
   if $H==6970 then
-    $Rstr="YOU FOUND SOMETHING"
+    $response_message="YOU FOUND SOMETHING"
     $F[4]=0
   end
   if $H==2066 then
-    $Rstr="A LARGE CUPBOARD IN THE CORNER"
+    $response_message="A LARGE CUPBOARD IN THE CORNER"
   end
   if $H==6865 || $H==6853 then
-    $Rstr="THERE ARE NINE STONES"
+    $response_message="THERE ARE NINE STONES"
   end
   if $H==248 then
-    $Rstr="A GBEFE XPSE - 'N S I T'"
+    $response_message="A GBEFE XPSE - 'N S I T'"
     decode
   end
 end
 
 def give
   if $room==64 then
-    $Rstr="HE GIVES IT BACK!"
+    $response_message="HE GIVES IT BACK!"
   end
   if $H==6425 then
     give_ring
   end
   if $room==75 || $room==76 then
-    $Rstr="HE DOES NOT WANT IT"
+    $response_message="HE DOES NOT WANT IT"
   end
   if $B==62 && $F[44]==0 then
-    $Rstr="YOU HAVE RUN OUT!"
+    $response_message="YOU HAVE RUN OUT!"
   end
   if ($H==7562 || $H==7662) && $F[44]>0 && $object_location[1]==0 then
-    $Rstr="HE TAKES IT"
+    $response_message="HE TAKES IT"
     $F[64]=1
   end
   if $F[64]==1 then
     $F[44]=$F[44]-1
   end
   if $B==1 then
-    $Rstr="HE TAKES THEM ALL!"
+    $response_message="HE TAKES THEM ALL!"
     $object_location[1]=81
     $F[64]=1
     $F[44]=0
   end
   if $H==2228 && $object_location[5]==81 then
-    $Rstr=$XBstr+"NORTH"
+    $response_message=$XBstr+"NORTH"
     $object_location[28]=81
     $room=12
   end
   if ($H==2228 && $object_location[5]==81) || $H==225 then
-    $Rstr=$XBstr+"NORTH"
+    $response_message=$XBstr+"NORTH"
     $room=12
   end
   if ($H==1228 && $object_location[5]==81) || $H==125 then
-    $Rstr=$XBstr+"SOUTH"
+    $response_message=$XBstr+"SOUTH"
     $room=12
   end
   if $room==7 || $room==33 then
-    $Rstr="HE EATS IT!"
+    $response_message="HE EATS IT!"
     $object_location[$B]=81
   end
   if $H==711 then
     $F[46]=1
-    $Rstr="HE IS DISTRACTED"
+    $response_message="HE IS DISTRACTED"
   end
   if $H==385 || $H==3824 then
-    $Rstr="THEY SCURRY AWAY"
+    $response_message="THEY SCURRY AWAY"
     $object_location[$B]=81
     $F[65]=1
   end
 end
 
 def say
-  $Rstr="YOU SAID IT"
+  $response_message="YOU SAID IT"
   if $B==84 then
-    $Rstr="YOU MUST SAY THEM ONE BY ONE!"
+    $response_message="YOU MUST SAY THEM ONE BY ONE!"
     return
   end
   if $room!=47 || $B<71 || $B>75 || $object_location[27]!=0 then
     return
   end
   if $B==71 && $F[60]==0 then
-    $Rstr=$X7str
+    $response_message=$X7str
     $F[60]=1
     return
   end
   if $B==72 && $F[60]==1 && $F[61]==0 then
-    $Rstr=$X8str
+    $response_message=$X8str
     $F[61]=1
     return
   end
@@ -594,7 +594,7 @@ def say
     $F[62]=1
     return
   end
-  $Rstr="THE WRONG SACRED WORD!"
+  $response_message="THE WRONG SACRED WORD!"
   $F[56]=1
 end
 
@@ -607,13 +607,13 @@ end
 def wear
   if $B==3 then
     $F[29]=1
-    $Rstr="ZPV BSF JOWJTJCMF"
+    $response_message="ZPV BSF JOWJTJCMF"
     $F[55]=0
     decode
   end
   if $B==20 then
     $F[51]=1
-    $Rstr="ZPV BSF EJTHVJTFE"
+    $response_message="ZPV BSF EJTHVJTFE"
     $F[55]=0
     decode
   end
@@ -621,15 +621,15 @@ end
 
 def tie
   if $B==2 || $B==14 then
-    $Rstr="NOTHING TO TIE IT TO!"
+    $response_message="NOTHING TO TIE IT TO!"
   end
   if $H==7214 then
-    $Rstr="IT IS TIED"
+    $response_message="IT IS TIED"
     $object_location[14]=72
     $F[53]=1
   end
   if $H==722 then
-    $Rstr="OK"
+    $response_message="OK"
     $F[40]=1
     $object_location[2]=72
   end
@@ -637,48 +637,48 @@ end
 
 def climb
   if $H==1547 && $F[38]==1 then
-    $Rstr="ALL RIGHT"
+    $response_message="ALL RIGHT"
     $room=16
   end
   if $B==14 || $B==2 then
-    $Rstr="NOT ATTACHED TO ANYTHING!"
+    $response_message="NOT ATTACHED TO ANYTHING!"
   end
   if $H==5414 && $object_location[14]==54 then
-    $Rstr="YOU ARE AT THE TOP"
+    $response_message="YOU ARE AT THE TOP"
   end
   if $H==7214 && $F[53]==1 then
-    $Rstr="GOING DOWN"
+    $response_message="GOING DOWN"
     $room=71
   end
   if $H==722 && $F[40]==1 then
     $room=71
-    $Rstr="IT IS TORN"
+    $response_message="IT IS TORN"
     $object_location[2]=81
     $F[40]=0
   end
   if $H==7114 && $F[53]==1 then
     $object_location[14]=71
     $F[53]=0
-    $Rstr="IT FALLS DOWN-BUMP!"
+    $response_message="IT FALLS DOWN-BUMP!"
   end
 end
 
 def use
   if $H==522 then
-    $Rstr="OK"
+    $response_message="OK"
     $F[30]=1
   end
   if $B==1 || $B==62 || $B==5 || $B==28 || $B==11 || $B==24 then
     give
   end
   if $H==416 then
-    $Rstr="ZPV IBWF LFQU BGMPBU"
+    $response_message="ZPV IBWF LFQU BGMPBU"
     $F[31]=1
     decode
     return
   end
   if $H==4116 then
-    $Rstr="IT IS NOT BIG ENOUGH!"
+    $response_message="IT IS NOT BIG ENOUGH!"
     return
   end
   if $B==18 || $B==7 then
@@ -704,80 +704,80 @@ def open
   end
   if $H==2030 then
     $F[9]=0
-    $Rstr="OK"
+    $response_message="OK"
   end
   if $H==6030 then
-    $Rstr="OK"
+    $response_message="OK"
     $F[3]=0
   end
   if $H==2444 || $H==1870 then
-    $Rstr="YOU ARE NOT STRONG ENOUGH"
+    $response_message="YOU ARE NOT STRONG ENOUGH"
   end
   if $H==3756 then
-    $Rstr="A PASSAGE!"
+    $response_message="A PASSAGE!"
     $exits[37]="EW"
   end
   if $H==5960 then
     open_sub
   end
   if $H==6970 then
-    $Rstr="IT FALLS OFF ITS HINGES"
+    $response_message="IT FALLS OFF ITS HINGES"
   end
   if $H==4870 then
-    $Rstr="IT IS LOCKED"
+    $response_message="IT IS LOCKED"
   end
 end
 
 def burn
-  if $B>$G then
-    $Rstr="IT DOES NOT BURN"
+  if $B>$num_marked_objects then
+    $response_message="IT DOES NOT BURN"
   end
   if $B==26 then
-    $Rstr="YOU LIT THEM"
+    $response_message="YOU LIT THEM"
   end
   if $H==3826 then
-    $Rstr="NOT BRIGHT ENOUGH"
+    $response_message="NOT BRIGHT ENOUGH"
   end
   if ($B==23 || $H==6970) && $object_location[26]!=0 then
-    $Rstr="OP NBUDIFT"
+    $response_message="OP NBUDIFT"
     decode
   end
   if $B==23 && $object_location[26]==0 then
-    $Rstr="A BRIGHT "+$Vstr
+    $response_message="A BRIGHT "+$Vstr
     $F[50]=1
   end
   if $H==6970 && $object_location[26]==0 then
     $F[43]=1
-    $Rstr="IT HAS TURNED TO ASHES"
+    $response_message="IT HAS TURNED TO ASHES"
   end
 end
 
 def fill
   if ($B==16 || $B==6) && ($room==41 || $room==51) then
-    $Rstr="YOU CAPSIZED!"
+    $response_message="YOU CAPSIZED!"
     $F[56]=1
   end
   if $H==6516 && $object_location[16]==0 then
-    $Rstr="IT IS NOW FULL"
+    $response_message="IT IS NOW FULL"
     $F[34]=1
   end
   if $H==656 then
-    $Rstr="IT LEAKS OUT!"
+    $response_message="IT LEAKS OUT!"
   end
 end
 
 def plant
   if $B!=22 || $room!=15 then
-    $Rstr="DOES NOT GROW!"
+    $response_message="DOES NOT GROW!"
     return
   end
-  $Rstr="OK"
+  $response_message="OK"
   $F[34]=1
 end
 
 def water
   if $B==22 && $F[37]==1 && $F[34]==1 then
-    $Rstr=$X2str
+    $response_message=$X2str
     $F[38]=1
     decode
   end
@@ -785,19 +785,19 @@ end
 
 def swing
   if $B==7 || $B==18 then
-    $Rstr="THWACK!"
+    $response_message="THWACK!"
   end
   if $H==5818 then
-    $Rstr="YOU CLEARED THE WEBS"
+    $response_message="YOU CLEARED THE WEBS"
     $F[66]=1
   end
   if $H==187 then
-    $Rstr="THE DOOR BROKE!"
+    $response_message="THE DOOR BROKE!"
     $exits[18]="NS"
     $exits[28]="NS"
   end
   if $H==717 then
-    $Rstr="YOU BROKE THROUGH"
+    $response_message="YOU BROKE THROUGH"
     $exits[71]="N"
   end
 end
@@ -808,7 +808,7 @@ def empty
     water
   end
   if $H==499 then
-    $Rstr="WHERE?"
+    $response_message="WHERE?"
   end
 end
 
@@ -819,7 +819,7 @@ def enter
     return
   end
   if $room==36 then
-    $Rstr="YOU FOUND SOMETHING"
+    $response_message="YOU FOUND SOMETHING"
     $F[13]=0
   end
 end
@@ -838,11 +838,11 @@ end
 
 def remove
   if ($B==3 && $F[29]==1) then
-    $Rstr="TAKEN OFF"
+    $response_message="TAKEN OFF"
     $F[29]=0
   end
   if ($B==20 && $F[51]==1) then
-    $Rstr="OK"
+    $response_message="OK"
     $F[51]=0
   end
   if $B==36 || $B==50 then
@@ -852,16 +852,16 @@ end
 
 def feed
   if $H==3859 || $H==3339 || $H==1241 || $H==2241 || $H==751 then
-    $Rstr="WITH WHAT?"
+    $response_message="WITH WHAT?"
   end
 end
 
 def turn
   if $H==2340 then
-    $Rstr="IT GOES ROUND"
+    $response_message="IT GOES ROUND"
   end
   if $H==2445 then
-    $Rstr="UIF HBUFT PQFQ, UIF QPPM FNQUJFT"
+    $response_message="UIF HBUFT PQFQ, UIF QPPM FNQUJFT"
     $F[33]=1
     decode
   end
@@ -869,30 +869,30 @@ end
 
 def dive
   if $room==14 || $room==51 then
-    $Rstr="YOU HAVE DROWNED"
+    $response_message="YOU HAVE DROWNED"
     $F[56]=1
   end
 end
 
 def bail
-  $Rstr="HOW?"
+  $response_message="HOW?"
 end
 
 def drop
-  if $B==0 || $B>$G then
+  if $B==0 || $B>$num_marked_objects then
     return
   end
   $object_location[$B]=$room
-  $Rstr="DONE"
+  $response_message="DONE"
   if $H==418 || $H==518 then
-    $Rstr="YOU DROWNED!"
+    $response_message="YOU DROWNED!"
     $F[56]=1
   end
   if $B==8 && $F[30]==1 then
     $object_location[2]=$room
   end
   if $B==16 && $F[34]==1 then
-    $Rstr="YOU LOST THE WATER!"
+    $response_message="YOU LOST THE WATER!"
     $F[34]=0
   end
   if $B==2 && $F[30]==1 then
@@ -902,7 +902,7 @@ end
 
 def insert
   if $B==62 && $F[44]==0 then
-    $Rstr="YOU DO NOT HAVE ANY"
+    $response_message="YOU DO NOT HAVE ANY"
   end
   if $H==5762 && $object_location[1]==0 && $F[44]>0 then
     insert_sub
@@ -910,13 +910,13 @@ def insert
 end
 
 def throw
-  if $B==0 || $B>$G then
+  if $B==0 || $B>$num_marked_objects then
     return
   end
-  $Rstr="DID NOT GO FAR!"
+  $response_message="DID NOT GO FAR!"
   $object_location[$B]=$room
   if $H==3317 then
-    $Rstr="ZPV DBVHIU UIF CPBS"
+    $response_message="ZPV DBVHIU UIF CPBS"
     $F[32]=1
     decode
   end
@@ -924,28 +924,28 @@ end
 
 def make
   if $B==10 then
-    $Rstr="B OJDF UVOF"
+    $response_message="B OJDF UVOF"
     decode
   end
   if $H==5233 then
-    $Rstr="WHAT WITH?"
+    $response_message="WHAT WITH?"
   end
   if $B==83 then
-    $Rstr="HOW, O MUSICAL ONE?"
+    $response_message="HOW, O MUSICAL ONE?"
   end
   if $H==5610 then
     $F[35]=1
-    $Rstr=$X1str+" IS FREE!"
+    $response_message=$X1str+" IS FREE!"
     $exits[56]="NS"
   end
 end
 
 def eat
-  if $B==0 || $B>$G then
+  if $B==0 || $B>$num_marked_objects then
     return
   end
   if $B==5 || $B==24 then
-    $Rstr="YUM YUM!"
+    $response_message="YUM YUM!"
     $object_location[$B]=81
   end
 end
@@ -953,19 +953,19 @@ end
 def move
   if $room==4 && $B==50 then
     $F[45]=1
-    $Rstr="YOU REVEALED A STEEP PASSAGE"
+    $response_message="YOU REVEALED A STEEP PASSAGE"
   end
   if $room==3 && $B==50 then
-    $Rstr="YOU CANNOT MOVE RUBBLE FROM HERE"
+    $response_message="YOU CANNOT MOVE RUBBLE FROM HERE"
   end
   if $H==7136 then
-    $Rstr="THEY ARE WEDGED IN!"
+    $response_message="THEY ARE WEDGED IN!"
   end
 end
 
 def into
   if ($B==67 || $B==68) && $object_location[9]==0 && $room==49 then
-    $Rstr="OK"
+    $response_message="OK"
     $F[47]=1
   end
 end
@@ -982,11 +982,11 @@ def ring
     end
   end until $MR>0
   if $MR==$F[42] then
-    $Rstr="A ROCK DOOR OPENS"
+    $response_message="A ROCK DOOR OPENS"
     $exits[27]="EW"
     return
   end
-  $Rstr="ZPV IBWF NJTUSFBUFE UIF CFMM!"
+  $response_message="ZPV IBWF NJTUSFBUFE UIF CFMM!"
   $F[56]=1
   decode
 end
@@ -1000,7 +1000,7 @@ end
 
 def hold
   if ($H==4864 || $H==4819) && $object_location[19]==0 then
-    $Rstr=$X6str
+    $response_message=$X6str
     $F[63]=1
     decode
   end
@@ -1011,7 +1011,7 @@ end
 
 def pay
   if $H==7549 || $H==7649 then
-    $Rstr="WHAT WITH?"
+    $response_message="WHAT WITH?"
   end
   if $B==1 || $B==62 then
     give
@@ -1020,35 +1020,35 @@ end
 
 def unlock
   if $H==4870 && $object_location[21]==0 then
-    $Rstr="THE KEY TURNS!"
+    $response_message="THE KEY TURNS!"
     $F[70]=1
   end
 end
 
 def break
   if $H==1870 then
-    $Rstr="HOW?"
+    $response_message="HOW?"
   end
 end
 
 def reflect
   if $room==48 then
-    $Rstr="HOW?"
+    $response_message="HOW?"
   end
 end
 
 def drink
-  $Rstr="ARE YOU THIRSTY?"
+  $response_message="ARE YOU THIRSTY?"
 end
 
 def give_ring
-  $Rstr="HE TAKES IT AND SAYS '"+STRstr($F[42])+" RINGS ARE NEEDED'"
+  $response_message="HE TAKES IT AND SAYS '"+STRstr($F[42])+" RINGS ARE NEEDED'"
   $object_location[25]=81
 end
 
 def insert_sub
   $F[44]=$F[44]-1
-  $Rstr="A NUMBER APPEARS - "+STRstr($F[41])
+  $response_message="A NUMBER APPEARS - "+STRstr($F[41])
   if $F[44]==0 then
     $object_location[1]=81
   end
@@ -1056,13 +1056,13 @@ end
 
 def open_sub
   puts
-  $Rstr="XIBU JT UIF DPEF"
+  $response_message="XIBU JT UIF DPEF"
   decode
-  puts $Rstr
+  puts $response_message
   $CN=mINPUT
-  $Rstr="WRONG!"
+  $response_message="WRONG!"
   if $CN==$F[41] then
-    $Rstr="IT OPENS"
+    $response_message="IT OPENS"
     $F[21]=0
   end
 end
@@ -1072,7 +1072,7 @@ def examine_sub
   $room=$F[$F[52]+57]
   restore_to_current_room
   $room=$T
-  $Rstr=$X4str+RIGHTstr($Dstr,LEN($Dstr)-2)
+  $response_message=$X4str+RIGHTstr($Dstr,LEN($Dstr)-2)
 end
 
 def restore_to_current_room
@@ -1099,7 +1099,7 @@ def pause
 end
 
 def setup
-  $object_location=Array.new($G+1,0)
+  $object_location=Array.new($num_marked_objects+1,0)
   $exits=Array.new(80+1,'')
   $F=Array.new(70+1,0)
   $prepositions=Array.new(6+1,'')
@@ -1229,8 +1229,8 @@ end
 
 def decode
   $Zstr=""
-  for i in 1..LEN($Rstr)
-    $Cstr=MIDstr($Rstr,i,1)
+  for i in 1..LEN($response_message)
+    $Cstr=MIDstr($response_message,i,1)
     if $Cstr<"A" then
       $Zstr=$Zstr+$Cstr
     else
@@ -1241,7 +1241,7 @@ def decode
       $Zstr=$Zstr+CHRstr($object_location)
     end
   end
-  $Rstr=$Zstr
+  $response_message=$Zstr
 end
 
 def tunnels
@@ -1272,8 +1272,8 @@ end
 def print_titles
   system('clear')
   puts
-  puts TAB($EL/2-9)+"MYSTERY OF SILVER"
-  puts TAB($EL/2-9)+"    MOUNTAIN"
+  puts TAB($line_length/2-9)+"MYSTERY OF SILVER"
+  puts TAB($line_length/2-9)+"    MOUNTAIN"
   puts "======================================"
   puts
   puts
@@ -1283,7 +1283,7 @@ def new_game
   for i in 1..80
     $exits[i]=mREAD
   end
-  for i in 1..$G
+  for i in 1..$num_marked_objects
     $object_location[i]=mREAD.to_i
   end
   for i in 1..13
@@ -1298,7 +1298,7 @@ def new_game
   $F[59]=15
   $F[52]=INT(RND(1)*3)
   $room=77
-  $Rstr="GOOD LUCK ON YOUR QUEST!"
+  $response_message="GOOD LUCK ON YOUR QUEST!"
   $tunnel_maze_directions[1]=""
   for i in 1..8
     $Fstr=MIDstr($cmd_list,1+INT(RND(1)*4)*3,1)
@@ -1323,7 +1323,7 @@ def load_game
   get_filename
   read_file
   $room=$F[69]
-  $Rstr="OK. CARRY ON"
+  $response_message="OK. CARRY ON"
 end
 
 def save_game
@@ -1361,7 +1361,7 @@ def format_description
   ls=1
   lp=1
   for i in 1..LEN($Jstr)
-    if MIDstr($Jstr,i,1)==" " && $LL>$EL then
+    if MIDstr($Jstr,i,1)==" " && $LL>$line_length then
       puts MIDstr($Jstr,lp,ls-lp)
       $LL=i-ls
       lp=ls+1
