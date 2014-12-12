@@ -1148,7 +1148,7 @@ def rooms
     "21STREAM IN A VALLEY BOTTOM", "11DEEP DARK WOOD",
     "11SHADY HOLLOW", "34ANCIENT STONE CIRCLE",
     "16STABLE", "14ATTIC BEDROOM",
-    "11DAMP WELL BOTTOM", "32TOPOF A DEEP WELL",
+    "11DAMP WELL BOTTOM", "32TOP OF A DEEP WELL",
     "31BURNT-OUT CAMPFIRE", "16ORCHARD",
     "62END OF A BRIDGE", "62END OF A BRIDGE",
     "61CROSSROADS", "41WINDING ROAD",
@@ -1209,7 +1209,7 @@ def tunnels(direction)
       puts "(OR G TO GIVE UP!)"
     end
     puts
-    puts $Wstr
+    $Wstr = mINPUT
     $Jstr=RIGHTstr($Jstr+RIGHTstr($Wstr,1),8)
     if $Wstr=="G" then
       $F[56]=1
