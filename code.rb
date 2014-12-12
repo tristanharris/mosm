@@ -2,7 +2,6 @@ require 'json'
 
 def start
   $line_length=39
-  $num_objects=88
   $NV=57
   $num_marked_objects=28
   setup
@@ -16,13 +15,13 @@ end
 def main
   print_titles
   $LL=0
-  $Pstr=$prepositions[VAL(LEFTstr(current_room_description,1))]+" "+$determiners[VAL(MIDstr(current_room_description,2,1))]+" "
+  $Pstr=prepositions[VAL(LEFTstr(current_room_description,1))]+" "+determiners[VAL(MIDstr(current_room_description,2,1))]+" "
   $Jstr=$response_message+". "+"YOU ARE "+$Pstr+RIGHTstr(current_room_description,LEN(current_room_description)-2)+" "
   format_description
   $Jstr=""
   marked_objects.each_with_index do |object_str, i|
     i = i + 1
-    $Pstr=$determiners[VAL(LEFTstr(object_str,1))]
+    $Pstr=determiners[VAL(LEFTstr(object_str,1))]
     object_str = strip_leading(object_str)
     if $F[i]==0 && $object_location[i]==$room then
       $Jstr=$Jstr+" "+$Pstr+" "+object_str+","
@@ -88,9 +87,9 @@ def main
   if $Vstr=="PLAY" then
     $Vstr="BLO"
   end
-  $Ustr=LEFTstr($Vstr,3)
+  cmd_start=LEFTstr($Vstr,3)
   for i in 1..$NV
-    if MIDstr($cmd_list,i*3-2,3)==$Ustr then
+    if MIDstr($cmd_list,i*3-2,3)==cmd_start then
       $VB=i
       break
     end
@@ -133,12 +132,12 @@ def main
     end
   end
   if $room==56 && $F[35]==0 && $VB!=37 && $VB!=53 then
-    $response_message=$X1str+" HAS GOT YOU!"
+    $response_message=words(1)+" HAS GOT YOU!"
     Kernel.throw :redraw
   end
   if !($VB==44 || $VB==47 || $VB==19 || $VB==57 || $VB==49) then
     if $room==48 && $F[63]==0 then
-      $response_message=$X9str
+      $response_message=words(9)
       Kernel.throw :redraw
     end
   end
@@ -157,7 +156,7 @@ def main
       end
     end
     if $room==56 && $F[35]==0 && $object_location[10]!=0 then
-      $response_message=$X1str+" GETS YOU!"
+      $response_message=words(1)+" GETS YOU!"
       $F[56]=1
     end
     if $F[56]==0 then
@@ -207,7 +206,7 @@ def go
       return
     end
     if $room==73 || $room==42 || $room==9 || $room==10 then
-      $response_message=$X3str
+      $response_message=words(3)
       $F[55]=1
       return
     end
@@ -233,7 +232,7 @@ def go
     return
   end
   if (($room==3 && direction==2) || ($room==4 && direction==4)) && $F[45]==0 then
-    $response_message=$X5str
+    $response_message=words(5)
     return
   end
   if $room==35 && $object_location[13]!=$room then
@@ -332,7 +331,7 @@ def inventory
     i = i+1
     object_str = strip_leading(object_str)
     if i==1 && $object_location[1]==0 && $F[44]==1 then
-      $object_str="COIN"
+      object_str="COIN"
     end
     if !(i==$num_marked_objects && $object_location[5]==0) then
       if $object_location[i]==0 then
@@ -531,16 +530,16 @@ def give
     $F[44]=0
   end
   if $H==2228 && $object_location[5]==81 then
-    $response_message=$XBstr+"NORTH"
+    $response_message=words(0)+"NORTH"
     $object_location[28]=81
     $room=12
   end
   if ($H==2228 && $object_location[5]==81) || $H==225 then
-    $response_message=$XBstr+"NORTH"
+    $response_message=words(0)+"NORTH"
     $room=12
   end
   if ($H==1228 && $object_location[5]==81) || $H==125 then
-    $response_message=$XBstr+"SOUTH"
+    $response_message=words(0)+"SOUTH"
     $room=12
   end
   if $room==7 || $room==33 then
@@ -568,12 +567,12 @@ def say
     return
   end
   if $B==71 && $F[60]==0 then
-    $response_message=$X7str
+    $response_message=words(7)
     $F[60]=1
     return
   end
   if $B==72 && $F[60]==1 && $F[61]==0 then
-    $response_message=$X8str
+    $response_message=words(8)
     $F[61]=1
     return
   end
@@ -760,7 +759,7 @@ end
 
 def water
   if $B==22 && $F[37]==1 && $F[34]==1 then
-    $response_message=decode($X2str)
+    $response_message=decode(words(2))
     $F[38]=1
   end
 end
@@ -914,7 +913,7 @@ def make
   end
   if $H==5610 then
     $F[35]=1
-    $response_message=$X1str+" IS FREE!"
+    $response_message=words(1)+" IS FREE!"
     $exits[56]="NS"
   end
 end
@@ -978,7 +977,7 @@ end
 
 def hold
   if ($H==4864 || $H==4819) && $object_location[19]==0 then
-    $response_message=decode($X6str)
+    $response_message=decode(words(6))
     $F[63]=1
   end
   if $B==27 then
@@ -1035,20 +1034,20 @@ def open_sub
   puts
   $response_message=decode("XIBU JT UIF DPEF")
   puts $response_message
-  $CN=mINPUT
+  cn=mINPUT
   $response_message="WRONG!"
-  if $CN==$F[41] then
+  if cn==$F[41] then
     $response_message="IT OPENS"
     $F[21]=0
   end
 end
 
 def examine_sub
-  $T=$room
+  tmp = $room
   $room=$F[$F[52]+57]
   desc = current_room_description
-  $room=$T
-  $response_message=$X4str+RIGHTstr(desc,LEN(desc)-2)
+  $room = tmp
+  $response_message=words(4)+RIGHTstr(desc,LEN(desc)-2)
 end
 
 def current_room_description
@@ -1061,28 +1060,35 @@ end
 
 def pause
   puts "PRESS return TO CONTINUE"
-  $Zstr=mINPUT
+  mINPUT
 end
 
-def load_words
-	$prepositions = [ nil, "IN", "NEAR", "BY", "ON", "", "AT" ]
-	$determiners = [ nil, "A", "THE", "SOME", "AN", "", "A SMALL" ]
-  $X6str="XV SFGMFDUFE UIF XJABSET HMSBF! IF JT EFBE"
-  $X1str="THE GHOST OF THE GOBLIN GUARDIAN"
-  $X2str="B MBSHF WJOF HSPXT JO TFDPOET!"
-  $X3str="A GRARG PATROL APPROACHES"
-  $X4str="MAGIC WORDS LIE AT THE CROSSROADS, THE FOUNTAIN AND THE "
-  $X5str="A PILE OF RUBBLE BLOCKS YOUR PATH"
-  $X7str="THE MOUNTAIN RUMBLES!"
-  $X8str="TOWERS FALL DOWN!"
-  $X9str="THE WIZARD HAS YOU IN HIS GLARE"
-  $XBstr="HE LEADS YOU "
+def prepositions
+  [ nil, "IN", "NEAR", "BY", "ON", "", "AT" ]
+end
+
+def determiners
+  [ nil, "A", "THE", "SOME", "AN", "", "A SMALL" ]
+end
+
+def words(i)
+  [
+    "HE LEADS YOU ",
+    "THE GHOST OF THE GOBLIN GUARDIAN",
+    "B MBSHF WJOF HSPXT JO TFDPOET!",
+    "A GRARG PATROL APPROACHES",
+    "MAGIC WORDS LIE AT THE CROSSROADS, THE FOUNTAIN AND THE ",
+    "A PILE OF RUBBLE BLOCKS YOUR PATH",
+    "XV SFGMFDUFE UIF XJABSET HMSBF! IF JT EFBE",
+    "THE MOUNTAIN RUMBLES!",
+    "TOWERS FALL DOWN!",
+    "THE WIZARD HAS YOU IN HIS GLARE"
+  ][i]
 end
 
 def setup
   $F=Array.new(70+1,0)
   $tunnel_maze_directions=Array.new(2+1,'')
-	load_words
   $cmd_list="NOOEOOSOOWOOUOODOOINVGETTAKEXAREAGIVSAYPICWEATIECLIRIGUSEOPE"
   $cmd_list=$cmd_list+"LIGFILPLAWATSWIEMPENTCROREMFEETURDIVBAILEATHRINSBLODROEATMOV"
   $cmd_list=$cmd_list+"INTRINCUTHOLBURPOISHOUNLWITDRICOUPAYMAKBRESTEGATREF"
