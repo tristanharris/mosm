@@ -1053,10 +1053,7 @@ def examine_sub
 end
 
 def restore_to_current_room
-  mRESTORE
-  for i in 1..$room
-    $Dstr=mREAD
-  end
+  $Dstr = rooms[$room-1]
 end
 
 def strip_leading(str)
@@ -1109,8 +1106,8 @@ def setup
   end
 end
 
-def mRESTORE
-  rooms = [
+def rooms
+  [
     "11HALF-DUG GRAVE", "12GOBLIN GRAVEYARD",
     "11HOLLOW TOMB", "23STALACTITES AND STALAGMITES",
     "11MAZE OF TUNNELS", "11VAULTED CAVERN",
@@ -1152,7 +1149,6 @@ def mRESTORE
     "61CROSSROADS", "41WINDING ROAD",
     "11VILLAGE OF RUSTIC HOUSES", "11WHITE COTTAGE"
   ]
-  $DATA = rooms
 end
 
 def objects
@@ -1338,10 +1334,6 @@ def format_description
     $LL=$LL+1
   end
   print MIDstr($Jstr,lp,LEN($Jstr)-lp)
-end
-
-def mREAD
-  $DATA.shift
 end
 
 def TAB(len)
