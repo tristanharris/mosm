@@ -1078,13 +1078,7 @@ def pause
   $Zstr=mINPUT
 end
 
-def setup
-  $object_location=Array.new($num_marked_objects+1,0)
-  $exits=Array.new(80+1,'')
-  $F=Array.new(70+1,0)
-  $prepositions=Array.new(6+1,'')
-  $determiners=Array.new(6+1,'')
-  $tunnel_maze_directions=Array.new(2+1,'')
+def load_words
   restore_to_objects
   for i in 1..$num_objects
     $Tstr=mREAD
@@ -1093,10 +1087,7 @@ def setup
     $prepositions[i]=mREAD
     $determiners[i]=mREAD
   end
-  $cmd_list="NOOEOOSOOWOOUOODOOINVGETTAKEXAREAGIVSAYPICWEATIECLIRIGUSEOPE"
-  $cmd_list=$cmd_list+"LIGFILPLAWATSWIEMPENTCROREMFEETURDIVBAILEATHRINSBLODROEATMOV"
-  $cmd_list=$cmd_list+"INTRINCUTHOLBURPOISHOUNLWITDRICOUPAYMAKBRESTEGATREF"
-  $X6str="XV SFGMFDUFE UIF XJABSET HMSBF! if JT EFBE"
+  $X6str="XV SFGMFDUFE UIF XJABSET HMSBF! IF JT EFBE"
   $X1str="THE GHOST OF THE GOBLIN GUARDIAN"
   $X2str="B MBSHF WJOF HSPXT JO TFDPOET!"
   $X3str="A GRARG PATROL APPROACHES"
@@ -1106,6 +1097,19 @@ def setup
   $X8str="TOWERS FALL DOWN!"
   $X9str="THE WIZARD HAS YOU IN HIS GLARE"
   $XBstr="HE LEADS YOU "
+end
+
+def setup
+  $object_location=Array.new($num_marked_objects+1,0)
+  $exits=Array.new(80+1,'')
+  $F=Array.new(70+1,0)
+  $prepositions=Array.new(6+1,'')
+  $determiners=Array.new(6+1,'')
+  $tunnel_maze_directions=Array.new(2+1,'')
+	load_words
+  $cmd_list="NOOEOOSOOWOOUOODOOINVGETTAKEXAREAGIVSAYPICWEATIECLIRIGUSEOPE"
+  $cmd_list=$cmd_list+"LIGFILPLAWATSWIEMPENTCROREMFEETURDIVBAILEATHRINSBLODROEATMOV"
+  $cmd_list=$cmd_list+"INTRINCUTHOLBURPOISHOUNLWITDRICOUPAYMAKBRESTEGATREF"
   print_titles
   puts "DO YOU WANT TO"
   puts
@@ -1259,7 +1263,7 @@ def print_titles
   puts
 end
 
-def new_game
+def load_initial_state
   for i in 1..80
     $exits[i]=mREAD
   end
@@ -1270,15 +1274,9 @@ def new_game
     a=mREAD.to_i
     $F[a]=1
   end
-  $F[41]=INT(RND(1)*900)+100
-  $F[42]=INT(RND(1)*3)+2
-  $F[44]=4
-  $F[57]=68
-  $F[58]=54
-  $F[59]=15
-  $F[52]=INT(RND(1)*3)
-  $room=77
-  $response_message="GOOD LUCK ON YOUR QUEST!"
+end
+
+def setup_tunnle_maze
   $tunnel_maze_directions[1]=""
   for i in 1..8
     $Fstr=MIDstr($cmd_list,1+INT(RND(1)*4)*3,1)
@@ -1297,6 +1295,20 @@ def new_game
     end
     $tunnel_maze_directions[2]=$Lstr+$tunnel_maze_directions[2]
   end
+end
+
+def new_game
+	load_initial_state
+  $F[41]=INT(RND(1)*900)+100
+  $F[42]=INT(RND(1)*3)+2
+  $F[44]=4
+  $F[57]=68
+  $F[58]=54
+  $F[59]=15
+  $F[52]=INT(RND(1)*3)
+  $room=77
+  $response_message="GOOD LUCK ON YOUR QUEST!"
+	setup_tunnle_maze
 end
 
 def load_game
