@@ -1200,7 +1200,7 @@ def tunnels(direction)
   $Jstr="SSSSSSSS"
   $NG=0
   begin
-    $MP=direction/2
+    mp=direction/2
     print_titles
     puts "YOU ARE LOST IN THE"
     puts "      TUNNELS"
@@ -1209,16 +1209,16 @@ def tunnels(direction)
       puts "(OR G TO GIVE UP!)"
     end
     puts
-    $Wstr = mINPUT
-    $Jstr=RIGHTstr($Jstr+RIGHTstr($Wstr,1),8)
-    if $Wstr=="G" then
+    way = mINPUT
+    $Jstr=RIGHTstr($Jstr+RIGHTstr(way,1),8)
+    if way=="G" then
       $F[56]=1
       return
     end
-    if $Jstr!=$tunnel_maze_directions[$MP] then
+    if $Jstr!=$tunnel_maze_directions[mp] then
       $NG=$NG+1
     end
-  end until !($Jstr!=$tunnel_maze_directions[$MP])
+  end until !($Jstr!=$tunnel_maze_directions[mp])
 end
 
 def print_titles
