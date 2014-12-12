@@ -16,9 +16,8 @@ end
 def main
   print_titles
   $LL=0
-  restore_to_current_room
-  $Pstr=$prepositions[VAL(LEFTstr($Dstr,1))]+" "+$determiners[VAL(MIDstr($Dstr,2,1))]+" "
-  $Jstr=$response_message+". "+"YOU ARE "+$Pstr+RIGHTstr($Dstr,LEN($Dstr)-2)+" "
+  $Pstr=$prepositions[VAL(LEFTstr(current_room_description,1))]+" "+$determiners[VAL(MIDstr(current_room_description,2,1))]+" "
+  $Jstr=$response_message+". "+"YOU ARE "+$Pstr+RIGHTstr(current_room_description,LEN(current_room_description)-2)+" "
   format_description
   $Jstr=""
   marked_objects.each_with_index do |object_str, i|
@@ -1047,13 +1046,13 @@ end
 def examine_sub
   $T=$room
   $room=$F[$F[52]+57]
-  restore_to_current_room
+  desc = current_room_description
   $room=$T
-  $response_message=$X4str+RIGHTstr($Dstr,LEN($Dstr)-2)
+  $response_message=$X4str+RIGHTstr(desc,LEN(desc)-2)
 end
 
-def restore_to_current_room
-  $Dstr = rooms[$room-1]
+def current_room_description
+  rooms[$room-1]
 end
 
 def strip_leading(str)
