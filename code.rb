@@ -1079,14 +1079,8 @@ def pause
 end
 
 def load_words
-  restore_to_objects
-  for i in 1..$num_objects
-    $Tstr=mREAD
-  end
-  for i in 1..6
-    $prepositions[i]=mREAD
-    $determiners[i]=mREAD
-  end
+	$prepositions = [ nil, "IN", "NEAR", "BY", "ON", "", "AT" ]
+	$determiners = [ nil, "A", "THE", "SOME", "AN", "", "A SMALL" ]
   $X6str="XV SFGMFDUFE UIF XJABSET HMSBF! IF JT EFBE"
   $X1str="THE GHOST OF THE GOBLIN GUARDIAN"
   $X2str="B MBSHF WJOF HSPXT JO TFDPOET!"
@@ -1100,11 +1094,7 @@ def load_words
 end
 
 def setup
-  $object_location=Array.new($num_marked_objects+1,0)
-  $exits=Array.new(80+1,'')
   $F=Array.new(70+1,0)
-  $prepositions=Array.new(6+1,'')
-  $determiners=Array.new(6+1,'')
   $tunnel_maze_directions=Array.new(2+1,'')
 	load_words
   $cmd_list="NOOEOOSOOWOOUOODOOINVGETTAKEXAREAGIVSAYPICWEATIECLIRIGUSEOPE"
@@ -1188,27 +1178,7 @@ def mRESTORE
     "STABLES", "SLUICE GATES", "POT", "STATUE", "PINNACLE", "MUSIC", "MAGIC WORDS",
     "MISTY POOL", "WELL BOTTOM", "OLD KILN", "MOUNTAIN HUT"
   ]
-  sentence_pairs = [
-    "IN", "A", "NEAR", "THE", "BY", "SOME", "ON", "AN", "", "", "AT", "A SMALL"
-  ]
-  exits = [
-    "E", "ESW", "WE", "EW", "EW", "ESW", "ESW", "ES", "EW", "SW",
-    "S", "N", "ES", "SW", "S", "NW", "N", "N", "ES", "NSW",
-    "NS", "E", "NSW", "N", "NES", "EW", "W", "S", "NS", "N",
-    "NES", "W", "NS", "D", "NES", "SW", "E", "NW", "NS", "S",
-    "NS", "E", "NSEW", "WU", "UD", "NS", "E", "SW", "NSE", "NW",
-    "NE", "EW", "NSW", "E", "WN", "S", "E", "NEW", "NW", "S",
-    "ES", "SW", "NES", "EW", "SW", "NE", "EW", "ESW", "SW", "ND",
-    " ", "E", "NEW", "EW", "NEW", "EW", "EW", "NEW", "NEW", "WU"
-  ]
-  object_locations = [
-    80, 70, 60, 69, 74, 72, 63, 52, 20, 11, 1, 14, 36, 54, 61, 21, 32, 10, 50,
-    29, 59, 34, 13, 80, 30, 81, 47, 74
-  ]
-  f_data = [
-    1, 2, 3, 4, 5, 9, 12, 13, 16, 17, 20, 21, 22
-  ]
-  $DATA = rooms + marked_objects + objects + sentence_pairs + exits + object_locations + f_data
+  $DATA = rooms + marked_objects + objects
 end
 
 def decode(coded_string)
@@ -1264,16 +1234,23 @@ def print_titles
 end
 
 def load_initial_state
-  for i in 1..80
-    $exits[i]=mREAD
-  end
-  for i in 1..$num_marked_objects
-    $object_location[i]=mREAD.to_i
-  end
-  for i in 1..13
-    a=mREAD.to_i
-    $F[a]=1
-  end
+  $exits = [ nil,
+    "E", "ESW", "WE", "EW", "EW", "ESW", "ESW", "ES", "EW", "SW",
+    "S", "N", "ES", "SW", "S", "NW", "N", "N", "ES", "NSW",
+    "NS", "E", "NSW", "N", "NES", "EW", "W", "S", "NS", "N",
+    "NES", "W", "NS", "D", "NES", "SW", "E", "NW", "NS", "S",
+    "NS", "E", "NSEW", "WU", "UD", "NS", "E", "SW", "NSE", "NW",
+    "NE", "EW", "NSW", "E", "WN", "S", "E", "NEW", "NW", "S",
+    "ES", "SW", "NES", "EW", "SW", "NE", "EW", "ESW", "SW", "ND",
+    " ", "E", "NEW", "EW", "NEW", "EW", "EW", "NEW", "NEW", "WU"
+  ]
+  $object_location = [ nil,
+    80, 70, 60, 69, 74, 72, 63, 52, 20, 11, 1, 14, 36, 54, 61, 21, 32, 10, 50,
+    29, 59, 34, 13, 80, 30, 81, 47, 74
+  ]
+  $F[1..13] = [
+    1, 2, 3, 4, 5, 9, 12, 13, 16, 17, 20, 21, 22
+  ]
 end
 
 def setup_tunnle_maze
