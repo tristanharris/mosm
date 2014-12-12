@@ -25,7 +25,7 @@ def main
   for i in 1..($num_marked_objects-1)
     $object_str=mREAD
     $Pstr=$determiners[VAL(LEFTstr($object_str,1))]
-    strip_leading
+    $object_str = strip_leading($object_str)
     if $F[i]==0 && $object_location[i]==$room then
       $Jstr=$Jstr+" "+$Pstr+" "+$object_str+","
     end
@@ -103,7 +103,7 @@ def main
     for i in 1..$num_objects
       $object_str=mREAD
       if i<=$num_marked_objects then
-        strip_leading
+        $object_str = strip_leading($object_str)
       end
       if $Tstr==$object_str then
         $B=i
@@ -334,7 +334,7 @@ def inventory
   print "YOU HAVE "
   for i in 1..$num_marked_objects
     $object_str=mREAD
-    strip_leading
+    $object_str = strip_leading($object_str)
     if i==1 && $object_location[1]==0 && $F[44]==1 then
       $object_str="COIN"
     end
@@ -1069,8 +1069,8 @@ def restore_to_objects
   end
 end
 
-def strip_leading
-  $object_str=RIGHTstr($object_str,LEN($object_str)-1)
+def strip_leading(str)
+  str[1..-1]
 end
 
 def pause
