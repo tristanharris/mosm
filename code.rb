@@ -20,14 +20,13 @@ def main
   $Pstr=$prepositions[VAL(LEFTstr($Dstr,1))]+" "+$determiners[VAL(MIDstr($Dstr,2,1))]+" "
   $Jstr=$response_message+". "+"YOU ARE "+$Pstr+RIGHTstr($Dstr,LEN($Dstr)-2)+" "
   format_description
-  restore_to_objects
   $Jstr=""
-  for i in 1..($num_marked_objects-1)
-    $object_str=mREAD
-    $Pstr=$determiners[VAL(LEFTstr($object_str,1))]
-    $object_str = strip_leading($object_str)
+  marked_objects.each_with_index do |object_str, i|
+    i = i + 1
+    $Pstr=$determiners[VAL(LEFTstr(object_str,1))]
+    object_str = strip_leading(object_str)
     if $F[i]==0 && $object_location[i]==$room then
-      $Jstr=$Jstr+" "+$Pstr+" "+$object_str+","
+      $Jstr=$Jstr+" "+$Pstr+" "+object_str+","
     end
   end
   if $room==29 && $F[48]==0 then
@@ -99,13 +98,12 @@ def main
   end
   $F[36]=0
   begin
-    restore_to_objects
-    for i in 1..$num_objects
-      $object_str=mREAD
+    objects.each_with_index do |object_str, i|
+      i = i + 1
       if i<=$num_marked_objects then
-        $object_str = strip_leading($object_str)
+        object_str = strip_leading(object_str)
       end
-      if $Tstr==$object_str then
+      if $Tstr==object_str then
         $B=i
         break
       end
@@ -328,19 +326,18 @@ def go
 end
 
 def inventory
-  restore_to_objects
   $response_message="OK"
   $F[49]=0
   print "YOU HAVE "
-  for i in 1..$num_marked_objects
-    $object_str=mREAD
-    $object_str = strip_leading($object_str)
+  marked_objects.each_with_index do |object_str, i|
+    i = i+1
+    object_str = strip_leading(object_str)
     if i==1 && $object_location[1]==0 && $F[44]==1 then
       $object_str="COIN"
     end
     if !(i==$num_marked_objects && $object_location[5]==0) then
       if $object_location[i]==0 then
-        print $object_str+","
+        print object_str+","
         $F[49]=1
       end
     end
@@ -1062,13 +1059,6 @@ def restore_to_current_room
   end
 end
 
-def restore_to_objects
-  mRESTORE
-  for i in 1..80
-    $Dstr=mREAD
-  end
-end
-
 def strip_leading(str)
   str[1..-1]
 end
@@ -1162,13 +1152,11 @@ def mRESTORE
     "61CROSSROADS", "41WINDING ROAD",
     "11VILLAGE OF RUSTIC HOUSES", "11WHITE COTTAGE"
   ]
-  marked_objects = [
-    "3COINS", "1SHEET", "3BOOTS", "1HORSESHOE", "3APPLES", "1BUCKET", "4AXE", "1BOAT", "1PHIAL",
-    "3REEDS", "1BONE", "1SHIELD", "3PLANKS", "1ROPE", "1RING", "1JUG", "1NET", "1SWORD",
-    "1SILVER PLATE", "1UNIFORM", "1KEY", "3SEEDS", "1LAMP", "3BREAD", "1BROOCH", "3MATCHES",
-    "2STONE OF DESTINY", "4APPLE"
-  ]
-  objects = [
+  $DATA = rooms
+end
+
+def objects
+  marked_objects + [
     "BED", "CUPBOARD", "BRIDGE", "TREES", "SAIL", "KILN",
     "KETCH", "BRICKS", "WINDMILL", "SACKS", "OGBAN'S BOAR", "WHEEL",
     "PONY", "GRAVESTONES", "POOL", "GATES", "HANDLE", "HUT", "VINE", "INSCRIPTIONS", "TROLL", "RUBBLE",
@@ -1178,8 +1166,17 @@ def mRESTORE
     "STABLES", "SLUICE GATES", "POT", "STATUE", "PINNACLE", "MUSIC", "MAGIC WORDS",
     "MISTY POOL", "WELL BOTTOM", "OLD KILN", "MOUNTAIN HUT"
   ]
-  $DATA = rooms + marked_objects + objects
 end
+
+def marked_objects
+  [
+    "3COINS", "1SHEET", "3BOOTS", "1HORSESHOE", "3APPLES", "1BUCKET", "4AXE", "1BOAT", "1PHIAL",
+    "3REEDS", "1BONE", "1SHIELD", "3PLANKS", "1ROPE", "1RING", "1JUG", "1NET", "1SWORD",
+    "1SILVER PLATE", "1UNIFORM", "1KEY", "3SEEDS", "1LAMP", "3BREAD", "1BROOCH", "3MATCHES",
+    "2STONE OF DESTINY", "4APPLE"
+  ]
+end
+
 
 def decode(coded_string)
   decoded_string=""
