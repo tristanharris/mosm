@@ -15,16 +15,16 @@ end
 def main
   print_titles
   $LL=0
-  $Pstr=prepositions[VAL(LEFTstr(current_room_description,1))]+" "+determiners[VAL(MIDstr(current_room_description,2,1))]+" "
-  $Jstr=$response_message+". "+"YOU ARE "+$Pstr+RIGHTstr(current_room_description,LEN(current_room_description)-2)+" "
+  preposition=prepositions[VAL(LEFTstr(current_room_description,1))]+" "+determiners[VAL(MIDstr(current_room_description,2,1))]+" "
+  $Jstr=$response_message+". "+"YOU ARE "+preposition+RIGHTstr(current_room_description,LEN(current_room_description)-2)+" "
   format_description
   $Jstr=""
   marked_objects.each_with_index do |object_str, i|
     i = i + 1
-    $Pstr=determiners[VAL(LEFTstr(object_str,1))]
+    determiner=determiners[VAL(LEFTstr(object_str,1))]
     object_str = strip_leading(object_str)
     if $F[i]==0 && $object_location[i]==$room then
-      $Jstr=$Jstr+" "+$Pstr+" "+object_str+","
+      $Jstr=$Jstr+" "+determiner+" "+object_str+","
     end
   end
   if $room==29 && $F[48]==0 then
@@ -290,27 +290,27 @@ def go
   if $room==8 && direction==2 then
     $F[46]=0
   end
-  $OM=$room
+  om=$room
   for i in 1..LEN($exits[$room])
-    $Kstr=MIDstr($exits[$OM],i,1)
-    if ($Kstr=="N" || $Kstr=="U") && direction==1 then
+    exit_direction=MIDstr($exits[om],i,1)
+    if (exit_direction=="N" || exit_direction=="U") && direction==1 then
       $room=$room-10
     end
-    if $Kstr=="E" && direction==2 then
+    if exit_direction=="E" && direction==2 then
       $room=$room+1
     end
-    if ($Kstr=="S" || $Kstr=="D") && direction==3 then
+    if (exit_direction=="S" || exit_direction=="D") && direction==3 then
       $room=$room+10
     end
-    if $Kstr=="W" && direction==4 then
+    if exit_direction=="W" && direction==4 then
       $room=$room-1
     end
   end
   $response_message="OK"
-  if $room==$OM then
+  if $room==om then
     $response_message="YOU CANNOT GO THAT WAY"
   end
-  if (($OM==75 && direction==2) || ($OM==76 && direction==4)) then
+  if ((om==75 && direction==2) || (om==76 && direction==4)) then
     $response_message="OK. YOU CROSSED"
   end
   if $F[29]==1 then
@@ -365,13 +365,13 @@ def take
     $response_message="IT IS FIRMLY NAILED ON!"
     return
   end
-  $CO=0
+  carried_object_count=0
   for i in 1..($num_marked_objects-1)
     if $object_location[i]==0 then
-      $CO=$CO+1
+      carried_object_count=carried_object_count+1
     end
   end
-  if $CO>13 then
+  if carried_object_count>13 then
     $response_message="YOU CANNOT CARRY ANYMORE"
     return
   end
@@ -954,12 +954,12 @@ def ring
   end
   begin puts
     puts "HOW MANY TIMES?"
-    $MR=mINPUT
-    if $MR==0 then
+    number_of_rings=mINPUT
+    if number_of_rings==0 then
       puts "A NUMBER"
     end
-  end until $MR>0
-  if $MR==$F[42] then
+  end until number_of_rings>0
+  if number_of_rings==$F[42] then
     $response_message="A ROCK DOOR OPENS"
     $exits[27]="EW"
     return
@@ -1101,12 +1101,12 @@ def setup
     puts
     puts
     puts "TYPE IN EITHER 1 OR 2"
-    $Cx=mINPUT.to_i
-  end until !($Cx!=1 && $Cx!=2)
-  if $Cx==1 then
+    selection=mINPUT.to_i
+  end until !(selection!=1 && selection!=2)
+  if selection==1 then
     new_game
   end
-  if $Cx==2 then
+  if selection==2 then
     load_game
   end
 end
@@ -1198,14 +1198,14 @@ end
 
 def tunnels(direction)
   $Jstr="SSSSSSSS"
-  $NG=0
+  number_of_goes=0
   begin
     mp=direction/2
     print_titles
     puts "YOU ARE LOST IN THE"
     puts "      TUNNELS"
     puts "WHICH WAY? (N,S,W OR E)"
-    if $NG>15 then
+    if number_of_goes>15 then
       puts "(OR G TO GIVE UP!)"
     end
     puts
@@ -1216,7 +1216,7 @@ def tunnels(direction)
       return
     end
     if $Jstr!=$tunnel_maze_directions[mp] then
-      $NG=$NG+1
+      number_of_goes=number_of_goes+1
     end
   end until !($Jstr!=$tunnel_maze_directions[mp])
 end
@@ -1254,21 +1254,21 @@ end
 def setup_tunnle_maze
   $tunnel_maze_directions[1]=""
   for i in 1..8
-    $Fstr=MIDstr($cmd_list,1+INT(RND(1)*4)*3,1)
-    $tunnel_maze_directions[1]=$tunnel_maze_directions[1]+$Fstr
-    if $Fstr=="N" then
-      $Lstr="S"
+    direction_forward=MIDstr($cmd_list,1+INT(RND(1)*4)*3,1)
+    $tunnel_maze_directions[1]=$tunnel_maze_directions[1]+direction_forward
+    if direction_forward=="N" then
+      direction_back="S"
     end
-    if $Fstr=="S" then
-      $Lstr="N"
+    if direction_forward=="S" then
+      direction_back="N"
     end
-    if $Fstr=="E" then
-      $Lstr="W"
+    if direction_forward=="E" then
+      direction_back="W"
     end
-    if $Fstr=="W" then
-      $Lstr="E"
+    if direction_forward=="W" then
+      direction_back="E"
     end
-    $tunnel_maze_directions[2]=$Lstr+$tunnel_maze_directions[2]
+    $tunnel_maze_directions[2]=direction_back+$tunnel_maze_directions[2]
   end
 end
 
@@ -1287,16 +1287,14 @@ def new_game
 end
 
 def load_game
-  get_filename
-  read_file
+  read_file(get_filename)
   $room=$F[69]
   $response_message="OK. CARRY ON"
 end
 
 def save_game
   $F[69]=$room
-  get_filename
-  write_file
+  write_file(get_filename)
   puts "BYE..."
   exit
 end
@@ -1304,21 +1302,21 @@ end
 def get_filename
   puts
   puts "PLEASE ENTER A FILE NAME"
-  $filename=mINPUT
+  mINPUT
 end
 
-def read_file
+def read_file(filename)
   #READ DATA FILE
-  puts "OK. SEARCHING FOR "+$filename
-  File.open($filename, 'r') do |x|
+  puts "OK. SEARCHING FOR "+filename
+  File.open(filename, 'r') do |x|
     puts "OK. LOADING"
     $exits, $object_location, $F, $tunnel_maze_directions = JSON.parse(x.gets)
   end
 end
 
-def write_file
+def write_file(filename)
   #SAVE DATA FILE
-  File.open($filename, 'w') do |x|
+  File.open(filename, 'w') do |x|
     puts "OK. SAVING"
     x.puts [$exits, $object_location, $F, $tunnel_maze_directions].to_json
   end
