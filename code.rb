@@ -1,8 +1,8 @@
 require 'json'
 
+LINE_LENGTH = 39
+
 def start
-  $line_length=39
-  $NV=57
   setup
   while true
     catch(:redraw) do
@@ -76,7 +76,7 @@ def main
     $Vstr="BLO"
   end
   cmd_start=LEFTstr($Vstr,3)
-  for i in 1..$NV
+  for i in 1..($cmd_list.length/3)
     if MIDstr($cmd_list,i*3-2,3)==cmd_start then
       $VB=i
       break
@@ -97,20 +97,20 @@ def main
     end
   end until !($B==0 && $F[36]==0 && $Tstr!="")
   if $VB==0 then
-    $VB=$NV+1
+    $VB=($cmd_list.length/3)+1
   end
   if $Tstr=="" then
     $response_message="I NEED TWO WORDS"
   end
-  if $VB>$NV then
+  if $VB>($cmd_list.length/3) then
     $response_message="TRY SOMETHING ELSE"
   end
-  if $VB>$NV && $B==0 then
+  if $VB>($cmd_list.length/3) && $B==0 then
     $response_message="YOU CANNOT "+cmd_string
   end
   if !($B>marked_objects.size || $B==0) then
     if !($VB==8 || $VB==9 || $VB==14 || $VB==17 || $VB==44 || $VB>54) then
-      if $VB<$NV && $object_location[$B]!=0 then
+      if $VB<($cmd_list.length/3) && $object_location[$B]!=0 then
         $response_message="YOU DO NOT HAVE THE "+$Tstr
         Kernel.throw :redraw
       end
@@ -1205,8 +1205,8 @@ end
 def print_titles
   system('clear')
   puts
-  puts TAB($line_length/2-9)+"MYSTERY OF SILVER"
-  puts TAB($line_length/2-9)+"    MOUNTAIN"
+  puts TAB(LINE_LENGTH/2-9)+"MYSTERY OF SILVER"
+  puts TAB(LINE_LENGTH/2-9)+"    MOUNTAIN"
   puts "======================================"
   puts
   puts
