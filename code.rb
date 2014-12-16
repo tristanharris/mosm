@@ -165,8 +165,7 @@ def main
   exit
 end
 
-def go
-  direction=$VB
+def go(direction=$VB)
   if direction==5 then
     direction=1
   end
@@ -780,8 +779,7 @@ end
 
 def enter
   if $H==4337 then
-    $VB=2
-    go
+    go(2)
     return
   end
   if $room==36 then
@@ -792,13 +790,11 @@ end
 
 def cross
   if $room==76 then
-    $VB=4
-    go
+    go(4)
     return
   end
   if $room==75 then
-    $VB=2
-    go
+    go(2)
   end
 end
 
