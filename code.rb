@@ -13,47 +13,40 @@ end
 
 def main
   print_titles
-  $LL=0
   preposition=prepositions[VAL(LEFTstr(current_room_description,1))]+" "+determiners[VAL(MIDstr(current_room_description,2,1))]+" "
-  $Jstr=$response_message+". "+"YOU ARE "+preposition+RIGHTstr(current_room_description,LEN(current_room_description)-2)+" "
-  format_description
-  $Jstr=""
+  desc1 = $response_message+". "+"YOU ARE "+preposition+RIGHTstr(current_room_description,LEN(current_room_description)-2)+" "
+  desc2=""
   marked_objects.each_with_index do |object_str, i|
     i = i + 1
     determiner=determiners[VAL(LEFTstr(object_str,1))]
     object_str = strip_leading(object_str)
     if $F[i]==0 && $object_location[i]==$room then
-      $Jstr=$Jstr+" "+determiner+" "+object_str+","
+      desc2=desc2+" "+determiner+" "+object_str+","
     end
   end
   if $room==29 && $F[48]==0 then
-    $Jstr=$Jstr+" GRARGS FEASTING,"
+    desc2=desc2+" GRARGS FEASTING,"
   end
   if $room==29 && $F[48]==1 then
-    $Jstr=$Jstr+" A SLEEPING GRARG,"
+    desc2=desc2+" A SLEEPING GRARG,"
   end
   if $room==12 || $room==22 then
-    $Jstr=$Jstr+" A PONY,"
+    desc2=desc2+" A PONY,"
   end
   if $room==64 then
-    $Jstr=$Jstr+" A HERMIT,"
+    desc2=desc2+" A HERMIT,"
   end
   if $room==18 && $exits[18]=="N" then
-    $Jstr=$Jstr+" AN OAK DOOR,"
+    desc2=desc2+" AN OAK DOOR,"
   end
   if $room==59 && $F[68]==1 then
-    $Jstr=$Jstr+" OGBAN (DEAD),"
+    desc2=desc2+" OGBAN (DEAD),"
   end
-  if $Jstr!="" then
-    $Jstr=", YOU CAN SEE"+$Jstr
+  if desc2!="" then
+    desc2=", YOU CAN SEE"+desc2
   end
-  $Jstr=$Jstr+" AND YOU CAN GO "
-  format_description
-  print " "
-  for i in 1..LEN($exits[$room])
-    print MIDstr($exits[$room],i,1)+","
-  end
-  puts
+  desc2=desc2+" AND YOU CAN GO "
+  puts format_description(desc1.strip + desc2 + $exits[$room].split(//).join(','))
   puts
   $response_message="PARDON?"
   puts "======================================"
@@ -1303,21 +1296,12 @@ def write_file(filename)
   end
 end
 
-def format_description
-  ls=1
-  lp=1
-  for i in 1..LEN($Jstr)
-    if MIDstr($Jstr,i,1)==" " && $LL>$line_length then
-      puts MIDstr($Jstr,lp,ls-lp)
-      $LL=i-ls
-      lp=ls+1
-    end
-    if MIDstr($Jstr,i,1)==" " then
-      ls=i
-    end
-    $LL=$LL+1
-  end
-  print MIDstr($Jstr,lp,LEN($Jstr)-lp)
+def format_description(desc)
+  desc.split(' ').inject(['']) do |lines, word|
+    lines << '' if lines.last.length >= LINE_LENGTH
+    lines.last << ' ' + word
+    lines
+  end.map(&:strip)
 end
 
 def TAB(len)
