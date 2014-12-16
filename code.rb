@@ -3,7 +3,6 @@ require 'json'
 def start
   $line_length=39
   $NV=57
-  $num_marked_objects=28
   setup
   while true
     catch(:redraw) do
@@ -109,7 +108,7 @@ def main
   if $VB>$NV && $B==0 then
     $response_message="YOU CANNOT "+cmd_string
   end
-  if !($B>$num_marked_objects || $B==0) then
+  if !($B>marked_objects.size || $B==0) then
     if !($VB==8 || $VB==9 || $VB==14 || $VB==17 || $VB==44 || $VB>54) then
       if $VB<$NV && $object_location[$B]!=0 then
         $response_message="YOU DO NOT HAVE THE "+$Tstr
@@ -319,7 +318,7 @@ def inventory
     if i==1 && $object_location[1]==0 && $F[44]==1 then
       object_str="COIN"
     end
-    if !(i==$num_marked_objects && $object_location[5]==0) then
+    if !(i==marked_objects.size && $object_location[5]==0) then
       if $object_location[i]==0 then
         print object_str+","
         $F[49]=1
@@ -352,7 +351,7 @@ def take
     return
   end
   carried_object_count=0
-  for i in 1..($num_marked_objects-1)
+  for i in 1..(marked_objects.size-1)
     if $object_location[i]==0 then
       carried_object_count=carried_object_count+1
     end
@@ -361,7 +360,7 @@ def take
     $response_message="YOU CANNOT CARRY ANYMORE"
     return
   end
-  if $B>$num_marked_objects then
+  if $B>marked_objects.size then
     $response_message="YOU CANNOT GET THE "+$Tstr
     return
   end
@@ -698,7 +697,7 @@ def open
 end
 
 def burn
-  if $B>$num_marked_objects then
+  if $B>marked_objects.size then
     $response_message="IT DOES NOT BURN"
   end
   if $B==26 then
@@ -845,7 +844,7 @@ def bail
 end
 
 def drop
-  if $B==0 || $B>$num_marked_objects then
+  if $B==0 || $B>marked_objects.size then
     return
   end
   $object_location[$B]=$room
@@ -876,7 +875,7 @@ def insert
 end
 
 def throw
-  if $B==0 || $B>$num_marked_objects then
+  if $B==0 || $B>marked_objects.size then
     return
   end
   $response_message="DID NOT GO FAR!"
@@ -905,7 +904,7 @@ def make
 end
 
 def eat
-  if $B==0 || $B>$num_marked_objects then
+  if $B==0 || $B>marked_objects.size then
     return
   end
   if $B==5 || $B==24 then
