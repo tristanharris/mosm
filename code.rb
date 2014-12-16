@@ -87,9 +87,6 @@ def main
   begin
     objects.each_with_index do |object_str, i|
       i = i + 1
-      if i<=$num_marked_objects then
-        object_str = strip_leading(object_str)
-      end
       if $Tstr==object_str then
         $B=i
         break
@@ -1146,7 +1143,7 @@ def rooms
 end
 
 def objects
-  marked_objects + [
+  marked_objects.map{ |str| strip_leading(str)} + [
     "BED", "CUPBOARD", "BRIDGE", "TREES", "SAIL", "KILN",
     "KETCH", "BRICKS", "WINDMILL", "SACKS", "OGBAN'S BOAR", "WHEEL",
     "PONY", "GRAVESTONES", "POOL", "GATES", "HANDLE", "HUT", "VINE", "INSCRIPTIONS", "TROLL", "RUBBLE",
