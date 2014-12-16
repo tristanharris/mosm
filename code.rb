@@ -65,22 +65,11 @@ def main
   if cmd_string=="SAVE GAME" then
     save_game
   end
-  $Vstr=""
-  $Tstr=""
   $VB=0
   $B=0
-  for i in 1..LEN(cmd_string)
-    if MIDstr(cmd_string,i,1)==" " && $Vstr=="" then
-      $Vstr=LEFTstr(cmd_string,i-1)
-    end
-    if MIDstr(cmd_string,i+1,1)!=" " && $Vstr!="" then
-      $Tstr=MIDstr(cmd_string,i+1,LEN(cmd_string)-1)
-      break
-    end
-  end
-  if $Tstr=="" then
-    $Vstr=cmd_string
-  end
+  $Vstr, $Tstr = cmd_string.split(' ', 2)
+  $Vstr ||= ""
+  $Tstr ||= ""
   while LEN($Vstr)<3
     $Vstr=$Vstr+"O"
   end
