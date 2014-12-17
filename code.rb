@@ -1171,7 +1171,7 @@ def decode(coded_string)
 end
 
 def tunnels(direction)
-  $Jstr="SSSSSSSS"
+  directions="SSSSSSSS"
   number_of_goes=0
   begin
     mp=direction/2
@@ -1184,15 +1184,15 @@ def tunnels(direction)
     end
     puts
     way = mINPUT
-    $Jstr=RIGHTstr($Jstr+RIGHTstr(way,1),8)
+    directions=RIGHTstr(directions+RIGHTstr(way,1),8)
     if way=="G" then
       $F[56]=1
       return
     end
-    if $Jstr!=$tunnel_maze_directions[mp] then
+    if directions!=$tunnel_maze_directions[mp] then
       number_of_goes=number_of_goes+1
     end
-  end until !($Jstr!=$tunnel_maze_directions[mp])
+  end until !(directions!=$tunnel_maze_directions[mp])
 end
 
 def print_titles
