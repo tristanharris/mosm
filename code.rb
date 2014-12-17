@@ -14,20 +14,20 @@ end
 def main
   print_titles
   preposition=prepositions[VAL(LEFTstr(current_room_description,1))]+" "+determiners[VAL(MIDstr(current_room_description,2,1))]+" "
-  desc1 = $response_message+". "+"YOU ARE "+preposition+RIGHTstr(current_room_description,LEN(current_room_description)-2)+" "
+  desc1 = game_state.response_message+". "+"YOU ARE "+preposition+RIGHTstr(current_room_description,LEN(current_room_description)-2)+" "
   desc2=""
   marked_objects.each_with_index do |object_str, i|
     i = i + 1
     determiner=determiners[VAL(LEFTstr(object_str,1))]
     object_str = strip_leading(object_str)
-    if $F[i]==0 && $object_location[i]==game_state.room then
+    if game_state.f[i]==0 && game_state.object_locations[i]==game_state.room then
       desc2=desc2+" "+determiner+" "+object_str+","
     end
   end
-  if game_state.room==29 && $F[48]==0 then
+  if game_state.room==29 && game_state.f[48]==0 then
     desc2=desc2+" GRARGS FEASTING,"
   end
-  if game_state.room==29 && $F[48]==1 then
+  if game_state.room==29 && game_state.f[48]==1 then
     desc2=desc2+" A SLEEPING GRARG,"
   end
   if game_state.room==12 || game_state.room==22 then
@@ -36,19 +36,19 @@ def main
   if game_state.room==64 then
     desc2=desc2+" A HERMIT,"
   end
-  if game_state.room==18 && $exits[18]=="N" then
+  if game_state.room==18 && game_state.exits[18]=="N" then
     desc2=desc2+" AN OAK DOOR,"
   end
-  if game_state.room==59 && $F[68]==1 then
+  if game_state.room==59 && game_state.f[68]==1 then
     desc2=desc2+" OGBAN (DEAD),"
   end
   if desc2!="" then
     desc2=", YOU CAN SEE"+desc2
   end
   desc2=desc2+" AND YOU CAN GO "
-  puts format_description(desc1.strip + desc2 + $exits[game_state.room].split(//).join(','))
+  puts format_description(desc1.strip + desc2 + game_state.exits[game_state.room].split(//).join(','))
   puts
-  $response_message="PARDON?"
+  game_state.response_message="PARDON?"
   puts "======================================"
   puts
   puts
@@ -57,91 +57,91 @@ def main
   if cmd_string=="SAVE GAME" then
     save_game
   end
-  $VB=0
+  game_state.command_id=0
   game_state.object=0
-  $Vstr, $Tstr = cmd_string.split(' ', 2)
-  $Vstr ||= ""
-  $Tstr ||= ""
-  while LEN($Vstr)<3
-    $Vstr=$Vstr+"O"
+  game_state.command, game_state.object_name = cmd_string.split(' ', 2)
+  game_state.command ||= ""
+  game_state.object_name ||= ""
+  while LEN(game_state.command)<3
+    game_state.command=game_state.command+"O"
   end
-  if $Vstr=="PLAY" then
-    $Vstr="BLO"
+  if game_state.command=="PLAY" then
+    game_state.command="BLO"
   end
-  cmd_start=LEFTstr($Vstr,3)
+  cmd_start=LEFTstr(game_state.command,3)
   for i in 1..($cmd_list.length/3)
     if MIDstr($cmd_list,i*3-2,3)==cmd_start then
-      $VB=i
+      game_state.command_id=i
       break
     end
   end
-  $F[36]=0
+  game_state.f[36]=0
   begin
     objects.each_with_index do |object_str, i|
       i = i + 1
-      if $Tstr==object_str then
+      if game_state.object_name==object_str then
         game_state.object=i
         break
       end
     end
-    if game_state.object==0 && $F[36]==0 && $Tstr!="" then
-      $Tstr=$Tstr+"S"
-      $F[36]=1
+    if game_state.object==0 && game_state.f[36]==0 && game_state.object_name!="" then
+      game_state.object_name=game_state.object_name+"S"
+      game_state.f[36]=1
     end
-  end until !(game_state.object==0 && $F[36]==0 && $Tstr!="")
-  if $VB==0 then
-    $VB=($cmd_list.length/3)+1
+  end until !(game_state.object==0 && game_state.f[36]==0 && game_state.object_name!="")
+  if game_state.command_id==0 then
+    game_state.command_id=($cmd_list.length/3)+1
   end
-  if $Tstr=="" then
-    $response_message="I NEED TWO WORDS"
+  if game_state.object_name=="" then
+    game_state.response_message="I NEED TWO WORDS"
   end
-  if $VB>($cmd_list.length/3) then
-    $response_message="TRY SOMETHING ELSE"
+  if game_state.command_id>($cmd_list.length/3) then
+    game_state.response_message="TRY SOMETHING ELSE"
   end
-  if $VB>($cmd_list.length/3) && game_state.object==0 then
-    $response_message="YOU CANNOT "+cmd_string
+  if game_state.command_id>($cmd_list.length/3) && game_state.object==0 then
+    game_state.response_message="YOU CANNOT "+cmd_string
   end
   if !(game_state.object>marked_objects.size || game_state.object==0) then
-    if !($VB==8 || $VB==9 || $VB==14 || $VB==17 || $VB==44 || $VB>54) then
-      if $VB<($cmd_list.length/3) && $object_location[game_state.object]!=0 then
-        $response_message="YOU DO NOT HAVE THE "+$Tstr
+    if !(game_state.command_id==8 || game_state.command_id==9 || game_state.command_id==14 || game_state.command_id==17 || game_state.command_id==44 || game_state.command_id>54) then
+      if game_state.command_id<($cmd_list.length/3) && game_state.object_locations[game_state.object]!=0 then
+        game_state.response_message="YOU DO NOT HAVE THE "+game_state.object_name
         Kernel.throw :redraw
       end
     end
   end
-  if game_state.room==56 && $F[35]==0 && $VB!=37 && $VB!=53 then
-    $response_message=words(1)+" HAS GOT YOU!"
+  if game_state.room==56 && game_state.f[35]==0 && game_state.command_id!=37 && game_state.command_id!=53 then
+    game_state.response_message=words(1)+" HAS GOT YOU!"
     Kernel.throw :redraw
   end
-  if !($VB==44 || $VB==47 || $VB==19 || $VB==57 || $VB==49) then
-    if game_state.room==48 && $F[63]==0 then
-      $response_message=words(9)
+  if !(game_state.command_id==44 || game_state.command_id==47 || game_state.command_id==19 || game_state.command_id==57 || game_state.command_id==49) then
+    if game_state.room==48 && game_state.f[63]==0 then
+      game_state.response_message=words(9)
       Kernel.throw :redraw
     end
   end
-  $H=VAL(STRstr(game_state.room)+STRstr(game_state.object))
+  game_state.room_and_object=VAL(STRstr(game_state.room)+STRstr(game_state.object))
   send([:go,:go,:go,:go,:go,:go,:inventory,:take,:take,:examine,:examine,:give,:say,
     :pick,:wear,:tie,:climb,:make,:use,:open,:burn,:fill,:plant,:water,:swing,:empty,
     :enter,:cross,:remove,:feed,:turn,:dive,:bail,:drop,:throw,:insert,:make,:drop,:eat,
     :move,:into,:ring,:cut,:hold,:burn,:into,:hold,:unlock,:use,:drink,:examine,:pay,
-    :make,:break,:take,:take,:reflect,:noop][$VB-1])
-  if !($F[62]==1) then
+    :make,:break,:take,:take,:reflect,:noop][game_state.command_id-1])
+  if !(game_state.f[62]==1) then
     if game_state.room==41 then
-      $F[67]==$F[67]+1
-      if $F[67]==10 then
-        $F[56]=1
-        $response_message="YOU SANK!"
+      game_state.f[67]==game_state.f[67]+1
+      if game_state.f[67]==10 then
+        game_state.f[56]=1
+        game_state.response_message="YOU SANK!"
       end
     end
-    if game_state.room==56 && $F[35]==0 && $object_location[10]!=0 then
-      $response_message=words(1)+" GETS YOU!"
-      $F[56]=1
+    if game_state.room==56 && game_state.f[35]==0 && game_state.object_locations[10]!=0 then
+      game_state.response_message=words(1)+" GETS YOU!"
+      game_state.f[56]=1
     end
-    if $F[56]==0 then
+    if game_state.f[56]==0 then
       Kernel.throw :redraw
     end
     print_titles
-    puts $response_message
+    puts game_state.response_message
     puts "YOU HAVE FAILED IN YOUR QUEST!"
     puts
     puts "BUT YOU ARE GRANTED ANOTHER TRY"
@@ -158,114 +158,114 @@ def main
   exit
 end
 
-def go(direction=$VB)
+def go(direction=game_state.command_id)
   if direction==5 then
     direction=1
   end
   if direction==6 then
     direction=3
   end
-  if !(!((game_state.room==75 && direction==2) || (game_state.room==76 && direction==4)) || $F[64]==1) then
-    $response_message=decode("B USPMM TUPQT ZPV DSPTTJOH")
+  if !(!((game_state.room==75 && direction==2) || (game_state.room==76 && direction==4)) || game_state.f[64]==1) then
+    game_state.response_message=decode("B USPMM TUPQT ZPV DSPTTJOH")
     return
   end
-  if $F[64]==1 then
-    $F[64]=0
+  if game_state.f[64]==1 then
+    game_state.f[64]=0
   end
-  if !($F[51]==1 || $F[29]==1) then
-    if $F[55]==1 then
-      $F[56]=1
-      $response_message="GRARGS HAVE GOT YOU!"
+  if !(game_state.f[51]==1 || game_state.f[29]==1) then
+    if game_state.f[55]==1 then
+      game_state.f[56]=1
+      game_state.response_message="GRARGS HAVE GOT YOU!"
       return
     end
-    if game_state.room==29 && $F[48]==0 then
-      $response_message="GRARGS WILL SEE YOU!"
+    if game_state.room==29 && game_state.f[48]==0 then
+      game_state.response_message="GRARGS WILL SEE YOU!"
       return
     end
     if game_state.room==73 || game_state.room==42 || game_state.room==9 || game_state.room==10 then
-      $response_message=words(3)
-      $F[55]=1
+      game_state.response_message=words(3)
+      game_state.f[55]=1
       return
     end
   end
-  if $object_location[8]==0 && ((game_state.room==52 && direction==2) || (game_state.room==31 && direction!=3)) then
-    $response_message="THE BOAT IS TOO HEAVY"
+  if game_state.object_locations[8]==0 && ((game_state.room==52 && direction==2) || (game_state.room==31 && direction!=3)) then
+    game_state.response_message="THE BOAT IS TOO HEAVY"
     return
   end
-  if $object_location[8]!=0 && ((game_state.room==52 && direction==4) || (game_state.room==31 && direction==3)) then
-    $response_message="YOU CANNOT SWIM"
+  if game_state.object_locations[8]!=0 && ((game_state.room==52 && direction==4) || (game_state.room==31 && direction==3)) then
+    game_state.response_message="YOU CANNOT SWIM"
     return
   end
-  if game_state.room==52 && $object_location[8] && direction==4 && $F[30]==0 then
-    $response_message="NO POWER!"
+  if game_state.room==52 && game_state.object_locations[8] && direction==4 && game_state.f[30]==0 then
+    game_state.response_message="NO POWER!"
     return
   end
-  if game_state.room==41 && direction==3 && $F[31]==0 then
-    $response_message=decode("UIF CPBU JT TJOLJOH!")
+  if game_state.room==41 && direction==3 && game_state.f[31]==0 then
+    game_state.response_message=decode("UIF CPBU JT TJOLJOH!")
     return
   end
-  if game_state.room==33 && direction==1 && $F[32]==0 then
-    $response_message="OGBAN'S BOAR BLOCK YOUR PATH"
+  if game_state.room==33 && direction==1 && game_state.f[32]==0 then
+    game_state.response_message="OGBAN'S BOAR BLOCK YOUR PATH"
     return
   end
-  if ((game_state.room==3 && direction==2) || (game_state.room==4 && direction==4)) && $F[45]==0 then
-    $response_message=words(5)
+  if ((game_state.room==3 && direction==2) || (game_state.room==4 && direction==4)) && game_state.f[45]==0 then
+    game_state.response_message=words(5)
     return
   end
-  if game_state.room==35 && $object_location[13]!=game_state.room then
-    $response_message="THE ICE IS BREAKING!"
+  if game_state.room==35 && game_state.object_locations[13]!=game_state.room then
+    game_state.response_message="THE ICE IS BREAKING!"
     return
   end
   if game_state.room==5 && (direction==2 || direction==4) then
     tunnels(direction)
   end
   if game_state.room==4 && direction==4 then
-    $response_message="PASSAGE IS TOO STEEP"
+    game_state.response_message="PASSAGE IS TOO STEEP"
     return
   end
-  if game_state.room==7 && direction==2 && $F[46]==0 then
-    $response_message="A HUGE HOUND BARS YOUR WAY"
+  if game_state.room==7 && direction==2 && game_state.f[46]==0 then
+    game_state.response_message="A HUGE HOUND BARS YOUR WAY"
     return
   end
-  if (game_state.room==38 || game_state.room==37) && $F[50]==0 then
-    $response_message=decode("JU JT UPP EBSL")
+  if (game_state.room==38 || game_state.room==37) && game_state.f[50]==0 then
+    game_state.response_message=decode("JU JT UPP EBSL")
     return
   end
-  if game_state.room==49 && direction==2 && $F[54]==0 then
-    $response_message="MYSTERIOUS FORCES HOLD YOU BACK"
+  if game_state.room==49 && direction==2 && game_state.f[54]==0 then
+    game_state.response_message="MYSTERIOUS FORCES HOLD YOU BACK"
     return
   end
-  if game_state.room==49 && direction==3 && $F[68]==0 then
-    $response_message="YOU MEET OGBAN!!!"
-    $F[56]=1
+  if game_state.room==49 && direction==3 && game_state.f[68]==0 then
+    game_state.response_message="YOU MEET OGBAN!!!"
+    game_state.f[56]=1
     return
   end
-  if game_state.room==38 && $F[65]==0 then
-    $response_message="RATS NIBBLE YOUR ANKLES"
+  if game_state.room==38 && game_state.f[65]==0 then
+    game_state.response_message="RATS NIBBLE YOUR ANKLES"
     return
   end
-  if game_state.room==58 && (direction==1 || direction==4) && $F[66]==0 then
-    $response_message="YOU GET CAUGHT IN THE WEBS!"
+  if game_state.room==58 && (direction==1 || direction==4) && game_state.f[66]==0 then
+    game_state.response_message="YOU GET CAUGHT IN THE WEBS!"
     return
   end
-  if game_state.room==48 && direction==4 && $F[70]==0 then
-    $response_message="THE DOOR DOES NOT OPEN"
+  if game_state.room==48 && direction==4 && game_state.f[70]==0 then
+    game_state.response_message="THE DOOR DOES NOT OPEN"
     return
   end
-  if game_state.room==40 && $F[47]==1 then
-    $F[68]=1
+  if game_state.room==40 && game_state.f[47]==1 then
+    game_state.f[68]=1
   end
-  if game_state.room==37 && direction==4 && $exits[37]=="EW" then
+  if game_state.room==37 && direction==4 && game_state.exits[37]=="EW" then
     game_state.room=67
-    $response_message="THE PASSAGE WAS STEEP!"
+    game_state.response_message="THE PASSAGE WAS STEEP!"
     return
   end
   if game_state.room==29 && direction==3 then
-    $F[48]=1
-    $F[20]=0
+    game_state.f[48]=1
+    game_state.f[20]=0
   end
   if game_state.room==8 && direction==2 then
-    $F[46]=0
+    game_state.f[46]=0
   end
   old_room = game_state.room
   exit_map = {
@@ -276,47 +276,47 @@ def go(direction=$VB)
     'D' => 3,
     'W' => 4
   }
-  $exits[game_state.room].split(//).each do |exit_direction|
+  game_state.exits[game_state.room].split(//).each do |exit_direction|
     game_state.room = game_state.room - 10 if exit_map[exit_direction] == direction && direction == 1
     game_state.room = game_state.room + 1  if exit_map[exit_direction] == direction && direction == 2
     game_state.room = game_state.room + 10 if exit_map[exit_direction] == direction && direction == 3
     game_state.room = game_state.room - 1  if exit_map[exit_direction] == direction && direction == 4
   end
-  $response_message="OK"
+  game_state.response_message="OK"
   if game_state.room==old_room then
-    $response_message="YOU CANNOT GO THAT WAY"
+    game_state.response_message="YOU CANNOT GO THAT WAY"
   end
   if ((old_room==75 && direction==2) || (old_room==76 && direction==4)) then
-    $response_message="OK. YOU CROSSED"
+    game_state.response_message="OK. YOU CROSSED"
   end
-  if $F[29]==1 then
-    $F[39]=$F[39]+1
+  if game_state.f[29]==1 then
+    game_state.f[39]=game_state.f[39]+1
   end
-  if $F[39]>5 && $F[29]==1 then
-    $response_message=decode("CPPUT IBWF XPSO PVU")
-    $F[29]=0
-    $object_location[3]=81
+  if game_state.f[39]>5 && game_state.f[29]==1 then
+    game_state.response_message=decode("CPPUT IBWF XPSO PVU")
+    game_state.f[29]=0
+    game_state.object_locations[3]=81
   end
 end
 
 def inventory
-  $response_message="OK"
-  $F[49]=0
+  game_state.response_message="OK"
+  game_state.f[49]=0
   print "YOU HAVE "
   marked_objects.each_with_index do |object_str, i|
     i = i+1
     object_str = strip_leading(object_str)
-    if i==1 && $object_location[1]==0 && $F[44]==1 then
+    if i==1 && game_state.object_locations[1]==0 && game_state.f[44]==1 then
       object_str="COIN"
     end
-    if !(i==marked_objects.size && $object_location[5]==0) then
-      if $object_location[i]==0 then
+    if !(i==marked_objects.size && game_state.object_locations[5]==0) then
+      if game_state.object_locations[i]==0 then
         print object_str+","
-        $F[49]=1
+        game_state.f[49]=1
       end
     end
   end
-  if $F[49]==0 then
+  if game_state.f[49]==0 then
     puts "NOTHING"
   end
   puts
@@ -324,240 +324,240 @@ def inventory
 end
 
 def take
-  if $H==6577 then
-    $response_message="HOW?"
+  if game_state.room_and_object==6577 then
+    game_state.response_message="HOW?"
     return
   end
-  if $H==4177 || $H==5177 then
+  if game_state.room_and_object==4177 || game_state.room_and_object==5177 then
     game_state.object=16
     fill
     return
   end
   if game_state.object==38 then
-    $response_message="TOO HEAVY!"
+    game_state.response_message="TOO HEAVY!"
     return
   end
-  if game_state.object==4 && $F[43]==0 then
-    $response_message="IT IS FIRMLY NAILED ON!"
+  if game_state.object==4 && game_state.f[43]==0 then
+    game_state.response_message="IT IS FIRMLY NAILED ON!"
     return
   end
   carried_object_count=0
   for i in 1..(marked_objects.size-1)
-    if $object_location[i]==0 then
+    if game_state.object_locations[i]==0 then
       carried_object_count=carried_object_count+1
     end
   end
   if carried_object_count>13 then
-    $response_message="YOU CANNOT CARRY ANYMORE"
+    game_state.response_message="YOU CANNOT CARRY ANYMORE"
     return
   end
   if game_state.object>marked_objects.size then
-    $response_message="YOU CANNOT GET THE "+$Tstr
+    game_state.response_message="YOU CANNOT GET THE "+game_state.object_name
     return
   end
   if game_state.object==0 then
     return
   end
-  if $object_location[game_state.object]!=game_state.room then
-    $response_message="IT IS NOT HERE"
+  if game_state.object_locations[game_state.object]!=game_state.room then
+    game_state.response_message="IT IS NOT HERE"
   end
-  if $F[game_state.object]==1 then
-    $response_message="WHAT "+$Tstr+"?"
+  if game_state.f[game_state.object]==1 then
+    game_state.response_message="WHAT "+game_state.object_name+"?"
   end
-  if $object_location[game_state.object]==0 then
-    $response_message="YOU ALREADY HAVE IT"
+  if game_state.object_locations[game_state.object]==0 then
+    game_state.response_message="YOU ALREADY HAVE IT"
   end
-  if $object_location[game_state.object]==game_state.room && $F[game_state.object]==0 then
-    $object_location[game_state.object]=0
-    $response_message="YOU HAVE THE "+$Tstr
+  if game_state.object_locations[game_state.object]==game_state.room && game_state.f[game_state.object]==0 then
+    game_state.object_locations[game_state.object]=0
+    game_state.response_message="YOU HAVE THE "+game_state.object_name
   end
   if game_state.object==28 then
-    $object_location[5]=81
+    game_state.object_locations[5]=81
   end
   if game_state.object==5 then
-    $object_location[28]=0
+    game_state.object_locations[28]=0
   end
-  if $object_location[4]==0 && $object_location[12]==0 && $object_location[15]==0 then
-    $F[54]=1
+  if game_state.object_locations[4]==0 && game_state.object_locations[12]==0 && game_state.object_locations[15]==0 then
+    game_state.f[54]=1
   end
-  if game_state.object==8 && $F[30]==1 then
-    $object_location[2]=0
+  if game_state.object==8 && game_state.f[30]==1 then
+    game_state.object_locations[2]=0
   end
   if game_state.object==2 then
-    $F[30]=0
+    game_state.f[30]=0
   end
 end
 
 def examine
-  $response_message="YOU SEE WHAT YOU MIGHT EXPECT!"
+  game_state.response_message="YOU SEE WHAT YOU MIGHT EXPECT!"
   if game_state.object>0 then
-    $response_message="NOTHING SPECIAL"
+    game_state.response_message="NOTHING SPECIAL"
   end
   if game_state.object==46 || game_state.object==88 then
     enter
   end
-  if $H==8076 then
-    $response_message="IT IS EMPTY"
+  if game_state.room_and_object==8076 then
+    game_state.response_message="IT IS EMPTY"
   end
-  if $H==8080 then
-    $response_message="AHA!"
-    $F[1]=0
+  if game_state.room_and_object==8080 then
+    game_state.response_message="AHA!"
+    game_state.f[1]=0
   end
-  if $H==7029 then
-    $response_message="OK"
-    $F[2]=0
+  if game_state.room_and_object==7029 then
+    game_state.response_message="OK"
+    game_state.f[2]=0
   end
   if game_state.object==20 then
-    $response_message=decode("NBUDIFT JO QPDLFU")
-    $object_location[26]=0
+    game_state.response_message=decode("NBUDIFT JO QPDLFU")
+    game_state.object_locations[26]=0
   end
-  if $H==1648 then
-    $response_message="THERE ARE SOME LETTERS '"+$tunnel_maze_directions[2]+"'"
+  if game_state.room_and_object==1648 then
+    game_state.response_message="THERE ARE SOME LETTERS '"+game_state.tunnel_maze_directions[2]+"'"
   end
-  if $H==7432 then
-    $response_message=decode("UIFZ BSF BQQMF USFFT")
-    $F[5]=0
+  if game_state.room_and_object==7432 then
+    game_state.response_message=decode("UIFZ BSF BQQMF USFFT")
+    game_state.f[5]=0
   end
-  if $H==2134 || $H==2187 then
-    $response_message="OK"
-    $F[16]=0
+  if game_state.room_and_object==2134 || game_state.room_and_object==2187 then
+    game_state.response_message="OK"
+    game_state.f[16]=0
   end
   if game_state.object==35 then
-    $response_message="IT IS FISHY!"
-    $F[17]=0
+    game_state.response_message="IT IS FISHY!"
+    game_state.f[17]=0
   end
-  if $H==3438 then
-    $response_message="OK"
-    $F[22]=0
+  if game_state.room_and_object==3438 then
+    game_state.response_message="OK"
+    game_state.f[22]=0
   end
-  if $H==242 then
-    $response_message="A FADED INSCRIPTION"
+  if game_state.room_and_object==242 then
+    game_state.response_message="A FADED INSCRIPTION"
   end
-  if ($H==1443 || $H==1485) && $F[33]==0 then
-    $response_message=decode("B HMJNNFSJOH GSPN UIF EFQUIT")
+  if (game_state.room_and_object==1443 || game_state.room_and_object==1485) && game_state.f[33]==0 then
+    game_state.response_message=decode("B HMJNNFSJOH GSPN UIF EFQUIT")
   end
-  if ($H==1443 || $H==1485) && $F[33]==1 then
-    $response_message="SOMETHING HERE..."
-    $F[12]=0
+  if (game_state.room_and_object==1443 || game_state.room_and_object==1485) && game_state.f[33]==1 then
+    game_state.response_message="SOMETHING HERE..."
+    game_state.f[12]=0
   end
-  if $H==2479 || $H==2444 then
-    $response_message="THERE IS A HANDLE"
+  if game_state.room_and_object==2479 || game_state.room_and_object==2444 then
+    game_state.response_message="THERE IS A HANDLE"
   end
   if game_state.object==9 then
-    $response_message=decode("UIF MBCFM SFBET 'QPJTPO'")
+    game_state.response_message=decode("UIF MBCFM SFBET 'QPJTPO'")
   end
-  if $H==4055 then
+  if game_state.room_and_object==4055 then
     examine_sub
   end
-  if $H==2969 && $F[49]==1 then
-    $response_message="VERY UGLY!"
+  if game_state.room_and_object==2969 && game_state.f[49]==1 then
+    game_state.response_message="VERY UGLY!"
   end
-  if $H==7158 || $H==7186 then
-    $response_message="THERE ARE LOOSE BRICKS"
+  if game_state.room_and_object==7158 || game_state.room_and_object==7186 then
+    game_state.response_message="THERE ARE LOOSE BRICKS"
   end
   if game_state.room==49 then
-    $response_message="VERY INTERESTING!"
+    game_state.response_message="VERY INTERESTING!"
   end
   if game_state.object==52 || game_state.object==82 || game_state.object==81 then
-    $response_message="INTERESTING!"
+    game_state.response_message="INTERESTING!"
   end
-  if $H==6978 then
-    $response_message="THERE IS A WOODEN DOOR"
+  if game_state.room_and_object==6978 then
+    game_state.response_message="THERE IS A WOODEN DOOR"
   end
-  if $H==6970 then
-    $response_message="YOU FOUND SOMETHING"
-    $F[4]=0
+  if game_state.room_and_object==6970 then
+    game_state.response_message="YOU FOUND SOMETHING"
+    game_state.f[4]=0
   end
-  if $H==2066 then
-    $response_message="A LARGE CUPBOARD IN THE CORNER"
+  if game_state.room_and_object==2066 then
+    game_state.response_message="A LARGE CUPBOARD IN THE CORNER"
   end
-  if $H==6865 || $H==6853 then
-    $response_message="THERE ARE NINE STONES"
+  if game_state.room_and_object==6865 || game_state.room_and_object==6853 then
+    game_state.response_message="THERE ARE NINE STONES"
   end
-  if $H==248 then
-    $response_message=decode("A GBEFE XPSE - 'N S I T'")
+  if game_state.room_and_object==248 then
+    game_state.response_message=decode("A GBEFE XPSE - 'N S I T'")
   end
 end
 
 def give
   if game_state.room==64 then
-    $response_message="HE GIVES IT BACK!"
+    game_state.response_message="HE GIVES IT BACK!"
   end
-  if $H==6425 then
+  if game_state.room_and_object==6425 then
     give_ring
   end
   if game_state.room==75 || game_state.room==76 then
-    $response_message="HE DOES NOT WANT IT"
+    game_state.response_message="HE DOES NOT WANT IT"
   end
-  if game_state.object==62 && $F[44]==0 then
-    $response_message="YOU HAVE RUN OUT!"
+  if game_state.object==62 && game_state.f[44]==0 then
+    game_state.response_message="YOU HAVE RUN OUT!"
   end
-  if ($H==7562 || $H==7662) && $F[44]>0 && $object_location[1]==0 then
-    $response_message="HE TAKES IT"
-    $F[64]=1
+  if (game_state.room_and_object==7562 || game_state.room_and_object==7662) && game_state.f[44]>0 && game_state.object_locations[1]==0 then
+    game_state.response_message="HE TAKES IT"
+    game_state.f[64]=1
   end
-  if $F[64]==1 then
-    $F[44]=$F[44]-1
+  if game_state.f[64]==1 then
+    game_state.f[44]=game_state.f[44]-1
   end
   if game_state.object==1 then
-    $response_message="HE TAKES THEM ALL!"
-    $object_location[1]=81
-    $F[64]=1
-    $F[44]=0
+    game_state.response_message="HE TAKES THEM ALL!"
+    game_state.object_locations[1]=81
+    game_state.f[64]=1
+    game_state.f[44]=0
   end
-  if $H==2228 && $object_location[5]==81 then
-    $response_message=words(0)+"NORTH"
-    $object_location[28]=81
+  if game_state.room_and_object==2228 && game_state.object_locations[5]==81 then
+    game_state.response_message=words(0)+"NORTH"
+    game_state.object_locations[28]=81
     game_state.room=12
   end
-  if ($H==2228 && $object_location[5]==81) || $H==225 then
-    $response_message=words(0)+"NORTH"
+  if (game_state.room_and_object==2228 && game_state.object_locations[5]==81) || game_state.room_and_object==225 then
+    game_state.response_message=words(0)+"NORTH"
     game_state.room=12
   end
-  if ($H==1228 && $object_location[5]==81) || $H==125 then
-    $response_message=words(0)+"SOUTH"
+  if (game_state.room_and_object==1228 && game_state.object_locations[5]==81) || game_state.room_and_object==125 then
+    game_state.response_message=words(0)+"SOUTH"
     game_state.room=12
   end
   if game_state.room==7 || game_state.room==33 then
-    $response_message="HE EATS IT!"
-    $object_location[game_state.object]=81
+    game_state.response_message="HE EATS IT!"
+    game_state.object_locations[game_state.object]=81
   end
-  if $H==711 then
-    $F[46]=1
-    $response_message="HE IS DISTRACTED"
+  if game_state.room_and_object==711 then
+    game_state.f[46]=1
+    game_state.response_message="HE IS DISTRACTED"
   end
-  if $H==385 || $H==3824 then
-    $response_message="THEY SCURRY AWAY"
-    $object_location[game_state.object]=81
-    $F[65]=1
+  if game_state.room_and_object==385 || game_state.room_and_object==3824 then
+    game_state.response_message="THEY SCURRY AWAY"
+    game_state.object_locations[game_state.object]=81
+    game_state.f[65]=1
   end
 end
 
 def say
-  $response_message="YOU SAID IT"
+  game_state.response_message="YOU SAID IT"
   if game_state.object==84 then
-    $response_message="YOU MUST SAY THEM ONE BY ONE!"
+    game_state.response_message="YOU MUST SAY THEM ONE BY ONE!"
     return
   end
-  if game_state.room!=47 || game_state.object<71 || game_state.object>75 || $object_location[27]!=0 then
+  if game_state.room!=47 || game_state.object<71 || game_state.object>75 || game_state.object_locations[27]!=0 then
     return
   end
-  if game_state.object==71 && $F[60]==0 then
-    $response_message=words(7)
-    $F[60]=1
+  if game_state.object==71 && game_state.f[60]==0 then
+    game_state.response_message=words(7)
+    game_state.f[60]=1
     return
   end
-  if game_state.object==72 && $F[60]==1 && $F[61]==0 then
-    $response_message=words(8)
-    $F[61]=1
+  if game_state.object==72 && game_state.f[60]==1 && game_state.f[61]==0 then
+    game_state.response_message=words(8)
+    game_state.f[61]=1
     return
   end
-  if game_state.object==($F[52]+73) && $F[60]==1 && $F[61]==1 then
-    $F[62]=1
+  if game_state.object==(game_state.f[52]+73) && game_state.f[60]==1 && game_state.f[61]==1 then
+    game_state.f[62]=1
     return
   end
-  $response_message="THE WRONG SACRED WORD!"
-  $F[56]=1
+  game_state.response_message="THE WRONG SACRED WORD!"
+  game_state.f[56]=1
 end
 
 def pick
@@ -568,76 +568,76 @@ end
 
 def wear
   if game_state.object==3 then
-    $F[29]=1
-    $response_message=decode("ZPV BSF JOWJTJCMF")
-    $F[55]=0
+    game_state.f[29]=1
+    game_state.response_message=decode("ZPV BSF JOWJTJCMF")
+    game_state.f[55]=0
   end
   if game_state.object==20 then
-    $F[51]=1
-    $response_message=decode("ZPV BSF EJTHVJTFE")
-    $F[55]=0
+    game_state.f[51]=1
+    game_state.response_message=decode("ZPV BSF EJTHVJTFE")
+    game_state.f[55]=0
   end
 end
 
 def tie
   if game_state.object==2 || game_state.object==14 then
-    $response_message="NOTHING TO TIE IT TO!"
+    game_state.response_message="NOTHING TO TIE IT TO!"
   end
-  if $H==7214 then
-    $response_message="IT IS TIED"
-    $object_location[14]=72
-    $F[53]=1
+  if game_state.room_and_object==7214 then
+    game_state.response_message="IT IS TIED"
+    game_state.object_locations[14]=72
+    game_state.f[53]=1
   end
-  if $H==722 then
-    $response_message="OK"
-    $F[40]=1
-    $object_location[2]=72
+  if game_state.room_and_object==722 then
+    game_state.response_message="OK"
+    game_state.f[40]=1
+    game_state.object_locations[2]=72
   end
 end
 
 def climb
-  if $H==1547 && $F[38]==1 then
-    $response_message="ALL RIGHT"
+  if game_state.room_and_object==1547 && game_state.f[38]==1 then
+    game_state.response_message="ALL RIGHT"
     game_state.room=16
   end
   if game_state.object==14 || game_state.object==2 then
-    $response_message="NOT ATTACHED TO ANYTHING!"
+    game_state.response_message="NOT ATTACHED TO ANYTHING!"
   end
-  if $H==5414 && $object_location[14]==54 then
-    $response_message="YOU ARE AT THE TOP"
+  if game_state.room_and_object==5414 && game_state.object_locations[14]==54 then
+    game_state.response_message="YOU ARE AT THE TOP"
   end
-  if $H==7214 && $F[53]==1 then
-    $response_message="GOING DOWN"
+  if game_state.room_and_object==7214 && game_state.f[53]==1 then
+    game_state.response_message="GOING DOWN"
     game_state.room=71
   end
-  if $H==722 && $F[40]==1 then
+  if game_state.room_and_object==722 && game_state.f[40]==1 then
     game_state.room=71
-    $response_message="IT IS TORN"
-    $object_location[2]=81
-    $F[40]=0
+    game_state.response_message="IT IS TORN"
+    game_state.object_locations[2]=81
+    game_state.f[40]=0
   end
-  if $H==7114 && $F[53]==1 then
-    $object_location[14]=71
-    $F[53]=0
-    $response_message="IT FALLS DOWN-BUMP!"
+  if game_state.room_and_object==7114 && game_state.f[53]==1 then
+    game_state.object_locations[14]=71
+    game_state.f[53]=0
+    game_state.response_message="IT FALLS DOWN-BUMP!"
   end
 end
 
 def use
-  if $H==522 then
-    $response_message="OK"
-    $F[30]=1
+  if game_state.room_and_object==522 then
+    game_state.response_message="OK"
+    game_state.f[30]=1
   end
   if game_state.object==1 || game_state.object==62 || game_state.object==5 || game_state.object==28 || game_state.object==11 || game_state.object==24 then
     give
   end
-  if $H==416 then
-    $response_message=decode("ZPV IBWF LFQU BGMPBU")
-    $F[31]=1
+  if game_state.room_and_object==416 then
+    game_state.response_message=decode("ZPV IBWF LFQU BGMPBU")
+    game_state.f[31]=1
     return
   end
-  if $H==4116 then
-    $response_message="IT IS NOT BIG ENOUGH!"
+  if game_state.room_and_object==4116 then
+    game_state.response_message="IT IS NOT BIG ENOUGH!"
     return
   end
   if game_state.object==18 || game_state.object==7 then
@@ -661,101 +661,101 @@ def open
   if game_state.object==76 || game_state.object==38 then
     examine
   end
-  if $H==2030 then
-    $F[9]=0
-    $response_message="OK"
+  if game_state.room_and_object==2030 then
+    game_state.f[9]=0
+    game_state.response_message="OK"
   end
-  if $H==6030 then
-    $response_message="OK"
-    $F[3]=0
+  if game_state.room_and_object==6030 then
+    game_state.response_message="OK"
+    game_state.f[3]=0
   end
-  if $H==2444 || $H==1870 then
-    $response_message="YOU ARE NOT STRONG ENOUGH"
+  if game_state.room_and_object==2444 || game_state.room_and_object==1870 then
+    game_state.response_message="YOU ARE NOT STRONG ENOUGH"
   end
-  if $H==3756 then
-    $response_message="A PASSAGE!"
-    $exits[37]="EW"
+  if game_state.room_and_object==3756 then
+    game_state.response_message="A PASSAGE!"
+    game_state.exits[37]="EW"
   end
-  if $H==5960 then
+  if game_state.room_and_object==5960 then
     open_sub
   end
-  if $H==6970 then
-    $response_message="IT FALLS OFF ITS HINGES"
+  if game_state.room_and_object==6970 then
+    game_state.response_message="IT FALLS OFF ITS HINGES"
   end
-  if $H==4870 then
-    $response_message="IT IS LOCKED"
+  if game_state.room_and_object==4870 then
+    game_state.response_message="IT IS LOCKED"
   end
 end
 
 def burn
   if game_state.object>marked_objects.size then
-    $response_message="IT DOES NOT BURN"
+    game_state.response_message="IT DOES NOT BURN"
   end
   if game_state.object==26 then
-    $response_message="YOU LIT THEM"
+    game_state.response_message="YOU LIT THEM"
   end
-  if $H==3826 then
-    $response_message="NOT BRIGHT ENOUGH"
+  if game_state.room_and_object==3826 then
+    game_state.response_message="NOT BRIGHT ENOUGH"
   end
-  if (game_state.object==23 || $H==6970) && $object_location[26]!=0 then
-    $response_message=decode("OP NBUDIFT")
+  if (game_state.object==23 || game_state.room_and_object==6970) && game_state.object_locations[26]!=0 then
+    game_state.response_message=decode("OP NBUDIFT")
   end
-  if game_state.object==23 && $object_location[26]==0 then
-    $response_message="A BRIGHT "+$Vstr
-    $F[50]=1
+  if game_state.object==23 && game_state.object_locations[26]==0 then
+    game_state.response_message="A BRIGHT "+game_state.command
+    game_state.f[50]=1
   end
-  if $H==6970 && $object_location[26]==0 then
-    $F[43]=1
-    $response_message="IT HAS TURNED TO ASHES"
+  if game_state.room_and_object==6970 && game_state.object_locations[26]==0 then
+    game_state.f[43]=1
+    game_state.response_message="IT HAS TURNED TO ASHES"
   end
 end
 
 def fill
   if (game_state.object==16 || game_state.object==6) && (game_state.room==41 || game_state.room==51) then
-    $response_message="YOU CAPSIZED!"
-    $F[56]=1
+    game_state.response_message="YOU CAPSIZED!"
+    game_state.f[56]=1
   end
-  if $H==6516 && $object_location[16]==0 then
-    $response_message="IT IS NOW FULL"
-    $F[34]=1
+  if game_state.room_and_object==6516 && game_state.object_locations[16]==0 then
+    game_state.response_message="IT IS NOW FULL"
+    game_state.f[34]=1
   end
-  if $H==656 then
-    $response_message="IT LEAKS OUT!"
+  if game_state.room_and_object==656 then
+    game_state.response_message="IT LEAKS OUT!"
   end
 end
 
 def plant
   if game_state.object!=22 || game_state.room!=15 then
-    $response_message="DOES NOT GROW!"
+    game_state.response_message="DOES NOT GROW!"
     return
   end
-  $response_message="OK"
-  $F[34]=1
+  game_state.response_message="OK"
+  game_state.f[34]=1
 end
 
 def water
-  if game_state.object==22 && $F[37]==1 && $F[34]==1 then
-    $response_message=decode(words(2))
-    $F[38]=1
+  if game_state.object==22 && game_state.f[37]==1 && game_state.f[34]==1 then
+    game_state.response_message=decode(words(2))
+    game_state.f[38]=1
   end
 end
 
 def swing
   if game_state.object==7 || game_state.object==18 then
-    $response_message="THWACK!"
+    game_state.response_message="THWACK!"
   end
-  if $H==5818 then
-    $response_message="YOU CLEARED THE WEBS"
-    $F[66]=1
+  if game_state.room_and_object==5818 then
+    game_state.response_message="YOU CLEARED THE WEBS"
+    game_state.f[66]=1
   end
-  if $H==187 then
-    $response_message="THE DOOR BROKE!"
-    $exits[18]="NS"
-    $exits[28]="NS"
+  if game_state.room_and_object==187 then
+    game_state.response_message="THE DOOR BROKE!"
+    game_state.exits[18]="NS"
+    game_state.exits[28]="NS"
   end
-  if $H==717 then
-    $response_message="YOU BROKE THROUGH"
-    $exits[71]="N"
+  if game_state.room_and_object==717 then
+    game_state.response_message="YOU BROKE THROUGH"
+    game_state.exits[71]="N"
   end
 end
 
@@ -764,19 +764,19 @@ def empty
     game_state.object=22
     water
   end
-  if $H==499 then
-    $response_message="WHERE?"
+  if game_state.room_and_object==499 then
+    game_state.response_message="WHERE?"
   end
 end
 
 def enter
-  if $H==4337 then
+  if game_state.room_and_object==4337 then
     go(2)
     return
   end
   if game_state.room==36 then
-    $response_message="YOU FOUND SOMETHING"
-    $F[13]=0
+    game_state.response_message="YOU FOUND SOMETHING"
+    game_state.f[13]=0
   end
 end
 
@@ -791,13 +791,13 @@ def cross
 end
 
 def remove
-  if (game_state.object==3 && $F[29]==1) then
-    $response_message="TAKEN OFF"
-    $F[29]=0
+  if (game_state.object==3 && game_state.f[29]==1) then
+    game_state.response_message="TAKEN OFF"
+    game_state.f[29]=0
   end
-  if (game_state.object==20 && $F[51]==1) then
-    $response_message="OK"
-    $F[51]=0
+  if (game_state.object==20 && game_state.f[51]==1) then
+    game_state.response_message="OK"
+    game_state.f[51]=0
   end
   if game_state.object==36 || game_state.object==50 then
     move
@@ -805,59 +805,59 @@ def remove
 end
 
 def feed
-  if $H==3859 || $H==3339 || $H==1241 || $H==2241 || $H==751 then
-    $response_message="WITH WHAT?"
+  if game_state.room_and_object==3859 || game_state.room_and_object==3339 || game_state.room_and_object==1241 || game_state.room_and_object==2241 || game_state.room_and_object==751 then
+    game_state.response_message="WITH WHAT?"
   end
 end
 
 def turn
-  if $H==2340 then
-    $response_message="IT GOES ROUND"
+  if game_state.room_and_object==2340 then
+    game_state.response_message="IT GOES ROUND"
   end
-  if $H==2445 then
-    $response_message=decode("UIF HBUFT PQFQ, UIF QPPM FNQUJFT")
-    $F[33]=1
+  if game_state.room_and_object==2445 then
+    game_state.response_message=decode("UIF HBUFT PQFQ, UIF QPPM FNQUJFT")
+    game_state.f[33]=1
   end
 end
 
 def dive
   if game_state.room==14 || game_state.room==51 then
-    $response_message="YOU HAVE DROWNED"
-    $F[56]=1
+    game_state.response_message="YOU HAVE DROWNED"
+    game_state.f[56]=1
   end
 end
 
 def bail
-  $response_message="HOW?"
+  game_state.response_message="HOW?"
 end
 
 def drop
   if game_state.object==0 || game_state.object>marked_objects.size then
     return
   end
-  $object_location[game_state.object]=game_state.room
-  $response_message="DONE"
-  if $H==418 || $H==518 then
-    $response_message="YOU DROWNED!"
-    $F[56]=1
+  game_state.object_locations[game_state.object]=game_state.room
+  game_state.response_message="DONE"
+  if game_state.room_and_object==418 || game_state.room_and_object==518 then
+    game_state.response_message="YOU DROWNED!"
+    game_state.f[56]=1
   end
-  if game_state.object==8 && $F[30]==1 then
-    $object_location[2]=game_state.room
+  if game_state.object==8 && game_state.f[30]==1 then
+    game_state.object_locations[2]=game_state.room
   end
-  if game_state.object==16 && $F[34]==1 then
-    $response_message="YOU LOST THE WATER!"
-    $F[34]=0
+  if game_state.object==16 && game_state.f[34]==1 then
+    game_state.response_message="YOU LOST THE WATER!"
+    game_state.f[34]=0
   end
-  if game_state.object==2 && $F[30]==1 then
-    $F[30]=0
+  if game_state.object==2 && game_state.f[30]==1 then
+    game_state.f[30]=0
   end
 end
 
 def insert
-  if game_state.object==62 && $F[44]==0 then
-    $response_message="YOU DO NOT HAVE ANY"
+  if game_state.object==62 && game_state.f[44]==0 then
+    game_state.response_message="YOU DO NOT HAVE ANY"
   end
-  if $H==5762 && $object_location[1]==0 && $F[44]>0 then
+  if game_state.room_and_object==5762 && game_state.object_locations[1]==0 && game_state.f[44]>0 then
     insert_sub
   end
 end
@@ -866,28 +866,28 @@ def throw
   if game_state.object==0 || game_state.object>marked_objects.size then
     return
   end
-  $response_message="DID NOT GO FAR!"
-  $object_location[game_state.object]=game_state.room
-  if $H==3317 then
-    $response_message=decode("ZPV DBVHIU UIF CPBS")
-    $F[32]=1
+  game_state.response_message="DID NOT GO FAR!"
+  game_state.object_locations[game_state.object]=game_state.room
+  if game_state.room_and_object==3317 then
+    game_state.response_message=decode("ZPV DBVHIU UIF CPBS")
+    game_state.f[32]=1
   end
 end
 
 def make
   if game_state.object==10 then
-    $response_message=decode("B OJDF UVOF")
+    game_state.response_message=decode("B OJDF UVOF")
   end
-  if $H==5233 then
-    $response_message="WHAT WITH?"
+  if game_state.room_and_object==5233 then
+    game_state.response_message="WHAT WITH?"
   end
   if game_state.object==83 then
-    $response_message="HOW, O MUSICAL ONE?"
+    game_state.response_message="HOW, O MUSICAL ONE?"
   end
-  if $H==5610 then
-    $F[35]=1
-    $response_message=words(1)+" IS FREE!"
-    $exits[56]="NS"
+  if game_state.room_and_object==5610 then
+    game_state.f[35]=1
+    game_state.response_message=words(1)+" IS FREE!"
+    game_state.exits[56]="NS"
   end
 end
 
@@ -896,28 +896,28 @@ def eat
     return
   end
   if game_state.object==5 || game_state.object==24 then
-    $response_message="YUM YUM!"
-    $object_location[game_state.object]=81
+    game_state.response_message="YUM YUM!"
+    game_state.object_locations[game_state.object]=81
   end
 end
 
 def move
   if game_state.room==4 && game_state.object==50 then
-    $F[45]=1
-    $response_message="YOU REVEALED A STEEP PASSAGE"
+    game_state.f[45]=1
+    game_state.response_message="YOU REVEALED A STEEP PASSAGE"
   end
   if game_state.room==3 && game_state.object==50 then
-    $response_message="YOU CANNOT MOVE RUBBLE FROM HERE"
+    game_state.response_message="YOU CANNOT MOVE RUBBLE FROM HERE"
   end
-  if $H==7136 then
-    $response_message="THEY ARE WEDGED IN!"
+  if game_state.room_and_object==7136 then
+    game_state.response_message="THEY ARE WEDGED IN!"
   end
 end
 
 def into
-  if (game_state.object==67 || game_state.object==68) && $object_location[9]==0 && game_state.room==49 then
-    $response_message="OK"
-    $F[47]=1
+  if (game_state.object==67 || game_state.object==68) && game_state.object_locations[9]==0 && game_state.room==49 then
+    game_state.response_message="OK"
+    game_state.f[47]=1
   end
 end
 
@@ -932,26 +932,26 @@ def ring
       puts "A NUMBER"
     end
   end until number_of_rings>0
-  if number_of_rings==$F[42] then
-    $response_message="A ROCK DOOR OPENS"
-    $exits[27]="EW"
+  if number_of_rings==game_state.f[42] then
+    game_state.response_message="A ROCK DOOR OPENS"
+    game_state.exits[27]="EW"
     return
   end
-  $response_message=decode("ZPV IBWF NJTUSFBUFE UIF CFMM!")
-  $F[56]=1
+  game_state.response_message=decode("ZPV IBWF NJTUSFBUFE UIF CFMM!")
+  game_state.f[56]=1
 end
 
 def cut
-  if $H==5861 then
-    $H=5818
+  if game_state.room_and_object==5861 then
+    game_state.room_and_object=5818
     swing
   end
 end
 
 def hold
-  if ($H==4864 || $H==4819) && $object_location[19]==0 then
-    $response_message=decode(words(6))
-    $F[63]=1
+  if (game_state.room_and_object==4864 || game_state.room_and_object==4819) && game_state.object_locations[19]==0 then
+    game_state.response_message=decode(words(6))
+    game_state.f[63]=1
   end
   if game_state.object==27 then
     take
@@ -959,8 +959,8 @@ def hold
 end
 
 def pay
-  if $H==7549 || $H==7649 then
-    $response_message="WHAT WITH?"
+  if game_state.room_and_object==7549 || game_state.room_and_object==7649 then
+    game_state.response_message="WHAT WITH?"
   end
   if game_state.object==1 || game_state.object==62 then
     give
@@ -968,59 +968,59 @@ def pay
 end
 
 def unlock
-  if $H==4870 && $object_location[21]==0 then
-    $response_message="THE KEY TURNS!"
-    $F[70]=1
+  if game_state.room_and_object==4870 && game_state.object_locations[21]==0 then
+    game_state.response_message="THE KEY TURNS!"
+    game_state.f[70]=1
   end
 end
 
 def break
-  if $H==1870 then
-    $response_message="HOW?"
+  if game_state.room_and_object==1870 then
+    game_state.response_message="HOW?"
   end
 end
 
 def reflect
   if game_state.room==48 then
-    $response_message="HOW?"
+    game_state.response_message="HOW?"
   end
 end
 
 def drink
-  $response_message="ARE YOU THIRSTY?"
+  game_state.response_message="ARE YOU THIRSTY?"
 end
 
 def give_ring
-  $response_message="HE TAKES IT AND SAYS '"+STRstr($F[42])+" RINGS ARE NEEDED'"
-  $object_location[25]=81
+  game_state.response_message="HE TAKES IT AND SAYS '"+STRstr(game_state.f[42])+" RINGS ARE NEEDED'"
+  game_state.object_locations[25]=81
 end
 
 def insert_sub
-  $F[44]=$F[44]-1
-  $response_message="A NUMBER APPEARS - "+STRstr($F[41])
-  if $F[44]==0 then
-    $object_location[1]=81
+  game_state.f[44]=game_state.f[44]-1
+  game_state.response_message="A NUMBER APPEARS - "+STRstr(game_state.f[41])
+  if game_state.f[44]==0 then
+    game_state.object_locations[1]=81
   end
 end
 
 def open_sub
   puts
-  $response_message=decode("XIBU JT UIF DPEF")
-  puts $response_message
+  game_state.response_message=decode("XIBU JT UIF DPEF")
+  puts game_state.response_message
   cn=mINPUT
-  $response_message="WRONG!"
-  if cn==$F[41] then
-    $response_message="IT OPENS"
-    $F[21]=0
+  game_state.response_message="WRONG!"
+  if cn==game_state.f[41] then
+    game_state.response_message="IT OPENS"
+    game_state.f[21]=0
   end
 end
 
 def examine_sub
   tmp = game_state.room
-  game_state.room=$F[$F[52]+57]
+  game_state.room=game_state.f[game_state.f[52]+57]
   desc = current_room_description
   game_state.room = tmp
-  $response_message=words(4)+RIGHTstr(desc,LEN(desc)-2)
+  game_state.response_message=words(4)+RIGHTstr(desc,LEN(desc)-2)
 end
 
 def current_room_description
@@ -1060,8 +1060,8 @@ def words(i)
 end
 
 def setup
-  $F=Array.new(70+1,0)
-  $tunnel_maze_directions=Array.new(2+1,'')
+  game_state.f=Array.new(70+1,0)
+  game_state.tunnel_maze_directions=Array.new(2+1,'')
   $cmd_list="NOOEOOSOOWOOUOODOOINVGETTAKEXAREAGIVSAYPICWEATIECLIRIGUSEOPE"
   $cmd_list=$cmd_list+"LIGFILPLAWATSWIEMPENTCROREMFEETURDIVBAILEATHRINSBLODROEATMOV"
   $cmd_list=$cmd_list+"INTRINCUTHOLBURPOISHOUNLWITDRICOUPAYMAKBRESTEGATREF"
@@ -1159,11 +1159,11 @@ def decode(coded_string)
     if char<"A" then
       decoded_string=decoded_string+char
     else
-      $object_location=char.ord-1
-      if $object_location==64 then
-        $object_location=90
+      game_state.object_locations=char.ord-1
+      if game_state.object_locations==64 then
+        game_state.object_locations=90
       end
-      decoded_string=decoded_string+CHRstr($object_location)
+      decoded_string=decoded_string+CHRstr(game_state.object_locations)
     end
   end
   return decoded_string
@@ -1185,13 +1185,13 @@ def tunnels(direction)
     way = mINPUT
     directions=RIGHTstr(directions+RIGHTstr(way,1),8)
     if way=="G" then
-      $F[56]=1
+      game_state.f[56]=1
       return
     end
-    if directions!=$tunnel_maze_directions[mp] then
+    if directions!=game_state.tunnel_maze_directions[mp] then
       number_of_goes=number_of_goes+1
     end
-  end until !(directions!=$tunnel_maze_directions[mp])
+  end until !(directions!=game_state.tunnel_maze_directions[mp])
 end
 
 def print_titles
@@ -1205,7 +1205,7 @@ def print_titles
 end
 
 def load_initial_state
-  $exits = [ nil,
+  game_state.exits = [ nil,
     "E", "ESW", "WE", "EW", "EW", "ESW", "ESW", "ES", "EW", "SW",
     "S", "N", "ES", "SW", "S", "NW", "N", "N", "ES", "NSW",
     "NS", "E", "NSW", "N", "NES", "EW", "W", "S", "NS", "N",
@@ -1215,20 +1215,20 @@ def load_initial_state
     "ES", "SW", "NES", "EW", "SW", "NE", "EW", "ESW", "SW", "ND",
     " ", "E", "NEW", "EW", "NEW", "EW", "EW", "NEW", "NEW", "WU"
   ]
-  $object_location = [ nil,
+  game_state.object_locations = [ nil,
     80, 70, 60, 69, 74, 72, 63, 52, 20, 11, 1, 14, 36, 54, 61, 21, 32, 10, 50,
     29, 59, 34, 13, 80, 30, 81, 47, 74
   ]
-  $F[1..13] = [
+  game_state.f[1..13] = [
     1, 2, 3, 4, 5, 9, 12, 13, 16, 17, 20, 21, 22
   ]
 end
 
 def setup_tunnle_maze
-  $tunnel_maze_directions[1]=""
+  game_state.tunnel_maze_directions[1]=""
   for i in 1..8
     direction_forward=MIDstr($cmd_list,1+INT(RND(1)*4)*3,1)
-    $tunnel_maze_directions[1]=$tunnel_maze_directions[1]+direction_forward
+    game_state.tunnel_maze_directions[1]=game_state.tunnel_maze_directions[1]+direction_forward
     if direction_forward=="N" then
       direction_back="S"
     end
@@ -1241,32 +1241,32 @@ def setup_tunnle_maze
     if direction_forward=="W" then
       direction_back="E"
     end
-    $tunnel_maze_directions[2]=direction_back+$tunnel_maze_directions[2]
+    game_state.tunnel_maze_directions[2]=direction_back+game_state.tunnel_maze_directions[2]
   end
 end
 
 def new_game
 	load_initial_state
-  $F[41]=INT(RND(1)*900)+100
-  $F[42]=INT(RND(1)*3)+2
-  $F[44]=4
-  $F[57]=68
-  $F[58]=54
-  $F[59]=15
-  $F[52]=INT(RND(1)*3)
+  game_state.f[41]=INT(RND(1)*900)+100
+  game_state.f[42]=INT(RND(1)*3)+2
+  game_state.f[44]=4
+  game_state.f[57]=68
+  game_state.f[58]=54
+  game_state.f[59]=15
+  game_state.f[52]=INT(RND(1)*3)
   game_state.room=77
-  $response_message="GOOD LUCK ON YOUR QUEST!"
+  game_state.response_message="GOOD LUCK ON YOUR QUEST!"
 	setup_tunnle_maze
 end
 
 def load_game
   read_file(get_filename)
-  game_state.room=$F[69]
-  $response_message="OK. CARRY ON"
+  game_state.room=game_state.f[69]
+  game_state.response_message="OK. CARRY ON"
 end
 
 def save_game
-  $F[69]=game_state.room
+  game_state.f[69]=game_state.room
   write_file(get_filename)
   puts "BYE..."
   exit
@@ -1283,7 +1283,7 @@ def read_file(filename)
   puts "OK. SEARCHING FOR "+filename
   File.open(filename, 'r') do |x|
     puts "OK. LOADING"
-    $exits, $object_location, $F, $tunnel_maze_directions = JSON.parse(x.gets)
+    game_state.exits, game_state.object_locations, game_state.f, game_state.tunnel_maze_directions = JSON.parse(x.gets)
   end
 end
 
@@ -1291,7 +1291,7 @@ def write_file(filename)
   #SAVE DATA FILE
   File.open(filename, 'w') do |x|
     puts "OK. SAVING"
-    x.puts [$exits, $object_location, $F, $tunnel_maze_directions].to_json
+    x.puts [game_state.exits, game_state.object_locations, game_state.f, game_state.tunnel_maze_directions].to_json
   end
 end
 
@@ -1354,7 +1354,8 @@ def CHRstr(value)
 end
 
 def game_state
-  @state ||= Struct.new(:room, :object).new
+  @state ||= Struct.new(:room, :object, :object_name, :room_and_object, :response_message, :f, :exits, :object_locations,
+                        :tunnel_maze_directions, :command, :command_id).new
 end
 
 start
