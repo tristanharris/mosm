@@ -267,27 +267,26 @@ def go(direction=$VB)
   if $room==8 && direction==2 then
     $F[46]=0
   end
-  om=$room
-  for i in 1..LEN($exits[$room])
-    exit_direction=MIDstr($exits[om],i,1)
-    if (exit_direction=="N" || exit_direction=="U") && direction==1 then
-      $room=$room-10
-    end
-    if exit_direction=="E" && direction==2 then
-      $room=$room+1
-    end
-    if (exit_direction=="S" || exit_direction=="D") && direction==3 then
-      $room=$room+10
-    end
-    if exit_direction=="W" && direction==4 then
-      $room=$room-1
-    end
+  old_room = $room
+  exit_map = {
+    'N' => 1,
+    'U' => 1,
+    'E' => 2,
+    'S' => 3,
+    'D' => 3,
+    'W' => 4
+  }
+  $exits[$room].split(//).each do |exit_direction|
+    $room = $room - 10 if exit_map[exit_direction] == direction && direction == 1
+    $room = $room + 1  if exit_map[exit_direction] == direction && direction == 2
+    $room = $room + 10 if exit_map[exit_direction] == direction && direction == 3
+    $room = $room - 1  if exit_map[exit_direction] == direction && direction == 4
   end
   $response_message="OK"
-  if $room==om then
+  if $room==old_room then
     $response_message="YOU CANNOT GO THAT WAY"
   end
-  if ((om==75 && direction==2) || (om==76 && direction==4)) then
+  if ((old_room==75 && direction==2) || (old_room==76 && direction==4)) then
     $response_message="OK. YOU CROSSED"
   end
   if $F[29]==1 then
