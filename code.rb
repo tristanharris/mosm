@@ -69,8 +69,8 @@ def main
     game_state.command="BLO"
   end
   cmd_start=LEFTstr(game_state.command,3)
-  for i in 1..($cmd_list.length/3)
-    if MIDstr($cmd_list,i*3-2,3)==cmd_start then
+  for i in 1..(cmd_list.length/3)
+    if MIDstr(cmd_list,i*3-2,3)==cmd_start then
       game_state.command_id=i
       break
     end
@@ -90,20 +90,20 @@ def main
     end
   end until !(game_state.object==0 && game_state.f[36]==0 && game_state.object_name!="")
   if game_state.command_id==0 then
-    game_state.command_id=($cmd_list.length/3)+1
+    game_state.command_id=(cmd_list.length/3)+1
   end
   if game_state.object_name=="" then
     game_state.response_message="I NEED TWO WORDS"
   end
-  if game_state.command_id>($cmd_list.length/3) then
+  if game_state.command_id>(cmd_list.length/3) then
     game_state.response_message="TRY SOMETHING ELSE"
   end
-  if game_state.command_id>($cmd_list.length/3) && game_state.object==0 then
+  if game_state.command_id>(cmd_list.length/3) && game_state.object==0 then
     game_state.response_message="YOU CANNOT "+cmd_string
   end
   if !(game_state.object>marked_objects.size || game_state.object==0) then
     if !(game_state.command_id==8 || game_state.command_id==9 || game_state.command_id==14 || game_state.command_id==17 || game_state.command_id==44 || game_state.command_id>54) then
-      if game_state.command_id<($cmd_list.length/3) && game_state.object_locations[game_state.object]!=0 then
+      if game_state.command_id<(cmd_list.length/3) && game_state.object_locations[game_state.object]!=0 then
         game_state.response_message="YOU DO NOT HAVE THE "+game_state.object_name
         Kernel.throw :redraw
       end
@@ -1059,12 +1059,15 @@ def words(i)
   ][i]
 end
 
+def cmd_list
+  "NOOEOOSOOWOOUOODOOINVGETTAKEXAREAGIVSAYPICWEATIECLIRIGUSEOPE" +
+  "LIGFILPLAWATSWIEMPENTCROREMFEETURDIVBAILEATHRINSBLODROEATMOV" +
+  "INTRINCUTHOLBURPOISHOUNLWITDRICOUPAYMAKBRESTEGATREF"
+end
+
 def setup
   game_state.f=Array.new(70+1,0)
   game_state.tunnel_maze_directions=Array.new(2+1,'')
-  $cmd_list="NOOEOOSOOWOOUOODOOINVGETTAKEXAREAGIVSAYPICWEATIECLIRIGUSEOPE"
-  $cmd_list=$cmd_list+"LIGFILPLAWATSWIEMPENTCROREMFEETURDIVBAILEATHRINSBLODROEATMOV"
-  $cmd_list=$cmd_list+"INTRINCUTHOLBURPOISHOUNLWITDRICOUPAYMAKBRESTEGATREF"
   print_titles
   puts "DO YOU WANT TO"
   puts
@@ -1227,7 +1230,7 @@ end
 def setup_tunnle_maze
   game_state.tunnel_maze_directions[1]=""
   for i in 1..8
-    direction_forward=MIDstr($cmd_list,1+INT(RND(1)*4)*3,1)
+    direction_forward=MIDstr(cmd_list,1+INT(RND(1)*4)*3,1)
     game_state.tunnel_maze_directions[1]=game_state.tunnel_maze_directions[1]+direction_forward
     if direction_forward=="N" then
       direction_back="S"
