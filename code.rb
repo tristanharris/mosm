@@ -58,7 +58,7 @@ class MOSM
     puts "WHAT WILL YOU DO NOW "
     cmd_string=mINPUT
     if cmd_string=="SAVE GAME" then
-      save_game
+      game_state.save_game
     end
     game_state.command_id=0
     game_state.object=0
@@ -1069,8 +1069,6 @@ class MOSM
   end
 
   def setup
-    game_state.f=Array.new(70+1,0)
-    game_state.tunnel_maze_directions=Array.new(2+1,'')
     print_titles
     puts "DO YOU WANT TO"
     puts
@@ -1083,10 +1081,10 @@ class MOSM
       selection=mINPUT.to_i
     end until !(selection!=1 && selection!=2)
     if selection==1 then
-      new_game
+      game_state.new_game
     end
     if selection==2 then
-      load_game
+      game_state.load_game
     end
   end
 
@@ -1210,97 +1208,6 @@ class MOSM
     puts
   end
 
-  def load_initial_state
-    game_state.exits = [ nil,
-      "E", "ESW", "WE", "EW", "EW", "ESW", "ESW", "ES", "EW", "SW",
-      "S", "N", "ES", "SW", "S", "NW", "N", "N", "ES", "NSW",
-      "NS", "E", "NSW", "N", "NES", "EW", "W", "S", "NS", "N",
-      "NES", "W", "NS", "D", "NES", "SW", "E", "NW", "NS", "S",
-      "NS", "E", "NSEW", "WU", "UD", "NS", "E", "SW", "NSE", "NW",
-      "NE", "EW", "NSW", "E", "WN", "S", "E", "NEW", "NW", "S",
-      "ES", "SW", "NES", "EW", "SW", "NE", "EW", "ESW", "SW", "ND",
-      " ", "E", "NEW", "EW", "NEW", "EW", "EW", "NEW", "NEW", "WU"
-    ]
-    game_state.object_locations = [ nil,
-      80, 70, 60, 69, 74, 72, 63, 52, 20, 11, 1, 14, 36, 54, 61, 21, 32, 10, 50,
-      29, 59, 34, 13, 80, 30, 81, 47, 74
-    ]
-    game_state.f[1..13] = [
-      1, 2, 3, 4, 5, 9, 12, 13, 16, 17, 20, 21, 22
-    ]
-  end
-
-  def setup_tunnle_maze
-    game_state.tunnel_maze_directions[1]=""
-    for i in 1..8
-      direction_forward=MIDstr(cmd_list,1+INT(RND(1)*4)*3,1)
-      game_state.tunnel_maze_directions[1]=game_state.tunnel_maze_directions[1]+direction_forward
-      if direction_forward=="N" then
-        direction_back="S"
-      end
-      if direction_forward=="S" then
-        direction_back="N"
-      end
-      if direction_forward=="E" then
-        direction_back="W"
-      end
-      if direction_forward=="W" then
-        direction_back="E"
-      end
-      game_state.tunnel_maze_directions[2]=direction_back+game_state.tunnel_maze_directions[2]
-    end
-  end
-
-  def new_game
-    load_initial_state
-    game_state.f[41]=INT(RND(1)*900)+100
-    game_state.f[42]=INT(RND(1)*3)+2
-    game_state.f[44]=4
-    game_state.f[57]=68
-    game_state.f[58]=54
-    game_state.f[59]=15
-    game_state.f[52]=INT(RND(1)*3)
-    game_state.room=77
-    game_state.response_message="GOOD LUCK ON YOUR QUEST!"
-    setup_tunnle_maze
-  end
-
-  def load_game
-    read_file(get_filename)
-    game_state.room=game_state.f[69]
-    game_state.response_message="OK. CARRY ON"
-  end
-
-  def save_game
-    game_state.f[69]=game_state.room
-    write_file(get_filename)
-    puts "BYE..."
-    exit
-  end
-
-  def get_filename
-    puts
-    puts "PLEASE ENTER A FILE NAME"
-    mINPUT
-  end
-
-  def read_file(filename)
-    #READ DATA FILE
-    puts "OK. SEARCHING FOR "+filename
-    File.open(filename, 'r') do |x|
-      puts "OK. LOADING"
-      game_state.exits, game_state.object_locations, game_state.f, game_state.tunnel_maze_directions = JSON.parse(x.gets)
-    end
-  end
-
-  def write_file(filename)
-    #SAVE DATA FILE
-    File.open(filename, 'w') do |x|
-      puts "OK. SAVING"
-      x.puts [game_state.exits, game_state.object_locations, game_state.f, game_state.tunnel_maze_directions].to_json
-    end
-  end
-
   def format_description(desc)
     desc.split(' ').inject(['']) do |lines, word|
       lines << '' if lines.last.length >= LINE_LENGTH
@@ -1323,6 +1230,101 @@ class GameState
   attr_accessor :room, :object, :object_name, :room_and_object, :response_message, :f, :exits, :object_locations,
                           :tunnel_maze_directions, :command, :command_id
 
+  def initialize
+    self.f = Array.new(70+1,0)
+    self.tunnel_maze_directions = Array.new(2+1,'')
+  end
+
+  def load_initial_state
+    self.exits = [ nil,
+      "E", "ESW", "WE", "EW", "EW", "ESW", "ESW", "ES", "EW", "SW",
+      "S", "N", "ES", "SW", "S", "NW", "N", "N", "ES", "NSW",
+      "NS", "E", "NSW", "N", "NES", "EW", "W", "S", "NS", "N",
+      "NES", "W", "NS", "D", "NES", "SW", "E", "NW", "NS", "S",
+      "NS", "E", "NSEW", "WU", "UD", "NS", "E", "SW", "NSE", "NW",
+      "NE", "EW", "NSW", "E", "WN", "S", "E", "NEW", "NW", "S",
+      "ES", "SW", "NES", "EW", "SW", "NE", "EW", "ESW", "SW", "ND",
+      " ", "E", "NEW", "EW", "NEW", "EW", "EW", "NEW", "NEW", "WU"
+    ]
+    self.object_locations = [ nil,
+      80, 70, 60, 69, 74, 72, 63, 52, 20, 11, 1, 14, 36, 54, 61, 21, 32, 10, 50,
+      29, 59, 34, 13, 80, 30, 81, 47, 74
+    ]
+    self.f[1..13] = [
+      1, 2, 3, 4, 5, 9, 12, 13, 16, 17, 20, 21, 22
+    ]
+  end
+
+  def setup_tunnel_maze
+    self.tunnel_maze_directions[1]=""
+    for i in 1..8
+      direction_forward = %w{N E S W}.sample
+      self.tunnel_maze_directions[1]=self.tunnel_maze_directions[1]+direction_forward
+      if direction_forward=="N" then
+        direction_back="S"
+      end
+      if direction_forward=="S" then
+        direction_back="N"
+      end
+      if direction_forward=="E" then
+        direction_back="W"
+      end
+      if direction_forward=="W" then
+        direction_back="E"
+      end
+      self.tunnel_maze_directions[2]=direction_back+self.tunnel_maze_directions[2]
+    end
+  end
+
+  def new_game
+    load_initial_state
+    self.f[41]=INT(RND(1)*900)+100
+    self.f[42]=INT(RND(1)*3)+2
+    self.f[44]=4
+    self.f[57]=68
+    self.f[58]=54
+    self.f[59]=15
+    self.f[52]=INT(RND(1)*3)
+    self.room=77
+    self.response_message="GOOD LUCK ON YOUR QUEST!"
+    setup_tunnel_maze
+  end
+
+  def load_game
+    read_file(get_filename)
+    self.room=self.f[69]
+    self.response_message="OK. CARRY ON"
+  end
+
+  def save_game
+    self.f[69]=self.room
+    write_file(get_filename)
+    puts "BYE..."
+    exit
+  end
+
+  def get_filename
+    puts
+    puts "PLEASE ENTER A FILE NAME"
+    mINPUT
+  end
+
+  def read_file(filename)
+    #READ DATA FILE
+    puts "OK. SEARCHING FOR "+filename
+    File.open(filename, 'r') do |x|
+      puts "OK. LOADING"
+      self.exits, self.object_locations, self.f, self.tunnel_maze_directions = JSON.parse(x.gets)
+    end
+  end
+
+  def write_file(filename)
+    #SAVE DATA FILE
+    File.open(filename, 'w') do |x|
+      puts "OK. SAVING"
+      x.puts [self.exits, self.object_locations, self.f, self.tunnel_maze_directions].to_json
+    end
+  end
 end
 
 def TAB(len)
@@ -1371,6 +1373,5 @@ end
 def CHRstr(value)
   value.chr
 end
-
 
 MOSM.new.start
