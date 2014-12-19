@@ -1360,9 +1360,15 @@ class MOSM
   end
 
   def game_state
-    @state ||= Struct.new(:room, :object, :object_name, :room_and_object, :response_message, :f, :exits, :object_locations,
-                          :tunnel_maze_directions, :command, :command_id).new
+    @state ||= GameState.new
   end
+
+end
+
+class GameState
+
+  attr_accessor :room, :object, :object_name, :room_and_object, :response_message, :f, :exits, :object_locations,
+                          :tunnel_maze_directions, :command, :command_id
 
 end
 
