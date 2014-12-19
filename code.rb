@@ -1309,54 +1309,7 @@ class MOSM
     end.map(&:strip)
   end
 
-  def TAB(len)
-    ' '*len
-  end
-
-  def mINPUT
-    print '?'
-    gets.chomp
-  end
-
-  def RND(v)
-    raise unless v==1
-    rand
-  end
-
-  def INT(v)
-    v.to_i
-  end
-
-  def MIDstr(str, start, len)
-    start -= 1
-    str[start...(start+len)]
-  end
-
-  def LEFTstr(str, len)
-    str[0..(len-1)]
-  end
-
-  def RIGHTstr(str, len)
-    str[-len..-1]
-  end
-
-  def VAL(str)
-    str.to_i
-  end
-
-  def STRstr(num)
-    num.to_s
-  end
-
-  def LEN(str)
-    str.length
-  end
-
   def noop
-  end
-
-  def CHRstr(value)
-    value.chr
   end
 
   def game_state
@@ -1371,5 +1324,53 @@ class GameState
                           :tunnel_maze_directions, :command, :command_id
 
 end
+
+def TAB(len)
+  ' '*len
+end
+
+def mINPUT
+  print '?'
+  gets.chomp
+end
+
+def RND(v)
+  raise unless v==1
+  rand
+end
+
+def INT(v)
+  v.to_i
+end
+
+def MIDstr(str, start, len)
+  start -= 1
+  str[start...(start+len)]
+end
+
+def LEFTstr(str, len)
+  str[0..(len-1)]
+end
+
+def RIGHTstr(str, len)
+  str[-len..-1]
+end
+
+def VAL(str)
+  str.to_i
+end
+
+def STRstr(num)
+  num.to_s
+end
+
+def LEN(str)
+  str.length
+end
+
+def CHRstr(value)
+  value.chr
+end
+
 
 MOSM.new.start
