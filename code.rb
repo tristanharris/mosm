@@ -993,13 +993,13 @@ class MOSM
   end
 
   def give_ring
-    game_state.response_message="HE TAKES IT AND SAYS '"+STRstr(game_state.f[42])+" RINGS ARE NEEDED'"
+    game_state.response_message="HE TAKES IT AND SAYS '#{game_state.f[42]} RINGS ARE NEEDED'"
     game_state.object_locations[25]=81
   end
 
   def insert_sub
     game_state.f[44]=game_state.f[44]-1
-    game_state.response_message="A NUMBER APPEARS - "+STRstr(game_state.f[41])
+    game_state.response_message="A NUMBER APPEARS - #{game_state.f[41]}"
     if game_state.f[44]==0 then
       game_state.object_locations[1]=81
     end
@@ -1327,7 +1327,7 @@ class GameState
   end
 
   def room_and_object
-    VAL(STRstr(room)+STRstr(object.to_i))
+    VAL("#{room}#{object.to_i}")
   end
 
   def object=(id)
@@ -1390,10 +1390,6 @@ end
 
 def VAL(str)
   str.to_i
-end
-
-def STRstr(num)
-  num.to_s
 end
 
 def LEN(str)
