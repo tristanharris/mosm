@@ -122,7 +122,6 @@ class MOSM
         Kernel.throw :redraw
       end
     end
-    game_state.room_and_object=VAL(STRstr(game_state.room)+STRstr(game_state.object))
     send([:go,:go,:go,:go,:go,:go,:inventory,:take,:take,:examine,:examine,:give,:say,
       :pick,:wear,:tie,:climb,:make,:use,:open,:burn,:fill,:plant,:water,:swing,:empty,
       :enter,:cross,:remove,:feed,:turn,:dive,:bail,:drop,:throw,:insert,:make,:drop,:eat,
@@ -946,7 +945,7 @@ class MOSM
 
   def cut
     if game_state.room_and_object==5861 then
-      game_state.room_and_object=5818
+      game_state.object=18
       swing
     end
   end
@@ -1227,7 +1226,7 @@ end
 
 class GameState
 
-  attr_accessor :room, :object, :object_name, :room_and_object, :response_message, :f, :exits, :object_locations,
+  attr_accessor :room, :object, :object_name, :response_message, :f, :exits, :object_locations,
                           :tunnel_maze_directions, :command, :command_id
 
   def initialize
@@ -1325,6 +1324,11 @@ class GameState
       x.puts [self.exits, self.object_locations, self.f, self.tunnel_maze_directions].to_json
     end
   end
+
+  def room_and_object
+    VAL(STRstr(room)+STRstr(object))
+  end
+
 end
 
 def TAB(len)
