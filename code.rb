@@ -1226,8 +1226,9 @@ end
 
 class GameState
 
-  attr_accessor :room, :object, :object_name, :response_message, :f, :exits, :object_locations,
+  attr_accessor :room, :object_name, :response_message, :f, :exits, :object_locations,
                           :tunnel_maze_directions, :command, :command_id
+  attr_reader :object
 
   def initialize
     self.f = Array.new(70+1,0)
@@ -1326,8 +1327,33 @@ class GameState
   end
 
   def room_and_object
-    VAL(STRstr(room)+STRstr(object))
+    VAL(STRstr(room)+STRstr(object.to_i))
   end
+
+  def object=(id)
+    @object = GameObject.new(id)
+  end
+
+end
+
+class GameObject
+
+  include Comparable
+
+  attr_reader :id
+
+  def initialize(id)
+    @id = id
+  end
+
+  def <=>(other)
+    self.to_i <=> other
+  end
+
+  def to_int
+    id
+  end
+  alias_method :to_i, :to_int
 
 end
 
