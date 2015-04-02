@@ -80,13 +80,6 @@ class MOSM
     end
     game_state.f[36]=0
     begin
-      objects.each_with_index do |object_str, i|
-        i = i + 1
-        if game_state.object_name==object_str then
-          game_state.object=i
-          break
-        end
-      end
       if game_state.object==0 && game_state.f[36]==0 && game_state.object_name!="" then
         game_state.object_name=game_state.object_name+"S"
         game_state.f[36]=1
@@ -1029,10 +1022,6 @@ class MOSM
     rooms[game_state.room-1]
   end
 
-  def strip_leading(str)
-    str[1..-1]
-  end
-
   def pause
     puts "PRESS return TO CONTINUE"
     mINPUT
@@ -1129,28 +1118,6 @@ class MOSM
       "62END OF A BRIDGE", "62END OF A BRIDGE",
       "61CROSSROADS", "41WINDING ROAD",
       "11VILLAGE OF RUSTIC HOUSES", "11WHITE COTTAGE"
-    ]
-  end
-
-  def objects
-    marked_objects.map{ |str| strip_leading(str)} + [
-      "BED", "CUPBOARD", "BRIDGE", "TREES", "SAIL", "KILN",
-      "KETCH", "BRICKS", "WINDMILL", "SACKS", "OGBAN'S BOAR", "WHEEL",
-      "PONY", "GRAVESTONES", "POOL", "GATES", "HANDLE", "HUT", "VINE", "INSCRIPTIONS", "TROLL", "RUBBLE",
-      "HOUND", "FOUNTAIN", "CIRCLE", "MOSAICS", "BOOKS", "CASKS", "WELL", "WALLS", "RATS", "SAFE",
-      "COBWEBS", "COIN", "BELL", "UP SILVER PLATE", "STONES", "KITCHENS", "GOBLET", "WINE",
-      "GRARGS", "DOOR", "AWAKE", "GUIDE", "PROTECT", "LEAD", "HELP", "CHEST", "WATER",
-      "STABLES", "SLUICE GATES", "POT", "STATUE", "PINNACLE", "MUSIC", "MAGIC WORDS",
-      "MISTY POOL", "WELL BOTTOM", "OLD KILN", "MOUNTAIN HUT"
-    ]
-  end
-
-  def marked_objects
-    [
-      "3COINS", "1SHEET", "3BOOTS", "1HORSESHOE", "3APPLES", "1BUCKET", "4AXE", "1BOAT", "1PHIAL",
-      "3REEDS", "1BONE", "1SHIELD", "3PLANKS", "1ROPE", "1RING", "1JUG", "1NET", "1SWORD",
-      "1SILVER PLATE", "1UNIFORM", "1KEY", "3SEEDS", "1LAMP", "3BREAD", "1BROOCH", "3MATCHES",
-      "2STONE OF DESTINY", "4APPLE"
     ]
   end
 
@@ -1334,6 +1301,11 @@ class GameState
     @object = GameObject.new(id)
   end
 
+  def object_name=(name)
+    @object_name = name
+    @object = GameObject.find(name)
+  end
+
 end
 
 class GameObject
@@ -1341,6 +1313,20 @@ class GameObject
   include Comparable
 
   attr_reader :id
+
+  def self.find(name)
+    objects.each_with_index do |object_str, i|
+      i = i + 1
+      if name==object_str then
+        return self.new(i)
+      end
+    end
+    return self.none
+  end
+
+  def self.none
+    GameObject.new(0)
+  end
 
   def initialize(id)
     @id = id
@@ -1398,6 +1384,33 @@ end
 
 def CHRstr(value)
   value.chr
+end
+
+
+def strip_leading(str)
+  str[1..-1]
+end
+
+def objects
+  marked_objects.map{ |str| strip_leading(str)} + [
+    "BED", "CUPBOARD", "BRIDGE", "TREES", "SAIL", "KILN",
+    "KETCH", "BRICKS", "WINDMILL", "SACKS", "OGBAN'S BOAR", "WHEEL",
+    "PONY", "GRAVESTONES", "POOL", "GATES", "HANDLE", "HUT", "VINE", "INSCRIPTIONS", "TROLL", "RUBBLE",
+    "HOUND", "FOUNTAIN", "CIRCLE", "MOSAICS", "BOOKS", "CASKS", "WELL", "WALLS", "RATS", "SAFE",
+    "COBWEBS", "COIN", "BELL", "UP SILVER PLATE", "STONES", "KITCHENS", "GOBLET", "WINE",
+    "GRARGS", "DOOR", "AWAKE", "GUIDE", "PROTECT", "LEAD", "HELP", "CHEST", "WATER",
+    "STABLES", "SLUICE GATES", "POT", "STATUE", "PINNACLE", "MUSIC", "MAGIC WORDS",
+    "MISTY POOL", "WELL BOTTOM", "OLD KILN", "MOUNTAIN HUT"
+  ]
+end
+
+def marked_objects
+  [
+    "3COINS", "1SHEET", "3BOOTS", "1HORSESHOE", "3APPLES", "1BUCKET", "4AXE", "1BOAT", "1PHIAL",
+    "3REEDS", "1BONE", "1SHIELD", "3PLANKS", "1ROPE", "1RING", "1JUG", "1NET", "1SWORD",
+    "1SILVER PLATE", "1UNIFORM", "1KEY", "3SEEDS", "1LAMP", "3BREAD", "1BROOCH", "3MATCHES",
+    "2STONE OF DESTINY", "4APPLE"
+  ]
 end
 
 MOSM.new.start
